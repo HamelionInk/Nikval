@@ -26,6 +26,8 @@
     <modules>
         <module>roadmaps-backend-spring</module>
         <module>roadmaps-config-server</module>
+        <module>roadmaps-eureka-server</module>
         <module>roadmaps-frontend-vaadin</module>
+        <module>roadmaps-gateway-server</module>
     </modules>
 </project>
