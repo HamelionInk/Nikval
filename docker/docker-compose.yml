@@ -19,8 +19,6 @@ services:
     depends_on:
       configserver:
         condition: service_started
-    command:
-      - sh -c './wait-for host:8082 -- cmd'
     networks:
       backend:
         aliases:
@@ -35,9 +33,6 @@ services:
         condition: service_started
       eurekaserver:
         condition: service_started
-    command:
-      - sh -c './wait-for host:8083 -- cmd'
-      - sh -c './wait-for host:8082 -- cmd'
     networks:
       backend:
         aliases:
@@ -54,10 +49,6 @@ services:
         condition: service_started
       gatewayserver:
         condition: service_started
-    command:
-      - sh -c './wait-for host:8083 -- cmd'
-      - sh -c './wait-for host:8082 -- cmd'
-      - sh -c './wait-for host:8084 -- cmd'
     networks:
       backend:
         aliases:
@@ -76,11 +67,6 @@ services:
         condition: service_started
       backendspring:
         condition: service_started
-    command:
-      - sh -c './wait-for host:8083 -- cmd'
-      - sh -c './wait-for host:8082 -- cmd'
-      - sh -c './wait-for host:8084 -- cmd'
-      - sh -c './wait-for host:8081 -- cmd'
     networks:
       backend:
         aliases:
@@ -91,6 +77,8 @@ services:
     restart: always
     environment:
       KEYCLOAK_VERSION: 6.0.1
+      KEYCLOAK_USER: admin
+      KEYCLOAK_PASSWORD: admin
     ports:
       - "8085:8085"
     networks:
