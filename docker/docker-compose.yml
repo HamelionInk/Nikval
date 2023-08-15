@@ -1,4 +1,4 @@
-version: '2.1'
+version: '3.9'
 
 services:
   configserver:
@@ -17,8 +17,7 @@ services:
     ports:
       - "8083:8083"
     depends_on:
-      configserver:
-        condition: service_started
+      - configserver
     networks:
       backend:
         aliases:
@@ -29,10 +28,8 @@ services:
     ports:
       - "8084:8084"
     depends_on:
-      configserver:
-        condition: service_started
-      eurekaserver:
-        condition: service_started
+      - configserver
+      - eurekaserver
     networks:
       backend:
         aliases:
@@ -43,12 +40,9 @@ services:
     ports:
       - "8081:8081"
     depends_on:
-      configserver:
-        condition: service_started
-      eurekaserver:
-        condition: service_started
-      gatewayserver:
-        condition: service_started
+      - configserver
+      - eurekaserver
+      - gatewayserver
     networks:
       backend:
         aliases:
@@ -59,14 +53,10 @@ services:
     ports:
       - "8080:8080"
     depends_on:
-      configserver:
-        condition: service_started
-      eurekaserver:
-        condition: service_started
-      gatewayserver:
-        condition: service_started
-      backendspring:
-        condition: service_started
+      - configserver
+      - eurekaserver
+      - gatewayserver
+      - backendspring
     networks:
       backend:
         aliases:
@@ -74,17 +64,42 @@ services:
 
   keycloak:
     image: jboss/keycloak
-    restart: always
     environment:
-      KEYCLOAK_VERSION: 6.0.1
-      KEYCLOAK_USER: admin
-      KEYCLOAK_PASSWORD: admin
+      KC_DB_URL: jdbc:postgresql://keycloak-postgres:5432/postgres
+      KC_DB_USERNAME: postgres
+      KC_DB_PASSWORD: postgres
+      KC_DB_SCHEMA: public
+      KC_FEATURES: preview
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
     ports:
       - "8085:8085"
+    depends_on:
+      - keycloak-postgres
     networks:
       backend:
         aliases:
           - "keycloak"
+
+  keycloak-postgres:
+    image: library/postgres:-14
+    restart: on-failure
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres
+    healthcheck:
+      test: pg_isready -d postgres
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 5s
+    ports:
+      - "5432:5432"
+    deploy:
+      resources:
+        limits:
+          memory: 256M
 
 networks:
   backend:
