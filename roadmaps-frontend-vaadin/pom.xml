@@ -5,13 +5,14 @@
     <groupId>com.nikitin.roadmaps</groupId>
     <artifactId>roadmaps-frontend-vaadin</artifactId>
     <name>roadmaps-frontend-vaadin</name>
-    <version>1.0-SNAPSHOT</version>
+    <version>0.0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <properties>
         <java.version>17</java.version>
         <vaadin.version>24.1.4</vaadin.version>
         <selenium.version>4.10.0</selenium.version>
+        <docker.image.prefix>roadmaps</docker.image.prefix>
     </properties>
 
     <parent>
@@ -91,7 +92,28 @@
                     <maxAttempts>240</maxAttempts>
                 </configuration>
             </plugin>
-
+            <plugin>
+                <groupId>com.spotify</groupId>
+                <artifactId>dockerfile-maven-plugin</artifactId>
+                <version>1.4.13</version>
+                <configuration>
+                    <repository>${docker.image.prefix}/${project.artifactId}</repository>
+                    <tag>${project.version}</tag>
+                    <buildArgs>
+                        <JAR_FILE>target/${project.build.finalName}.jar</JAR_FILE>
+                    </buildArgs>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>default</id>
+                        <phase>install</phase>
+                        <goals>
+                            <goal>build</goal>
+                            <goal>push</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
             <plugin>
                 <groupId>com.vaadin</groupId>
                 <artifactId>vaadin-maven-plugin</artifactId>
@@ -124,6 +146,7 @@
                     </exclusions>
                 </dependency>
             </dependencies>
+
             <build>
                 <plugins>
                     <plugin>
