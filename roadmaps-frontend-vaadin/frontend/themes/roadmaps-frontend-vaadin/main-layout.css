@@ -1,16 +1,36 @@
 vaadin-scroller[slot="drawer"] {
-  padding: var(--lumo-space-s);
+    padding: var(--lumo-space-s);
 }
 
 [slot="drawer"]:is(header, footer) {
-  display: flex;
-  align-items: center;
-  gap: var(--lumo-space-s);
-  padding: var(--lumo-space-s) var(--lumo-space-m);
-  min-height: var(--lumo-size-xl);
-  box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    gap: var(--lumo-space-s);
+    padding: var(--lumo-space-s) var(--lumo-space-m);
+    min-height: var(--lumo-size-xl);
+    box-sizing: border-box;
 }
 
 [slot="drawer"]:is(header, footer):is(:empty) {
-  display: none;
+    display: none;
+}
+
+vaadin-side-nav-item:hover {
+    background-color: #d3dadc;
+}
+
+.applicationNameText {
+    margin-left: 1%;
+    font-family: cursive;
+    font-size: xx-large;
+}
+
+.localeChangeComboBox {
+    margin-right: 1%;
+    margin-left: auto;
+}
+
+.logo {
+    margin-left: 1%;
+    height: 70px;
 }

@@ -17,10 +17,22 @@ spring:
     check-template-location: false
   jpa:
     defer-datasource-initialization: true
+  security:
+    oauth2:
+      client:
+        registration:
+          keycloak:
+            client-secret: XFiV7e9cXlCiy2Txh9UMJuAkt8dYXc19
+            issuer-uri: http://localhost:8085/realms/roadmaps
+            client-id: frontend-vaadin
+            scope: profile,openid,email,roles
 
 vaadin:
   launch-browser: true
   whitelisted-packages: com.vaadin,org.vaadin,dev.hilla,com.nikitin.roadmaps
+  sso:
+    login-route: /oauth2/authorization/keycloak
+    back-channel-logout: true
 
 management:
   endpoints:

@@ -1,4 +1,4 @@
-package com.nikitin.roadmaps.views.helloworld;
+package com.nikitin.roadmaps.views.about;
 
 import com.nikitin.roadmaps.views.MainLayout;
 import com.vaadin.flow.component.html.H2;
@@ -7,15 +7,13 @@ import com.vaadin.flow.component.html.Paragraph;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
-import com.vaadin.flow.server.auth.AnonymousAllowed;
 import com.vaadin.flow.theme.lumo.LumoUtility.Margin;
 
-@PageTitle("Hello World")
-@Route(value = "hello", layout = MainLayout.class)
-@AnonymousAllowed
-public class HelloWorldView extends VerticalLayout {
+@PageTitle("About")
+@Route(value = "about", layout = MainLayout.class)
+public class AboutView extends VerticalLayout {
 
-    public HelloWorldView() {
+    public AboutView() {
         setSpacing(false);
 
         Image img = new Image("images/empty-plant.png", "placeholder plant");

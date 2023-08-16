@@ -1,1 +1,3 @@
-@import url('./main-layout.css');
+@import url('main-layout.css');
+@import url('login-view.css');
+@import url('sign-up-view.css');

@@ -1,74 +1,122 @@
 package com.nikitin.roadmaps.views;
 
+import com.nikitin.roadmaps.security.SecurityService;
 import com.nikitin.roadmaps.views.helloworld.HelloWorldView;
+import com.nikitin.roadmaps.views.homepage.HomePageView;
+import com.nikitin.roadmaps.views.login.LoginView;
+import com.nikitin.roadmaps.views.profile.ProfileView;
+import com.nikitin.roadmaps.views.signup.SignUpView;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.DrawerToggle;
-import com.vaadin.flow.component.html.Footer;
+import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.html.H1;
-import com.vaadin.flow.component.html.H2;
-import com.vaadin.flow.component.html.Header;
-import com.vaadin.flow.component.orderedlayout.Scroller;
+import com.vaadin.flow.component.html.Image;
+import com.vaadin.flow.component.icon.VaadinIcon;
+import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.sidenav.SideNav;
 import com.vaadin.flow.component.sidenav.SideNavItem;
-import com.vaadin.flow.router.PageTitle;
-import com.vaadin.flow.theme.lumo.LumoUtility;
-import org.vaadin.lineawesome.LineAwesomeIcon;
+import com.vaadin.flow.i18n.I18NProvider;
+import com.vaadin.flow.i18n.LocaleChangeEvent;
+import com.vaadin.flow.i18n.LocaleChangeObserver;
+import com.vaadin.flow.server.VaadinSession;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.client.RestTemplate;
 
-/**
- * The main view is a top-level placeholder for other views.
- */
-public class MainLayout extends AppLayout {
+import java.util.Locale;
 
-    private H2 viewTitle;
+public class MainLayout extends AppLayout implements LocaleChangeObserver {
 
-    public MainLayout() {
-        setPrimarySection(Section.DRAWER);
-        addDrawerContent();
-        addHeaderContent();
+    private static final String APPLICATION_NAME_KEY = "main.layout.applicationName";
+    private static final String SIDE_NAVIGATION_GENERAL_KEY = "main.layout.generalSideNavigation";
+    private static final String SIDE_NAVIGATION_ROADMAPS_KEY = "main.layout.roadmapsSideNavigation";
+    private static final String SIDE_NAV_ITEM_PROFILE_KEY = "main.layout.profileNavItem";
+    private static final String SIDE_NAV_ITEM_HOME_PAGE_KEY = "main.layout.homePageNavItem";
+    private static final String SIDE_NAV_ITEM_LOGIN_KEY = "main.layout.loginNavItem";
+    private static final String SIDE_NAV_ITEM_SIGN_UP_KEY = "main.layout.signUpNavItem";
+    private static final String LOCALE_SAVED_KEY = "main.layout.localeSaved";
+
+    private final SecurityService securityService;
+    private final I18NProvider i18NProvider;
+
+    private final ComboBox<Locale> localeChangeComboBox = new ComboBox<>();
+
+    private final H1 applicationNameText;
+
+    private final SideNav roadmapsSideNavigation;
+    private final SideNav generalSideNavigation;
+
+    private final SideNavItem homePageNavItem;
+    private final SideNavItem profileNavItem;
+    private final SideNavItem loginNavItem;
+    private final SideNavItem signUpNavItem;
+
+    public MainLayout(@Autowired SecurityService securityService, @Autowired I18NProvider i18NProvider) {
+        applicationNameText = new H1(getTranslation(APPLICATION_NAME_KEY));
+
+        roadmapsSideNavigation = new SideNav(getTranslation(SIDE_NAVIGATION_ROADMAPS_KEY));
+        generalSideNavigation= new SideNav(getTranslation(SIDE_NAVIGATION_GENERAL_KEY));
+
+        homePageNavItem = new SideNavItem(getTranslation(SIDE_NAV_ITEM_HOME_PAGE_KEY), HomePageView.class, VaadinIcon.HOME.create());
+        profileNavItem = new SideNavItem(getTranslation(SIDE_NAV_ITEM_PROFILE_KEY), ProfileView.class, VaadinIcon.USER_CARD.create());
+        loginNavItem = new SideNavItem(getTranslation(SIDE_NAV_ITEM_LOGIN_KEY), LoginView.class, VaadinIcon.SIGN_IN.create());
+        signUpNavItem = new SideNavItem(getTranslation(SIDE_NAV_ITEM_SIGN_UP_KEY), SignUpView.class, VaadinIcon.PLUS.create());
+
+        this.securityService = securityService;
+        this.i18NProvider = i18NProvider;
+        buildNavigationSideBar();
     }
 
-    private void addHeaderContent() {
-        DrawerToggle toggle = new DrawerToggle();
-        toggle.setAriaLabel("Menu toggle");
+    private void buildNavigationSideBar() {
+        applicationNameText.addClassNames("applicationNameText");
 
-        viewTitle = new H2();
-        viewTitle.addClassNames(LumoUtility.FontSize.LARGE, LumoUtility.Margin.NONE);
+        DrawerToggle drawerToggle = new DrawerToggle();
+        drawerToggle.addClassNames("drawerToggle");
 
-        addToNavbar(true, toggle, viewTitle);
+        generalSideNavigation.setCollapsible(true);
+
+        if (securityService.isAuthenticated()) {
+            generalSideNavigation.addItem(
+                    homePageNavItem,
+                    profileNavItem);
+        } else {
+            generalSideNavigation.addItem(
+                    loginNavItem,
+                    signUpNavItem);
+        }
+
+        roadmapsSideNavigation.setCollapsible(true);
+        roadmapsSideNavigation.addItem(
+                new SideNavItem("Java backend", HelloWorldView.class, VaadinIcon.SITEMAP.create()));
+
+        localeChangeComboBox.addClassNames("localeChangeComboBox");
+        localeChangeComboBox.setItems(i18NProvider.getProvidedLocales());
+        localeChangeComboBox.setItemLabelGenerator(generator -> getTranslation(generator.getLanguage()));
+        localeChangeComboBox.setValue(UI.getCurrent().getLocale());
+        localeChangeComboBox.addValueChangeListener(event ->saveLocalPreference(event.getValue()));
+
+        Image logo = new Image("images/logo-application.png", "placeholder plant");
+        logo.addClassName("logo");
+
+        addToNavbar(drawerToggle, logo, applicationNameText, localeChangeComboBox);
+        addToDrawer(generalSideNavigation, roadmapsSideNavigation);
     }
 
-    private void addDrawerContent() {
-        H1 appName = new H1("roadmaps-frontend-vaadin");
-        appName.addClassNames(LumoUtility.FontSize.LARGE, LumoUtility.Margin.NONE);
-        Header header = new Header(appName);
-
-        Scroller scroller = new Scroller(createNavigation());
-
-        addToDrawer(header, scroller, createFooter());
-    }
-
-    private SideNav createNavigation() {
-        SideNav nav = new SideNav();
-
-        nav.addItem(new SideNavItem("Hello World", HelloWorldView.class, LineAwesomeIcon.GLOBE_SOLID.create()));
-
-        return nav;
-    }
-
-    private Footer createFooter() {
-        Footer layout = new Footer();
-
-        return layout;
+    private void saveLocalPreference(Locale locale) {
+        getUI().ifPresent(UI -> UI.setLocale(locale));
+        localeChangeComboBox.setItemLabelGenerator(i -> getTranslation(i.getLanguage()));
+        Notification.show(getTranslation(LOCALE_SAVED_KEY))
+                .setPosition(Notification.Position.TOP_CENTER);
     }
 
     @Override
-    protected void afterNavigation() {
-        super.afterNavigation();
-        viewTitle.setText(getCurrentPageTitle());
-    }
-
-    private String getCurrentPageTitle() {
-        PageTitle title = getContent().getClass().getAnnotation(PageTitle.class);
-        return title == null ? "" : title.value();
+    public void localeChange(LocaleChangeEvent localeChangeEvent) {
+        roadmapsSideNavigation.setLabel(getTranslation(SIDE_NAVIGATION_ROADMAPS_KEY));
+        generalSideNavigation.setLabel(getTranslation(SIDE_NAVIGATION_GENERAL_KEY));
+        homePageNavItem.setLabel(getTranslation(SIDE_NAV_ITEM_HOME_PAGE_KEY));
+        profileNavItem.setLabel(getTranslation(SIDE_NAV_ITEM_PROFILE_KEY));
+        loginNavItem.setLabel(getTranslation(SIDE_NAV_ITEM_LOGIN_KEY));
+        signUpNavItem.setLabel(getTranslation(SIDE_NAV_ITEM_SIGN_UP_KEY));
+        applicationNameText.setText(getTranslation(APPLICATION_NAME_KEY));
     }
 }
