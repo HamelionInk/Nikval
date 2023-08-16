@@ -6,6 +6,7 @@ services:
     ports:
       - "8082:8082"
     environment:
+      SPRING_PROFILES_ACTIVE: dev
       ENCRYPT_KEY: "fje83Ki8403Iod87dne7Yjsl3THueh48jfuO9j4U2hf64Lo"
     networks:
       backend:
@@ -16,6 +17,8 @@ services:
     image: roadmaps/roadmaps-eureka-server:0.0.1-SNAPSHOT
     ports:
       - "8083:8083"
+    environment:
+      SPRING_PROFILES_ACTIVE: dev
     depends_on:
       - configserver
     networks:
@@ -27,6 +30,8 @@ services:
     image: roadmaps/roadmaps-gateway-server:0.0.1-SNAPSHOT
     ports:
       - "8084:8084"
+    environment:
+      SPRING_PROFILES_ACTIVE: dev
     depends_on:
       - configserver
       - eurekaserver
@@ -39,6 +44,8 @@ services:
     image: roadmaps/roadmaps-backend-spring:0.0.1-SNAPSHOT
     ports:
       - "8081:8081"
+    environment:
+      SPRING_PROFILES_ACTIVE: dev
     depends_on:
       - configserver
       - eurekaserver
@@ -52,6 +59,8 @@ services:
     image: roadmaps/roadmaps-frontend-vaadin:0.0.1-SNAPSHOT
     ports:
       - "8080:8080"
+    environment:
+      SPRING_PROFILES_ACTIVE: dev
     depends_on:
       - configserver
       - eurekaserver
@@ -62,44 +71,34 @@ services:
         aliases:
           - "frontend-vaadin"
 
-  keycloak:
-    image: jboss/keycloak
+  postgreskeycloak:
+    image: postgres
+    ports:
+      - "5432:5432"
     environment:
-      KC_DB_URL: jdbc:postgresql://keycloak-postgres:5432/postgres
-      KC_DB_USERNAME: postgres
-      KC_DB_PASSWORD: postgres
-      KC_DB_SCHEMA: public
-      KC_FEATURES: preview
+      POSTGRES_DB: keycloak
+      POSTGRES_USER: keycloak
+      POSTGRES_PASSWORD: keycloak
+      POSTGRES_SCHEMA: keycloak
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:22.0.1
+    command:
+      - start-dev
+    environment:
+      KC_HTTP_PORT: 8085
       KEYCLOAK_ADMIN: admin
       KEYCLOAK_ADMIN_PASSWORD: admin
+      KC_DATABASE: postgres
+      KC_STORAGE: jpa
+      KC_DB_URL: jdbc:postgresql://postgreskeycloak:5432/keycloak
+      KC_DB_SCHEMA: public
+      KC_DB_PASSWORD: keycloak
+      KC_DB_USERNAME: keycloak
     ports:
       - "8085:8085"
     depends_on:
-      - keycloak-postgres
-    networks:
-      backend:
-        aliases:
-          - "keycloak"
-
-  keycloak-postgres:
-    image: library/postgres:-14
-    restart: on-failure
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: postgres
-    healthcheck:
-      test: pg_isready -d postgres
-      interval: 10s
-      timeout: 5s
-      retries: 3
-      start_period: 5s
-    ports:
-      - "5432:5432"
-    deploy:
-      resources:
-        limits:
-          memory: 256M
+      - postgreskeycloak
 
 networks:
   backend:
