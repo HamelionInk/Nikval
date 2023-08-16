@@ -44,7 +44,7 @@ management:
 
 keycloak.client-id: frontend-vaadin
 keycloak.client-secret: XFiV7e9cXlCiy2Txh9UMJuAkt8dYXc19
-keycloak.scope: profile,openid
+keycloak.scope: profile, openid
 keycloak.authorization-grant-type: password
 
 keycloak.authorization-uri: http://localhost:8085/realms/roadmaps/protocol/openid-connect/auth
