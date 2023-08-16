@@ -22,10 +22,10 @@ spring:
       client:
         registration:
           frontend-vaadin:
-            client-secret: XFiV7e9cXlCiy2Txh9UMJuAkt8dYXc19
+            client-secret: 'XFiV7e9cXlCiy2Txh9UMJuAkt8dYXc19'
             issuer-uri: http://keycloak:8085/realms/roadmaps
-            client-id: frontend-vaadin
-            scope: profile,openid,email,roles
+            client-id: 'frontend-vaadin'
+            scope: 'profile,openid,email,roles'
 
 vaadin:
   launch-browser: true
