@@ -21,7 +21,7 @@ spring:
     oauth2:
       client:
         registration:
-          keycloak-5:
+          frontend-vaadin:
             client-secret: XFiV7e9cXlCiy2Txh9UMJuAkt8dYXc19
             issuer-uri: http://keycloak:8085/realms/roadmaps
             client-id: frontend-vaadin
