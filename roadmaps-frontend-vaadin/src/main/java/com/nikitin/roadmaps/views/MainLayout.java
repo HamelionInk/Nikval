@@ -1,6 +1,5 @@
 package com.nikitin.roadmaps.views;
 
-import com.nikitin.roadmaps.security.SecurityService;
 import com.nikitin.roadmaps.views.helloworld.HelloWorldView;
 import com.nikitin.roadmaps.views.homepage.HomePageView;
 import com.nikitin.roadmaps.views.login.LoginView;
@@ -19,9 +18,9 @@ import com.vaadin.flow.component.sidenav.SideNavItem;
 import com.vaadin.flow.i18n.I18NProvider;
 import com.vaadin.flow.i18n.LocaleChangeEvent;
 import com.vaadin.flow.i18n.LocaleChangeObserver;
-import com.vaadin.flow.server.VaadinSession;
+import com.vaadin.flow.spring.security.AuthenticationContext;
+import com.vaadin.sso.starter.SingleSignOnProperties;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.client.RestTemplate;
 
 import java.util.Locale;
 
@@ -36,7 +35,8 @@ public class MainLayout extends AppLayout implements LocaleChangeObserver {
     private static final String SIDE_NAV_ITEM_SIGN_UP_KEY = "main.layout.signUpNavItem";
     private static final String LOCALE_SAVED_KEY = "main.layout.localeSaved";
 
-    private final SecurityService securityService;
+    private final AuthenticationContext authenticationContext;
+    private final SingleSignOnProperties ssoProperties;
     private final I18NProvider i18NProvider;
 
     private final ComboBox<Locale> localeChangeComboBox = new ComboBox<>();
@@ -51,7 +51,8 @@ public class MainLayout extends AppLayout implements LocaleChangeObserver {
     private final SideNavItem loginNavItem;
     private final SideNavItem signUpNavItem;
 
-    public MainLayout(@Autowired SecurityService securityService, @Autowired I18NProvider i18NProvider) {
+    public MainLayout(@Autowired I18NProvider i18NProvider, AuthenticationContext authenticationContext,
+                      SingleSignOnProperties ssoProperties) {
         applicationNameText = new H1(getTranslation(APPLICATION_NAME_KEY));
 
         roadmapsSideNavigation = new SideNav(getTranslation(SIDE_NAVIGATION_ROADMAPS_KEY));
@@ -62,8 +63,9 @@ public class MainLayout extends AppLayout implements LocaleChangeObserver {
         loginNavItem = new SideNavItem(getTranslation(SIDE_NAV_ITEM_LOGIN_KEY), LoginView.class, VaadinIcon.SIGN_IN.create());
         signUpNavItem = new SideNavItem(getTranslation(SIDE_NAV_ITEM_SIGN_UP_KEY), SignUpView.class, VaadinIcon.PLUS.create());
 
-        this.securityService = securityService;
         this.i18NProvider = i18NProvider;
+        this.authenticationContext = authenticationContext;
+        this.ssoProperties = ssoProperties;
         buildNavigationSideBar();
     }
 
@@ -75,7 +77,7 @@ public class MainLayout extends AppLayout implements LocaleChangeObserver {
 
         generalSideNavigation.setCollapsible(true);
 
-        if (securityService.isAuthenticated()) {
+        if (authenticationContext.isAuthenticated()) {
             generalSideNavigation.addItem(
                     homePageNavItem,
                     profileNavItem);
