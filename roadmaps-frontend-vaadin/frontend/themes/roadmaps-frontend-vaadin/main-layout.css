@@ -2,6 +2,10 @@ vaadin-scroller[slot="drawer"] {
     padding: var(--lumo-space-s);
 }
 
+vaadin-button:hover {
+    background-color: #d3dadc;
+}
+
 [slot="drawer"]:is(header, footer) {
     display: flex;
     align-items: center;

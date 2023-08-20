@@ -44,15 +44,3 @@ management:
     web:
       exposure:
         include: "*"
-
-keycloak.client-id: frontend-vaadin
-keycloak.client-secret: XFiV7e9cXlCiy2Txh9UMJuAkt8dYXc19
-keycloak.scope: profile, email, roles
-keycloak.authorization-grant-type: client_credentials
-
-keycloak.authorization-uri: http://localhost:8085/realms/roadmaps/protocol/openid-connect/auth
-keycloak.user-info-uri: http://localhost:8085/realms/roadmaps/protocol/openid-connect/userinfo
-keycloak.token-uri: http://localhost:8085/realms/roadmaps/protocol/openid-connect/token
-keycloak.logout: http://localhost:8085/realms/roadmaps/protocol/openid-connect/logout
-keycloak.jwk-set-uri: http://localhost:8085/realms/roadmaps/protocol/openid-connect/certs
-keycloak.certs-id: vpuC8EAeHUEUBBpX6hsjltddMsaJewPlucOctSVVuIM

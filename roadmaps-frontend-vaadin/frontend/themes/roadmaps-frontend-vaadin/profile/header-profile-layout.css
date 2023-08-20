@@ -1,0 +1,45 @@
+.header_profile_layout {
+    width: 100%;
+    margin-top: -1%;
+    margin-right: 2%;
+    box-shadow: 0 0 10px 5px rgba(221, 221, 221, 1);
+}
+
+.user_avatar {
+    height: 10%;
+    width: 10%;
+    margin: 0.2%;
+}
+
+.user_full_name_h3 {
+    font-size: x-large;
+    margin-top: 2%;
+}
+
+.user_login_date_h4 {
+    color: rgba(119,123,115,0.55);
+    font-family: "JetBrains Mono Light", cursive;
+    font-size: small;
+    margin-top: 2.6%;
+}
+
+.logout_button {
+    margin-top: -1%;
+}
+
+.user_info_edit_button {
+    margin-top: -1%;
+    margin-right: 3%;
+}
+
+.save_user_info_button {
+    margin-top: -1%;
+    margin-right: 3%;
+}
+
+.button_header_div {
+    margin-top: 2%;
+    margin-right: 5%;
+    margin-left: auto;
+    display: flex;
+}
