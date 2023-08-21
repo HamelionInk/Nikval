@@ -2,6 +2,13 @@ server:
   port: 8081
 
 spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/roadmaps
+    username: postgres
+    password: 12345
+  jpa:
+    hibernate:
+      ddl-auto: update
   profiles:
     active: ${SPRING_PROFILES_ACTIVE:default}
 
