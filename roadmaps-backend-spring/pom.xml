@@ -59,6 +59,13 @@
             <scope>test</scope>
         </dependency>
 
+        <!--DataBase-->
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>42.6.0</version>
+        </dependency>
+
         <!--Util-->
         <dependency>
             <groupId>org.projectlombok</groupId>

@@ -1,4 +1,4 @@
-package com.nikitin.roadmaps.roadmapsbackendspring.dto.response;
+package com.nikitin.roadmaps.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -22,5 +22,4 @@ public class ProfileResponseDto {
     private String competence;
     private String speciality;
     private Instant lastDateLogin;
-
 }

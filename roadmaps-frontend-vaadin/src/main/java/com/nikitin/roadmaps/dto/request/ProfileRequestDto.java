@@ -1,4 +1,4 @@
-package com.nikitin.roadmaps.roadmapsbackendspring.dto.response;
+package com.nikitin.roadmaps.dto.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,16 +11,13 @@ import java.time.Instant;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class ProfileResponseDto {
+public class ProfileRequestDto {
 
-    private Long id;
     private String picture;
     private String name;
     private String lastName;
-    private String fullName;
     private String email;
     private String competence;
     private String speciality;
     private Instant lastDateLogin;
-
 }

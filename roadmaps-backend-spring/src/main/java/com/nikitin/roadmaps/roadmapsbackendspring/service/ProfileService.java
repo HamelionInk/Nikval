@@ -13,5 +13,6 @@ public interface ProfileService {
     ProfileResponseDto update(@NonNull Long id, @NonNull ProfileRequestDto profileRequestDto);
     ProfileResponseDto patch(@NonNull Long id, @NonNull ProfileRequestDto profileRequestDto);
     ProfileResponseDto getById(@NonNull Long id);
+    ProfileResponseDto getByEmail(@NonNull String email);
     Page<ProfileResponseDto> getAll(@NonNull Pageable pageable);
 }

@@ -1,6 +1,7 @@
 package com.nikitin.roadmaps.views.profile.layout;
 
 import com.vaadin.flow.component.avatar.Avatar;
+import com.vaadin.flow.component.avatar.AvatarVariant;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H3;
@@ -31,6 +32,7 @@ public class HeaderProfileLayout extends HorizontalLayout implements LocaleChang
         addClassName("header_profile_layout");
 
         userAvatar = new Avatar();
+        userAvatar.addThemeVariants(AvatarVariant.LUMO_XLARGE);
         userAvatar.addClassName("user_avatar");
 
         userFullNameH3 = new H3("Михаил Никитин");

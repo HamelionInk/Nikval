@@ -1,28 +1,22 @@
 package com.nikitin.roadmaps.views.profile;
 
+import com.nikitin.roadmaps.client.ProfileClient;
 import com.nikitin.roadmaps.views.MainLayout;
 import com.nikitin.roadmaps.views.profile.div.RoadmapInfoDiv;
 import com.nikitin.roadmaps.views.profile.div.UserInfoDiv;
 import com.nikitin.roadmaps.views.profile.layout.HeaderProfileLayout;
-import com.vaadin.flow.component.avatar.Avatar;
-import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.combobox.ComboBox;
-import com.vaadin.flow.component.html.Div;
-import com.vaadin.flow.component.html.H3;
-import com.vaadin.flow.component.html.H4;
-import com.vaadin.flow.component.icon.VaadinIcon;
-import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.i18n.LocaleChangeEvent;
 import com.vaadin.flow.i18n.LocaleChangeObserver;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
-import com.vaadin.flow.server.VaadinServletRequest;
-import com.vaadin.flow.spring.security.AuthenticationContext;
 import jakarta.annotation.security.PermitAll;
-import jakarta.servlet.ServletException;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.core.oidc.user.OidcUser;
+
+import java.util.Optional;
 
 @Slf4j
 @PageTitle("Profile")
@@ -30,18 +24,54 @@ import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 @PermitAll
 public class ProfileView extends VerticalLayout implements LocaleChangeObserver {
 
+    private ProfileClient profileClient;
     private HeaderProfileLayout headerProfileLayout;
     private UserInfoDiv userInfoDiv;
     private RoadmapInfoDiv roadmapInfoDiv;
 
-    public ProfileView(AuthenticationContext authenticationContext) {
+    public ProfileView(@Autowired ProfileClient profileClient) {
+        this.profileClient = profileClient;
+
         headerProfileLayout = new HeaderProfileLayout();
         userInfoDiv = new UserInfoDiv();
         roadmapInfoDiv = new RoadmapInfoDiv();
 
         add(headerProfileLayout, userInfoDiv, roadmapInfoDiv);
+        setProfileInfo();
 
         addEventListeners();
+    }
+
+    public void setProfileInfo() {
+        var oidcUser = (OidcUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        var profile = profileClient.getProfileByEmail(oidcUser.getEmail());
+
+        Optional.ofNullable(profile.getName())
+                .ifPresent(name -> userInfoDiv.getNameTextField().setValue(name));
+
+        Optional.ofNullable(profile.getLastName())
+                .ifPresent(lastName -> userInfoDiv.getLastNameTextField().setValue(lastName));
+
+        Optional.ofNullable(profile.getEmail())
+                .ifPresent(email -> userInfoDiv.getEmailTextField().setValue(email));
+
+        Optional.ofNullable(profile.getCompetence())
+                .ifPresent(competence -> userInfoDiv.getCompetenceTextField().setValue(competence));
+
+        Optional.ofNullable(profile.getSpeciality())
+                .ifPresent(speciality -> userInfoDiv.getSpecialityTextField().setValue(speciality));
+
+        Optional.ofNullable(profile.getPicture())
+                .ifPresent(picture -> headerProfileLayout.getUserAvatar().setImage(picture));
+
+        Optional.ofNullable(profile.getFullName())
+                .ifPresent(fullName -> {
+                    headerProfileLayout.getUserFullNameH3().setText(fullName);
+                    headerProfileLayout.getUserAvatar().setName(fullName);
+                });
+
+        Optional.ofNullable(profile.getLastDateLogin())
+                .ifPresent(lastDateLogin -> headerProfileLayout.getUserLoginDateH4().setText(lastDateLogin.toString()));
     }
 
     public void addEventListeners() {

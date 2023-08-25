@@ -11,6 +11,9 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.Formula;
+
+import java.time.Instant;
 
 @Getter
 @Setter
@@ -25,13 +28,16 @@ public class Profile {
     private Long id;
 
     @Column(name = "picture")
-    private byte picture;
+    private String picture;
 
     @Column(name = "name", nullable = false)
     private String name;
 
     @Column(name = "last_name", nullable = false)
     private String lastName;
+
+    @Formula("CONCAT_WS( ' ', name, last_name)")
+    private String fullName;
 
     @Column(name = "email", nullable = false, unique = true)
     private String email;
@@ -41,4 +47,8 @@ public class Profile {
 
     @Column(name = "speciality")
     private String speciality;
+
+    @Column(name = "last_date_login")
+    private Instant lastDateLogin;
+
 }

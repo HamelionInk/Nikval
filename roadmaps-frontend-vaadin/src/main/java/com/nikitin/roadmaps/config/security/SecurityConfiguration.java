@@ -15,6 +15,7 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 public class SecurityConfiguration extends VaadinWebSecurity {
 
     private final KeycloakLogoutHandler keycloakLogoutHandler;
+    private final SuccessAuthHandler successAuthHandler;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -25,7 +26,8 @@ public class SecurityConfiguration extends VaadinWebSecurity {
                                 .requestMatchers(AntPathRequestMatcher.antMatcher("/signUp")).permitAll()
                                 .requestMatchers(AntPathRequestMatcher.antMatcher("/images/*.png")).permitAll())
                 .oauth2Login(oauth2 ->
-                        oauth2.defaultSuccessUrl("/profile"))
+                        oauth2.defaultSuccessUrl("/profile")
+                                .successHandler(successAuthHandler))
                 .logout(logout ->
                         logout.logoutSuccessUrl("/")
                                 .addLogoutHandler(keycloakLogoutHandler));
