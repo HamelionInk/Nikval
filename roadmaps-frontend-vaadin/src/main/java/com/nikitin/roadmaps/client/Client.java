@@ -4,11 +4,13 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.stereotype.Component;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
 
 @Slf4j
@@ -18,8 +20,12 @@ public abstract class Client {
 
     private final RestTemplate restTemplate;
 
-    public <T> T request(String url, HttpMethod httpMethod, HttpEntity<?> request, Class<T> response) {
-        return restTemplate.exchange(url, httpMethod, request, response).getBody();
+    public <T> ResponseEntity<T> request(String url, HttpMethod httpMethod, HttpEntity<?> request, Class<T> response) {
+        try {
+            return restTemplate.exchange(url, httpMethod, request, response);
+        } catch (HttpStatusCodeException exception) {
+            return ResponseEntity.status(exception.getStatusCode()).build();
+        }
     }
 
     public <T> HttpEntity<T> buildRequestBody(T requestDto) {

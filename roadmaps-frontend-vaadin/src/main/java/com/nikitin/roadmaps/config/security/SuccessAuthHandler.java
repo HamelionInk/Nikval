@@ -2,23 +2,18 @@ package com.nikitin.roadmaps.config.security;
 
 import com.nikitin.roadmaps.client.ProfileClient;
 import com.nikitin.roadmaps.dto.request.ProfileRequestDto;
-import com.nikitin.roadmaps.dto.response.ProfileResponseDto;
 import com.vaadin.flow.spring.security.VaadinSavedRequestAwareAuthenticationSuccessHandler;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.stereotype.Component;
-import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
-import java.util.Date;
+import java.util.Optional;
 
 @Slf4j
 @Component
@@ -35,20 +30,22 @@ public class SuccessAuthHandler extends VaadinSavedRequestAwareAuthenticationSuc
     }
 
     private void createOrUpdateProfile(OidcUser userInfo) {
-        try {
-            var profileResponseDto = profileClient.getByEmail(userInfo.getEmail());
-            profileResponseDto.setLastDateLogin(new Date().toInstant());
-            profileClient.patch(profileResponseDto.getId(), ProfileRequestDto.builder()
-                            .lastDateLogin(profileResponseDto.getLastDateLogin())
-                    .build());
-        } catch (Exception exception) {
+        var response = profileClient.getByEmail(userInfo.getEmail());
+        if (response.getStatusCode().is2xxSuccessful()) {
+            Optional.ofNullable(response.getBody())
+                    .ifPresent(responseBody -> profileClient.patch(responseBody.getId(), ProfileRequestDto.builder()
+                            .lastDateLogin(userInfo.getAuthenticatedAt())
+                            .build()));
+        }
+
+        if (response.getStatusCode().is4xxClientError()) {
             profileClient.create(ProfileRequestDto.builder()
                     .name(userInfo.getGivenName())
                     .lastName(userInfo.getFamilyName())
                     .email(userInfo.getEmail())
-                    .lastDateLogin(new Date().toInstant())
+                    .lastDateLogin(userInfo.getAuthenticatedAt())
                     .build());
         }
-
     }
 }
+
