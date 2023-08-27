@@ -1,5 +1,6 @@
 package com.nikitin.roadmaps.dto.response;
 
+import com.nikitin.roadmaps.dto.enums.CompetenceType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -19,7 +20,7 @@ public class ProfileResponseDto {
     private String lastName;
     private String fullName;
     private String email;
-    private String competence;
+    private CompetenceType competence;
     private String speciality;
     private Instant lastDateLogin;
 }

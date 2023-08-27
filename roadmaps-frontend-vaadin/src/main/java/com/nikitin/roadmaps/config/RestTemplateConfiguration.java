@@ -8,7 +8,7 @@ import org.springframework.web.util.DefaultUriBuilderFactory;
 @Configuration
 public class RestTemplateConfiguration {
 
-    private final String url = "http://localhost:8081";
+    private final String url = "http://localhost:8081/api/v1/roadmaps";
 
     @Bean
     public RestTemplate restTemplate() {

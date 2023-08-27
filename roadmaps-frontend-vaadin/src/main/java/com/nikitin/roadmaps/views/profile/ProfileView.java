@@ -44,7 +44,7 @@ public class ProfileView extends VerticalLayout implements LocaleChangeObserver 
 
     public void setProfileInfo() {
         var oidcUser = (OidcUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        var profile = profileClient.getProfileByEmail(oidcUser.getEmail());
+        var profile = profileClient.getByEmail(oidcUser.getEmail());
 
         Optional.ofNullable(profile.getName())
                 .ifPresent(name -> userInfoDiv.getNameTextField().setValue(name));
@@ -56,7 +56,7 @@ public class ProfileView extends VerticalLayout implements LocaleChangeObserver 
                 .ifPresent(email -> userInfoDiv.getEmailTextField().setValue(email));
 
         Optional.ofNullable(profile.getCompetence())
-                .ifPresent(competence -> userInfoDiv.getCompetenceTextField().setValue(competence));
+                .ifPresent(competence -> userInfoDiv.getCompetenceTextField().setValue(competence.getName()));
 
         Optional.ofNullable(profile.getSpeciality())
                 .ifPresent(speciality -> userInfoDiv.getSpecialityTextField().setValue(speciality));
