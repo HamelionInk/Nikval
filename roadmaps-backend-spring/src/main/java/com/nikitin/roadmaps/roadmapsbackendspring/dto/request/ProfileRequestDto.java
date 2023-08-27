@@ -42,6 +42,5 @@ public class ProfileRequestDto {
     private String speciality;
 
     @NotNull(message = "Поле <lastDateLogin> не может быть null", groups = Create.class)
-    @FutureOrPresent(message = "Дата должна быть больше настоящего времени", groups = {Create.class, Patch.class})
     private Instant lastDateLogin;
 }
