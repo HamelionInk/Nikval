@@ -10,7 +10,6 @@ import org.springframework.data.domain.Pageable;
 public interface ProfileService {
 
     ProfileResponseDto create(@NonNull ProfileRequestDto profileRequestDto);
-    ProfileResponseDto update(@NonNull Long id, @NonNull ProfileRequestDto profileRequestDto);
     ProfileResponseDto patch(@NonNull Long id, @NonNull ProfileRequestDto profileRequestDto);
     ProfileResponseDto getById(@NonNull Long id);
     ProfileResponseDto getByEmail(@NonNull String email);
