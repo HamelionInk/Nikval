@@ -1,8 +1,11 @@
 package com.nikitin.roadmaps.roadmapsbackendspring.entity;
 
 
+import com.nikitin.roadmaps.roadmapsbackendspring.dto.enums.CompetenceType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -43,7 +46,8 @@ public class Profile {
     private String email;
 
     @Column(name = "competence")
-    private String competence;
+    @Enumerated(value = EnumType.STRING)
+    private CompetenceType competence;
 
     @Column(name = "speciality")
     private String speciality;

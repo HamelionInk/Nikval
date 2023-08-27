@@ -22,18 +22,15 @@ import java.util.Optional;
 public class ProfileServiceImplement implements ProfileService {
 
     private static final String PROFILE_ALREADY_EXIST = "Профиль с указанной почтой уже используется - %s";
-    private static final String PROFILE_NOT_FOUND = "Профиль с указанной почтой не найден - %s";
+    private static final String PROFILE_WITH_EMAIL_NOT_FOUND = "Профиль с указанной почтой не найден - %s";
+    private static final String PROFILE_WITH_ID_NOT_FOUND = "Профиль с указанным идентификатором не найден - %s";
 
     private final ProfileRepository profileRepository;
     private final ProfileMapper profileMapper;
 
     @Override
     public ProfileResponseDto create(@NonNull ProfileRequestDto profileRequestDto) {
-        Optional.ofNullable(profileRequestDto.getEmail())
-                .flatMap(profileRepository::findByEmailIgnoreCase)
-                .ifPresent(profile -> {
-                    throw new BadRequestException(String.format(PROFILE_ALREADY_EXIST, profileRequestDto.getEmail()));
-                });
+        emailAlreadyExist(profileRequestDto.getEmail(), null);
 
         var profile = profileMapper.toEntity(profileRequestDto);
 
@@ -41,29 +38,43 @@ public class ProfileServiceImplement implements ProfileService {
     }
 
     @Override
-    public ProfileResponseDto update(@NonNull Long id, @NonNull ProfileRequestDto profileRequestDto) {
-        return null;
-    }
-
-    @Override
     public ProfileResponseDto patch(@NonNull Long id, @NonNull ProfileRequestDto profileRequestDto) {
-        return null;
+        return profileRepository.findById(id)
+                .map(profileForUpdate -> {
+                    emailAlreadyExist(profileRequestDto.getEmail(), profileForUpdate.getEmail());
+
+                    return profileMapper.toResponseDto(profileRepository.save(profileMapper.toPatchEntity(profileRequestDto, profileForUpdate)));
+                })
+                .orElseThrow(() -> new NotFoundException(String.format(PROFILE_WITH_ID_NOT_FOUND, id)));
     }
 
     @Override
     public ProfileResponseDto getById(@NonNull Long id) {
-        return null;
+        return profileRepository.findById(id)
+                .map(profileMapper::toResponseDto)
+                .orElseThrow(() -> new NotFoundException(String.format(PROFILE_WITH_ID_NOT_FOUND, id)));
     }
 
     @Override
     public ProfileResponseDto getByEmail(@NonNull String email) {
         return profileRepository.findByEmailIgnoreCase(email)
                 .map(profileMapper::toResponseDto)
-                .orElseThrow(() -> new NotFoundException(String.format(PROFILE_NOT_FOUND, email)));
+                .orElseThrow(() -> new NotFoundException(String.format(PROFILE_WITH_EMAIL_NOT_FOUND, email)));
     }
 
     @Override
     public Page<ProfileResponseDto> getAll(@NonNull Pageable pageable) {
-        return null;
+        return profileRepository.findAll(pageable)
+                .map(profileMapper::toResponseDto);
+    }
+
+    private void emailAlreadyExist(String emailFromDto, String emailFromEntity) {
+        Optional.ofNullable(emailFromDto)
+                .flatMap(profileRepository::findByEmailIgnoreCase)
+                .ifPresent(profile -> {
+                    if (!emailFromDto.equals(emailFromEntity)) {
+                        throw new BadRequestException(String.format(PROFILE_ALREADY_EXIST, emailFromDto));
+                    }
+                });
     }
 }
