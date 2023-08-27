@@ -18,25 +18,24 @@ public class ProfileClient extends Client {
         super(restTemplate);
     }
 
-    public void createProfileForFirstAuthentication(OidcUser userInfo) {
-        try {
-            request("/profiles",
-                    HttpMethod.POST,
-                    buildRequestBody(ProfileRequestDto.builder()
-                            .picture(userInfo.getPicture())
-                            .name(userInfo.getGivenName())
-                            .lastName(userInfo.getFamilyName())
-                            .email(userInfo.getEmail())
-                            .build()),
-                    ProfileResponseDto.class
-            );
-        } catch (Exception exception) {
-            //do nothing
-        }
+    public ProfileResponseDto create(ProfileRequestDto profileRequestDto) {
+        return request("/profiles",
+                HttpMethod.POST,
+                buildRequestBody(profileRequestDto),
+                ProfileResponseDto.class
+        );
     }
 
-    public ProfileResponseDto getProfileByEmail(String email) {
-        return request("/profiles/" + email,
+    public ProfileResponseDto patch(Long id, ProfileRequestDto profileRequestDto) {
+        return request("/profiles/" + id,
+                HttpMethod.PATCH,
+                buildRequestBody(profileRequestDto),
+                ProfileResponseDto.class
+        );
+    }
+
+    public ProfileResponseDto getByEmail(String email) {
+        return request("/profiles/email/" + email,
                 HttpMethod.GET,
                 null,
                 ProfileResponseDto.class
