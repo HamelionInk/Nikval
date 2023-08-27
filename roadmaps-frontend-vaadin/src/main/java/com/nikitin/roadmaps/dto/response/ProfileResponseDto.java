@@ -1,5 +1,6 @@
 package com.nikitin.roadmaps.dto.response;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.nikitin.roadmaps.dto.enums.CompetenceType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

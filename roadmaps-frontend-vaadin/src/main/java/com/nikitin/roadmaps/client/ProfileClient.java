@@ -5,7 +5,7 @@ import com.nikitin.roadmaps.dto.response.ProfileResponseDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
-import org.springframework.security.oauth2.core.oidc.user.OidcUser;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
@@ -18,7 +18,7 @@ public class ProfileClient extends Client {
         super(restTemplate);
     }
 
-    public ProfileResponseDto create(ProfileRequestDto profileRequestDto) {
+    public ResponseEntity<ProfileResponseDto> create(ProfileRequestDto profileRequestDto) {
         return request("/profiles",
                 HttpMethod.POST,
                 buildRequestBody(profileRequestDto),
@@ -26,7 +26,7 @@ public class ProfileClient extends Client {
         );
     }
 
-    public ProfileResponseDto patch(Long id, ProfileRequestDto profileRequestDto) {
+    public ResponseEntity<ProfileResponseDto> patch(Long id, ProfileRequestDto profileRequestDto) {
         return request("/profiles/" + id,
                 HttpMethod.PATCH,
                 buildRequestBody(profileRequestDto),
@@ -34,7 +34,7 @@ public class ProfileClient extends Client {
         );
     }
 
-    public ProfileResponseDto getByEmail(String email) {
+    public ResponseEntity<ProfileResponseDto> getByEmail(String email) {
         return request("/profiles/email/" + email,
                 HttpMethod.GET,
                 null,

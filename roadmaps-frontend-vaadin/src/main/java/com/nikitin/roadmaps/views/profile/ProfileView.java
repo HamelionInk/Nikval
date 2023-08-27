@@ -44,34 +44,39 @@ public class ProfileView extends VerticalLayout implements LocaleChangeObserver 
 
     public void setProfileInfo() {
         var oidcUser = (OidcUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        var profile = profileClient.getByEmail(oidcUser.getEmail());
+        var response = profileClient.getByEmail(oidcUser.getEmail());
 
-        Optional.ofNullable(profile.getName())
-                .ifPresent(name -> userInfoDiv.getNameTextField().setValue(name));
+        if (response.getStatusCode().is2xxSuccessful()) {
+            Optional.ofNullable(response.getBody())
+                    .ifPresent(profileResponseDto -> {
+                        Optional.ofNullable(profileResponseDto.getName())
+                                .ifPresent(name -> userInfoDiv.getNameTextField().setValue(name));
 
-        Optional.ofNullable(profile.getLastName())
-                .ifPresent(lastName -> userInfoDiv.getLastNameTextField().setValue(lastName));
+                        Optional.ofNullable(profileResponseDto.getLastName())
+                                .ifPresent(lastName -> userInfoDiv.getLastNameTextField().setValue(lastName));
 
-        Optional.ofNullable(profile.getEmail())
-                .ifPresent(email -> userInfoDiv.getEmailTextField().setValue(email));
+                        Optional.ofNullable(profileResponseDto.getEmail())
+                                .ifPresent(email -> userInfoDiv.getEmailTextField().setValue(email));
 
-        Optional.ofNullable(profile.getCompetence())
-                .ifPresent(competence -> userInfoDiv.getCompetenceTextField().setValue(competence.getName()));
+                        Optional.ofNullable(profileResponseDto.getCompetence())
+                                .ifPresent(competence -> userInfoDiv.getCompetenceTextField().setValue(competence.getName()));
 
-        Optional.ofNullable(profile.getSpeciality())
-                .ifPresent(speciality -> userInfoDiv.getSpecialityTextField().setValue(speciality));
+                        Optional.ofNullable(profileResponseDto.getSpeciality())
+                                .ifPresent(speciality -> userInfoDiv.getSpecialityTextField().setValue(speciality));
 
-        Optional.ofNullable(profile.getPicture())
-                .ifPresent(picture -> headerProfileLayout.getUserAvatar().setImage(picture));
+                        Optional.ofNullable(profileResponseDto.getPicture())
+                                .ifPresent(picture -> headerProfileLayout.getUserAvatar().setImage(picture));
 
-        Optional.ofNullable(profile.getFullName())
-                .ifPresent(fullName -> {
-                    headerProfileLayout.getUserFullNameH3().setText(fullName);
-                    headerProfileLayout.getUserAvatar().setName(fullName);
-                });
+                        Optional.ofNullable(profileResponseDto.getFullName())
+                                .ifPresent(fullName -> {
+                                    headerProfileLayout.getUserFullNameH3().setText(fullName);
+                                    headerProfileLayout.getUserAvatar().setName(fullName);
+                                });
 
-        Optional.ofNullable(profile.getLastDateLogin())
-                .ifPresent(lastDateLogin -> headerProfileLayout.getUserLoginDateH4().setText(lastDateLogin.toString()));
+                        Optional.ofNullable(profileResponseDto.getLastDateLogin())
+                                .ifPresent(lastDateLogin -> headerProfileLayout.getUserLoginDateH4().setText(lastDateLogin.toString()));
+                    });
+        }
     }
 
     public void addEventListeners() {
