@@ -127,7 +127,7 @@ public class ProfileView extends VerticalLayout implements LocaleChangeObserver 
                     });
         } else {
             //todo - прокидывать exception
-            log.info("Get Profile Error");
+            log.info("Get Profile Error " + response.getStatusCode());
         }
     }
 
@@ -142,7 +142,7 @@ public class ProfileView extends VerticalLayout implements LocaleChangeObserver 
                     });
         } else {
             //todo - прокидывать exception
-            log.info("Save Profile Error");
+            log.info("Save Profile Error " + response.getStatusCode() );
         }
     }
 
