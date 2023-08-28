@@ -1,0 +1,8 @@
+.save_user_info_button {
+    align-content: center;
+    display: flex;
+}
+
+.save_info_div {
+    width: 100%;
+}
