@@ -2,16 +2,24 @@ package com.nikitin.roadmaps.roadmapsbackendspring.controller;
 
 import com.nikitin.roadmaps.roadmapsbackendspring.dto.request.ProfileRequestDto;
 import com.nikitin.roadmaps.roadmapsbackendspring.dto.response.ProfileResponseDto;
+import com.nikitin.roadmaps.roadmapsbackendspring.exception.ExceptionResponseDto;
 import com.nikitin.roadmaps.roadmapsbackendspring.service.ProfileService;
 import com.nikitin.roadmaps.roadmapsbackendspring.validation.Create;
 import com.nikitin.roadmaps.roadmapsbackendspring.validation.Patch;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,11 +34,19 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/profiles")
+@Tag(name = "Профиль")
 public class ProfileController {
 
     private final ProfileService profileService;
 
     @PostMapping
+    @Operation(description = "Создание профиля сотрудника", method = "POST")
+    @ApiResponse(responseCode = "201", description = "CREATED - Профиль успешно создан",
+            content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                    schema = @Schema(implementation = ProfileResponseDto.class))})
+    @ApiResponse(responseCode = "400", description = "BAD REQUEST - Ошибка в запросе",
+            content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                    schema = @Schema(implementation = ExceptionResponseDto.class))})
     public ResponseEntity<ProfileResponseDto> create(@RequestBody @Validated(value = Create.class) ProfileRequestDto profileRequestDto) {
         var responseBody = profileService.create(profileRequestDto);
 
@@ -38,32 +54,57 @@ public class ProfileController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<ProfileResponseDto> patch(@PathVariable (name = "id") Long id,
-                                                     @RequestBody @Validated(value = Patch.class) ProfileRequestDto profileRequestDto) {
+    @Operation(description = "Обновление профиля сотрудника по идентификатору (Поля со значением Null не обновляются)", method = "PATCH")
+    @ApiResponse(responseCode = "202", description = "ACCEPTED - Профиль успешно обновлен",
+            content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                    schema = @Schema(implementation = ProfileResponseDto.class))})
+    @ApiResponse(responseCode = "400", description = "BAD REQUEST - Ошибка в запросе",
+            content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                    schema = @Schema(implementation = ExceptionResponseDto.class))})
+    @ApiResponse(responseCode = "404", description = "NOT FOUND - Профиль с указанным идентификатором не найден",
+            content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                    schema = @Schema(implementation = ExceptionResponseDto.class))})
+    public ResponseEntity<ProfileResponseDto> patch(@PathVariable(name = "id") Long id,
+                                                    @RequestBody @Validated(value = Patch.class) ProfileRequestDto profileRequestDto) {
         var responseBody = profileService.patch(id, profileRequestDto);
 
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(responseBody);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ProfileResponseDto> getById(@PathVariable (name = "id") Long id) {
+    @Operation(description = "Получение профиля пользователя по уникальному идентификатору", method = "GET")
+    @ApiResponse(responseCode = "202", description = "ACCEPTED - Профиль успешно получен",
+            content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                    schema = @Schema(implementation = ProfileResponseDto.class))})
+    @ApiResponse(responseCode = "404", description = "NOT FOUND - Профиль с указанным идентификатором не найден",
+            content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                    schema = @Schema(implementation = ExceptionResponseDto.class))})
+    public ResponseEntity<ProfileResponseDto> getById(@PathVariable(name = "id") Long id) {
         var responseBody = profileService.getById(id);
 
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(responseBody);
     }
 
     @GetMapping("/email/{email}")
-    public ResponseEntity<ProfileResponseDto> getByEmail(@PathVariable (name = "email") String email) {
+    @Operation(description = "Получение профиля пользователя по электронной почте", method = "GET")
+    @ApiResponse(responseCode = "202", description = "ACCEPTED - Профиль успешно получен",
+            content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                    schema = @Schema(implementation = ProfileResponseDto.class))})
+    @ApiResponse(responseCode = "404", description = "NOT FOUND - Профиль с указанной электронной почтой не найден",
+            content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                    schema = @Schema(implementation = ExceptionResponseDto.class))})
+    public ResponseEntity<ProfileResponseDto> getByEmail(@PathVariable(name = "email") String email) {
         var responseBody = profileService.getByEmail(email);
 
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(responseBody);
     }
 
     @GetMapping
-    public ResponseEntity<Page<ProfileResponseDto>> getAll(@PageableDefault(
-            sort = "name",
-            direction = Sort.Direction.ASC,
-            size = Integer.MAX_VALUE) Pageable pageable) {
+    @Operation(description = "Получение всех профилей пользователей", method = "GET")
+    @ApiResponse(responseCode = "202", description = "ACCEPTED - Профили успешно получены",
+            content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                    schema = @Schema(implementation = ProfileResponseDto.class))})
+    public ResponseEntity<Page<ProfileResponseDto>> getAll(@ParameterObject @PageableDefault(sort = "name", direction = Sort.Direction.ASC, size = Integer.MAX_VALUE) Pageable pageable) {
         var responseBody = profileService.getAll(pageable);
 
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(responseBody);
