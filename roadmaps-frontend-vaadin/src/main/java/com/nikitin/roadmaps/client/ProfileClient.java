@@ -37,7 +37,7 @@ public class ProfileClient extends Client {
     public ResponseEntity<ProfileResponseDto> getByEmail(String email) {
         return request("/profiles/email/" + email,
                 HttpMethod.GET,
-                null,
+                buildRequestBody(null),
                 ProfileResponseDto.class
         );
     }
