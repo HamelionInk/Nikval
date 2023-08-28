@@ -1,5 +1,6 @@
 package com.nikitin.roadmaps.views.profile.layout;
 
+import com.nikitin.roadmaps.views.profile.button.UserInfoEditButton;
 import com.vaadin.flow.component.avatar.Avatar;
 import com.vaadin.flow.component.avatar.AvatarVariant;
 import com.vaadin.flow.component.button.Button;
@@ -25,8 +26,7 @@ public class HeaderProfileLayout extends HorizontalLayout implements LocaleChang
     private H3 userFullNameH3;
     private H4 userLoginDateH4;
     private Button logoutButton;
-    private Button userInfoEditButton;
-    private Button saveUserInfoButton;
+    private UserInfoEditButton userInfoEditButton;
 
     public HeaderProfileLayout() {
         addClassName("header_profile_layout");
@@ -49,16 +49,12 @@ public class HeaderProfileLayout extends HorizontalLayout implements LocaleChang
         logoutButton.addClickListener(event -> logoutEvent());
         logoutButton.addClassName("logout_button");
 
-        userInfoEditButton = new Button("Редактировать", VaadinIcon.EDIT.create());
+        userInfoEditButton = new UserInfoEditButton("Редактировать", VaadinIcon.EDIT.create());
         userInfoEditButton.addClassName("user_info_edit_button");
-
-        saveUserInfoButton = new Button("Сохранить", VaadinIcon.SAFE.create());
-        saveUserInfoButton.addClassName("save_user_info_button");
-        saveUserInfoButton.setVisible(false);
 
         Div buttonHeaderDiv = new Div();
         buttonHeaderDiv.addClassName("button_header_div");
-        buttonHeaderDiv.add(saveUserInfoButton, userInfoEditButton, logoutButton);
+        buttonHeaderDiv.add(userInfoEditButton, logoutButton);
 
         return buttonHeaderDiv;
     }
