@@ -2,6 +2,8 @@ package com.nikitin.roadmaps.config.security;
 
 import com.nikitin.roadmaps.client.ProfileClient;
 import com.nikitin.roadmaps.dto.request.ProfileRequestDto;
+import com.nikitin.roadmaps.dto.response.ProfileResponseDto;
+import com.nikitin.roadmaps.util.RestUtils;
 import com.vaadin.flow.spring.security.VaadinSavedRequestAwareAuthenticationSuccessHandler;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -33,9 +35,12 @@ public class SuccessAuthHandler extends VaadinSavedRequestAwareAuthenticationSuc
         var response = profileClient.getByEmail(userInfo.getEmail());
         if (response.getStatusCode().is2xxSuccessful()) {
             Optional.ofNullable(response.getBody())
-                    .ifPresent(responseBody -> profileClient.patch(responseBody.getId(), ProfileRequestDto.builder()
-                            .lastDateLogin(userInfo.getAuthenticatedAt())
-                            .build()));
+                    .ifPresent(responseBody -> {
+                        var profileResponseDto = RestUtils.convertResponseToDto(responseBody, ProfileResponseDto.class);
+                        profileClient.patch(profileResponseDto.getId(), ProfileRequestDto.builder()
+                                .lastDateLogin(userInfo.getAuthenticatedAt())
+                                .build());
+                    });
         }
 
         if (response.getStatusCode().is4xxClientError()) {

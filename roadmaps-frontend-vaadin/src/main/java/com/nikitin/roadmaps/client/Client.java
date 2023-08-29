@@ -20,11 +20,11 @@ public abstract class Client {
 
     private final RestTemplate restTemplate;
 
-    public <T> ResponseEntity<T> request(String url, HttpMethod httpMethod, HttpEntity<?> request, Class<T> response) {
+    public ResponseEntity<String> request(String url, HttpMethod httpMethod, HttpEntity<?> request) {
         try {
-            return restTemplate.exchange(url, httpMethod, request, response);
+            return restTemplate.exchange(url, httpMethod, request, String.class);
         } catch (HttpStatusCodeException exception) {
-            return ResponseEntity.status(exception.getStatusCode()).build();
+            return ResponseEntity.status(exception.getStatusCode()).body(exception.getResponseBodyAsString());
         }
     }
 

@@ -3,6 +3,7 @@ package com.nikitin.roadmaps.views.profile;
 import com.nikitin.roadmaps.client.ProfileClient;
 import com.nikitin.roadmaps.dto.request.ProfileRequestDto;
 import com.nikitin.roadmaps.dto.response.ProfileResponseDto;
+import com.nikitin.roadmaps.util.RestUtils;
 import com.nikitin.roadmaps.views.MainLayout;
 import com.nikitin.roadmaps.views.profile.div.RoadmapInfoDiv;
 import com.nikitin.roadmaps.views.profile.div.SaveInfoDiv;
@@ -20,7 +21,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 
 import java.util.Optional;
-import com.nikitin.roadmaps.util.ViewUtils;
+
+import static com.nikitin.roadmaps.util.RestUtils.*;
+import static com.nikitin.roadmaps.util.ViewUtils.*;
 
 @Slf4j
 @PageTitle("Profile")
@@ -97,12 +100,12 @@ public class ProfileView extends VerticalLayout implements LocaleChangeObserver 
             saveInfoDiv.getSaveUserInfoButton().setVisible(false);
             headerProfileLayout.getUserInfoEditButton().setIsActive(false);
             patchProfile(ProfileRequestDto.builder()
-                    .name(ViewUtils.hasStringValue(userInfoDiv.getNameTextField().getValue()))
-                    .lastName(ViewUtils.hasStringValue(userInfoDiv.getLastNameTextField().getValue()))
-                    .email(ViewUtils.hasStringValue(userInfoDiv.getEmailTextField().getValue()))
+                    .name(hasStringValue(userInfoDiv.getNameTextField().getValue()))
+                    .lastName(hasStringValue(userInfoDiv.getLastNameTextField().getValue()))
+                    .email(hasStringValue(userInfoDiv.getEmailTextField().getValue()))
                     //todo - Сделать Enum
                     //.competence(userInfoDiv.getCompetenceTextField().getValue())
-                    .speciality(ViewUtils.hasStringValue(userInfoDiv.getSpecialityTextField().getValue()))
+                    .speciality(hasStringValue(userInfoDiv.getSpecialityTextField().getValue()))
                     .build());
         });
     }
@@ -122,12 +125,12 @@ public class ProfileView extends VerticalLayout implements LocaleChangeObserver 
         if (response.getStatusCode().is2xxSuccessful()) {
             Optional.ofNullable(response.getBody())
                     .ifPresent(body -> {
-                        profileResponseDto = body;
+                        profileResponseDto = convertResponseToDto(body, ProfileResponseDto.class);
                         setProfile(profileResponseDto);
                     });
         } else {
-            //todo - прокидывать exception
-            log.info("Get Profile Error " + response.getStatusCode());
+            Optional.ofNullable(response.getBody())
+                    .ifPresent(RestUtils::throwRestException);
         }
     }
 
@@ -137,12 +140,16 @@ public class ProfileView extends VerticalLayout implements LocaleChangeObserver 
         if (response.getStatusCode().is2xxSuccessful()) {
             Optional.ofNullable(response.getBody())
                     .ifPresent(body -> {
-                        profileResponseDto = body;
+                        profileResponseDto = convertResponseToDto(body, ProfileResponseDto.class);
                         setProfile(profileResponseDto);
+                        successNotification();
                     });
         } else {
-            //todo - прокидывать exception
-            log.info("Save Profile Error " + response.getStatusCode() );
+            Optional.ofNullable(response.getBody())
+                    .ifPresent(body -> {
+                        setProfile(profileResponseDto);
+                        throwRestException(body);
+                    });
         }
     }
 

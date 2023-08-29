@@ -1,5 +1,6 @@
 package com.nikitin.roadmaps.views;
 
+import com.nikitin.roadmaps.exception.VaadinExceptionHandler;
 import com.nikitin.roadmaps.views.helloworld.HelloWorldView;
 import com.nikitin.roadmaps.views.homepage.HomePageView;
 import com.nikitin.roadmaps.views.profile.ProfileView;
@@ -53,6 +54,7 @@ public class MainLayout extends AppLayout implements LocaleChangeObserver {
         profileNavItem = new SideNavItem(getTranslation(SIDE_NAV_ITEM_PROFILE_KEY), ProfileView.class, VaadinIcon.USER_CARD.create());
 
         this.i18NProvider = i18NProvider;
+
         buildNavigationSideBar();
     }
 
