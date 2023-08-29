@@ -18,27 +18,24 @@ public class ProfileClient extends Client {
         super(restTemplate);
     }
 
-    public ResponseEntity<ProfileResponseDto> create(ProfileRequestDto profileRequestDto) {
+    public ResponseEntity<String> create(ProfileRequestDto profileRequestDto) {
         return request("/profiles",
                 HttpMethod.POST,
-                buildRequestBody(profileRequestDto),
-                ProfileResponseDto.class
+                buildRequestBody(profileRequestDto)
         );
     }
 
-    public ResponseEntity<ProfileResponseDto> patch(Long id, ProfileRequestDto profileRequestDto) {
+    public ResponseEntity<String> patch(Long id, ProfileRequestDto profileRequestDto) {
         return request("/profiles/" + id,
                 HttpMethod.PATCH,
-                buildRequestBody(profileRequestDto),
-                ProfileResponseDto.class
+                buildRequestBody(profileRequestDto)
         );
     }
 
-    public ResponseEntity<ProfileResponseDto> getByEmail(String email) {
+    public ResponseEntity<String> getByEmail(String email) {
         return request("/profiles/email/" + email,
                 HttpMethod.GET,
-                buildRequestBody(null),
-                ProfileResponseDto.class
+                buildRequestBody(null)
         );
     }
 }
