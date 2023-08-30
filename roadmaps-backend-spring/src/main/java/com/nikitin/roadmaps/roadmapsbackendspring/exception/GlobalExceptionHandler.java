@@ -4,6 +4,13 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
+import org.springframework.security.oauth2.core.OAuth2AuthorizationException;
+import org.springframework.security.web.authentication.session.SessionAuthenticationException;
+import org.springframework.security.web.csrf.InvalidCsrfTokenException;
+import org.springframework.security.web.csrf.MissingCsrfTokenException;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -45,6 +52,29 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
         return ResponseEntity.status(statusCode.value())
                 .body(body);
+    }
+
+    @ExceptionHandler(value = {AuthenticationException.class, MissingCsrfTokenException.class,
+            InvalidCsrfTokenException.class, SessionAuthenticationException.class, OAuth2AuthenticationException.class})
+    public ResponseEntity<ExceptionResponseDto> handleAuthenticationException(Exception exception, WebRequest request) {
+        var httpStatus = HttpStatus.UNAUTHORIZED;
+        return ResponseEntity.status(httpStatus.value())
+                .body(ExceptionResponseDto.builder()
+                        .status(String.valueOf(httpStatus.value()))
+                        .message(exception.getMessage())
+                        .path(request.getContextPath())
+                        .build());
+    }
+
+    @ExceptionHandler(value = {AccessDeniedException.class, OAuth2AuthorizationException.class})
+    public ResponseEntity<ExceptionResponseDto> handleForbiddenException(Exception exception, WebRequest request) {
+        var httpStatus = HttpStatus.FORBIDDEN;
+        return ResponseEntity.status(httpStatus.value())
+                .body(ExceptionResponseDto.builder()
+                        .status(String.valueOf(httpStatus.value()))
+                        .message(exception.getMessage())
+                        .path(request.getContextPath())
+                        .build());
     }
 
     @ExceptionHandler(value = BadRequestException.class)
