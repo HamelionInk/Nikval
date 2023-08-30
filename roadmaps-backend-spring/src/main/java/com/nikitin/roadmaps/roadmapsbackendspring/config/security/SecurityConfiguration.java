@@ -10,6 +10,7 @@ import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.JwtDecoders;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.servlet.HandlerExceptionResolver;
 
 @Slf4j
 @EnableWebSecurity
@@ -18,6 +19,7 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfiguration {
 
     private final JwtGrantedAuthoritiesConverter jwtAuthenticationConverter;
+    private final HandlerExceptionResolver handlerExceptionResolver;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
@@ -28,8 +30,10 @@ public class SecurityConfiguration {
                                 .anyRequest().authenticated())
                 .oauth2ResourceServer(oauth2ResourceServer ->
                         oauth2ResourceServer.jwt(jwt ->
-                                jwt.decoder(jwtDecoder())
-                                        .jwtAuthenticationConverter(customJwtAuthenticationConverter())));
+                                        jwt.decoder(jwtDecoder())
+                                                .jwtAuthenticationConverter(customJwtAuthenticationConverter()))
+                                .authenticationEntryPoint(((request, response, authException) ->
+                                        handlerExceptionResolver.resolveException(request, response, null, authException))));
 
         return httpSecurity.build();
     }
