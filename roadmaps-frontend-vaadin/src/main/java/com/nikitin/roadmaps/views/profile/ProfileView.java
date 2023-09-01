@@ -4,6 +4,7 @@ import com.nikitin.roadmaps.client.ProfileClient;
 import com.nikitin.roadmaps.dto.request.ProfileRequestDto;
 import com.nikitin.roadmaps.dto.response.ProfileResponseDto;
 import com.nikitin.roadmaps.util.RestUtils;
+import com.nikitin.roadmaps.util.ViewUtils;
 import com.nikitin.roadmaps.views.MainLayout;
 import com.nikitin.roadmaps.views.profile.div.RoadmapInfoDiv;
 import com.nikitin.roadmaps.views.profile.div.SaveInfoDiv;
@@ -15,6 +16,7 @@ import com.vaadin.flow.i18n.LocaleChangeObserver;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import jakarta.annotation.security.PermitAll;
+import jakarta.annotation.security.RolesAllowed;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -22,13 +24,10 @@ import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 
 import java.util.Optional;
 
-import static com.nikitin.roadmaps.util.RestUtils.*;
-import static com.nikitin.roadmaps.util.ViewUtils.*;
-
 @Slf4j
 @PageTitle("Profile")
 @Route(value = "profile", layout = MainLayout.class)
-@PermitAll
+@RolesAllowed(value = {"ROLE_USER"})
 public class ProfileView extends VerticalLayout implements LocaleChangeObserver {
 
     private ProfileClient profileClient;
@@ -46,6 +45,8 @@ public class ProfileView extends VerticalLayout implements LocaleChangeObserver 
         userInfoDiv = new UserInfoDiv();
         roadmapInfoDiv = new RoadmapInfoDiv();
         saveInfoDiv = new SaveInfoDiv();
+
+        profileResponseDto = new ProfileResponseDto();
 
         add(headerProfileLayout, userInfoDiv, roadmapInfoDiv, saveInfoDiv);
         getProfile();
@@ -100,12 +101,12 @@ public class ProfileView extends VerticalLayout implements LocaleChangeObserver 
             saveInfoDiv.getSaveUserInfoButton().setVisible(false);
             headerProfileLayout.getUserInfoEditButton().setIsActive(false);
             patchProfile(ProfileRequestDto.builder()
-                    .name(hasStringValue(userInfoDiv.getNameTextField().getValue()))
-                    .lastName(hasStringValue(userInfoDiv.getLastNameTextField().getValue()))
-                    .email(hasStringValue(userInfoDiv.getEmailTextField().getValue()))
+                    .name(ViewUtils.hasStringValue(userInfoDiv.getNameTextField().getValue()))
+                    .lastName(ViewUtils.hasStringValue(userInfoDiv.getLastNameTextField().getValue()))
+                    .email(ViewUtils.hasStringValue(userInfoDiv.getEmailTextField().getValue()))
                     //todo - Сделать Enum
                     //.competence(userInfoDiv.getCompetenceTextField().getValue())
-                    .speciality(hasStringValue(userInfoDiv.getSpecialityTextField().getValue()))
+                    .speciality(ViewUtils.hasStringValue(userInfoDiv.getSpecialityTextField().getValue()))
                     .build());
         });
     }
@@ -120,37 +121,25 @@ public class ProfileView extends VerticalLayout implements LocaleChangeObserver 
 
     private void getProfile() {
         var oidcUser = (OidcUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        var response = profileClient.getByEmail(oidcUser.getEmail());
+        var response = profileClient.getByEmail(oidcUser.getEmail(), true);
 
         if (response.getStatusCode().is2xxSuccessful()) {
             Optional.ofNullable(response.getBody())
-                    .ifPresent(body -> {
-                        profileResponseDto = convertResponseToDto(body, ProfileResponseDto.class);
-                        setProfile(profileResponseDto);
-                    });
-        } else {
-            Optional.ofNullable(response.getBody())
-                    .ifPresent(RestUtils::throwRestException);
+                    .ifPresent(body -> profileResponseDto = RestUtils.convertResponseToDto(body, ProfileResponseDto.class));
         }
+
+        setProfile(profileResponseDto);
     }
 
     private void patchProfile(ProfileRequestDto profileRequestDto) {
-        var response = profileClient.patch(profileResponseDto.getId(), profileRequestDto);
+        var response = profileClient.patch(profileResponseDto.getId(), profileRequestDto, true);
 
         if (response.getStatusCode().is2xxSuccessful()) {
             Optional.ofNullable(response.getBody())
-                    .ifPresent(body -> {
-                        profileResponseDto = convertResponseToDto(body, ProfileResponseDto.class);
-                        setProfile(profileResponseDto);
-                        successNotification();
-                    });
-        } else {
-            Optional.ofNullable(response.getBody())
-                    .ifPresent(body -> {
-                        setProfile(profileResponseDto);
-                        throwRestException(body);
-                    });
+                    .ifPresent(body -> profileResponseDto = RestUtils.convertResponseToDto(body, ProfileResponseDto.class));
         }
+
+        setProfile(profileResponseDto);
     }
 
     @Override

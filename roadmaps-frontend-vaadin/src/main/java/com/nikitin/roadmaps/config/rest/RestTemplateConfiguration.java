@@ -11,7 +11,7 @@ public class RestTemplateConfiguration {
 
     private final String url = "http://localhost:8081/api/v1/roadmaps";
 
-    @Bean
+    @Bean("mainRestTemplate")
     public RestTemplate restTemplate() {
         var restTemplate = new RestTemplate();
         var requestFactory = new HttpComponentsClientHttpRequestFactory();

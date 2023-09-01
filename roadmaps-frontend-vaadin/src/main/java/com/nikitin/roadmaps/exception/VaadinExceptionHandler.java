@@ -16,7 +16,7 @@ public class VaadinExceptionHandler implements ErrorHandler {
                 .ifPresent(ui -> ui.access(() -> {
                     Notification errorNotification = Notification.show(errorEvent.getThrowable().getMessage());
                     errorNotification.addThemeVariants(NotificationVariant.LUMO_ERROR);
-                    errorNotification.setPosition(Notification.Position.TOP_CENTER);
+                    errorNotification.setPosition(Notification.Position.BOTTOM_END);
                 }));
     }
 }
