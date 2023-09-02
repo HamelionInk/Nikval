@@ -1,5 +1,8 @@
 package com.nikitin.roadmaps.dto.enums;
 
+import java.util.Arrays;
+import java.util.List;
+
 public enum CompetenceType {
 
     JUNIOR("Junior"),
@@ -16,5 +19,9 @@ public enum CompetenceType {
 
     public String getName() {
         return name;
+    }
+
+    public static List<CompetenceType> getAllValue() {
+        return Arrays.stream(CompetenceType.values()).toList();
     }
 }

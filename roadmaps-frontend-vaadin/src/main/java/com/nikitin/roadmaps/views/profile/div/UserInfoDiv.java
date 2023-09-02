@@ -1,9 +1,9 @@
 package com.nikitin.roadmaps.views.profile.div;
 
+import com.nikitin.roadmaps.dto.enums.CompetenceType;
 import com.vaadin.flow.component.accordion.AccordionPanel;
-import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.html.Div;
-import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.i18n.LocaleChangeEvent;
 import com.vaadin.flow.i18n.LocaleChangeObserver;
@@ -20,7 +20,7 @@ public class UserInfoDiv extends Div implements LocaleChangeObserver {
     private TextField lastNameTextField;
     private TextField emailTextField;
     private TextField specialityTextField;
-    private TextField competenceTextField;
+    private ComboBox<CompetenceType> competenceComboBox;
 
 
     public UserInfoDiv() {
@@ -46,14 +46,16 @@ public class UserInfoDiv extends Div implements LocaleChangeObserver {
         specialityTextField.addClassName("profile_text_field");
         specialityTextField.setReadOnly(true);
 
-        competenceTextField = new TextField("Компетенция");
-        competenceTextField.addClassName("profile_text_field");
-        competenceTextField.setReadOnly(true);
+        competenceComboBox = new ComboBox<>("Компетенция");
+        competenceComboBox.setItems(CompetenceType.getAllValue());
+        competenceComboBox.setItemLabelGenerator(CompetenceType::getName);
+        competenceComboBox.addClassName("profile_text_field");
+        competenceComboBox.setReadOnly(true);
 
         AccordionPanel accordionPanel = new AccordionPanel("Информация о пользователе");
         accordionPanel.addClassName("profile_accordion_panel");
         accordionPanel.setOpened(true);
-        accordionPanel.addContent(nameTextField, lastNameTextField, emailTextField, specialityTextField, competenceTextField);
+        accordionPanel.addContent(nameTextField, lastNameTextField, emailTextField, specialityTextField, competenceComboBox);
 
         return accordionPanel;
     }
