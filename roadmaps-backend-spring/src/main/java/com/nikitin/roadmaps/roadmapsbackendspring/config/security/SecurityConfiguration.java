@@ -26,7 +26,6 @@ public class SecurityConfiguration {
         httpSecurity
                 .authorizeHttpRequests(httpRequest ->
                         httpRequest
-                                .requestMatchers("/**").hasAuthority("ROLE_USER")
                                 .anyRequest().authenticated())
                 .oauth2ResourceServer(oauth2ResourceServer ->
                         oauth2ResourceServer.jwt(jwt ->
