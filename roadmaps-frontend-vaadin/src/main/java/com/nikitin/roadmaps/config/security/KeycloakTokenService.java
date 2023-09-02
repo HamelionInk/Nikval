@@ -8,6 +8,7 @@ import com.vaadin.flow.server.VaadinServletRequest;
 import com.vaadin.flow.server.VaadinSession;
 import jakarta.servlet.ServletException;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -32,18 +33,20 @@ public class KeycloakTokenService {
     }
 
     public String getAccessToken() {
-        validateAccessToken();
-        return (String) VaadinSession.getCurrent().getAttribute(KeycloakSessionAttribute.ACCESS_TOKEN.getValue());
-    }
-
-    public void validateAccessToken() {
-        var dateExpired = (Instant) VaadinSession.getCurrent().getAttribute(KeycloakSessionAttribute.EXPIRED_TOKEN.getValue());
         try {
-            if (dateExpired.getEpochSecond() <= Instant.now().getEpochSecond()) {
-                refreshToken((String) VaadinSession.getCurrent().getAttribute(KeycloakSessionAttribute.REFRESH_TOKEN.getValue()));
-            }
+            validateAccessToken();
+            return (String) VaadinSession.getCurrent().getAttribute(KeycloakSessionAttribute.ACCESS_TOKEN.getValue());
         } catch (TokenExpiredException exception) {
             logout();
+            return StringUtils.EMPTY;
+        }
+    }
+
+    public void validateAccessToken() throws TokenExpiredException {
+        var dateExpired = (Instant) VaadinSession.getCurrent().getAttribute(KeycloakSessionAttribute.EXPIRED_TOKEN.getValue());
+
+        if (dateExpired.getEpochSecond() <= Instant.now().getEpochSecond()) {
+            refreshToken((String) VaadinSession.getCurrent().getAttribute(KeycloakSessionAttribute.REFRESH_TOKEN.getValue()));
         }
     }
 

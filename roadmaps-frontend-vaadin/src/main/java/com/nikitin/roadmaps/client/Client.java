@@ -18,6 +18,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.HttpStatusCodeException;
+import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestTemplate;
 
 @Slf4j
@@ -43,10 +44,12 @@ public abstract class Client {
         try {
             return restTemplate.exchange(url, httpMethod, request, String.class);
         } catch (HttpStatusCodeException exception) {
-            var exceptionResponseBody = RestUtils.convertResponseToDto(exception.getResponseBodyAsString(), ExceptionResponseDto.class);
-            Notification errorNotification = Notification.show(exceptionResponseBody.getStatus() + " - " + exceptionResponseBody.getMessage());
-            errorNotification.addThemeVariants(NotificationVariant.LUMO_ERROR);
-            errorNotification.setPosition(Notification.Position.BOTTOM_END);
+            if(!exception.getStatusCode().equals(HttpStatus.UNAUTHORIZED)) {
+                var exceptionResponseBody = RestUtils.convertResponseToDto(exception.getResponseBodyAsString(), ExceptionResponseDto.class);
+                Notification errorNotification = Notification.show(exceptionResponseBody.getStatus() + " - " + exceptionResponseBody.getMessage());
+                errorNotification.addThemeVariants(NotificationVariant.LUMO_ERROR);
+                errorNotification.setPosition(Notification.Position.BOTTOM_END);
+            }
             return ResponseEntity.status(exception.getStatusCode()).body(exception.getResponseBodyAsString());
         }
     }
