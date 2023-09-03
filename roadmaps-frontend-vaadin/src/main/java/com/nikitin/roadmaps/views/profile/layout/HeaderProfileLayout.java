@@ -1,6 +1,7 @@
 package com.nikitin.roadmaps.views.profile.layout;
 
 import com.nikitin.roadmaps.views.profile.button.UserInfoEditButton;
+import com.nikitin.roadmaps.views.profile.dialog.AvatarEditDialog;
 import com.vaadin.flow.component.avatar.Avatar;
 import com.vaadin.flow.component.avatar.AvatarVariant;
 import com.vaadin.flow.component.button.Button;
@@ -12,6 +13,7 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.i18n.LocaleChangeEvent;
 import com.vaadin.flow.i18n.LocaleChangeObserver;
 import com.vaadin.flow.server.VaadinServletRequest;
+import com.vaadin.flow.theme.lumo.LumoIcon;
 import jakarta.servlet.ServletException;
 import lombok.Getter;
 import lombok.Setter;
@@ -26,14 +28,29 @@ public class HeaderProfileLayout extends HorizontalLayout implements LocaleChang
     private H3 userFullNameH3;
     private H4 userLoginDateH4;
     private Button logoutButton;
+    private Button editAvatarButton;
     private UserInfoEditButton userInfoEditButton;
+
+    private AvatarEditDialog avatarEditDialog;
 
     public HeaderProfileLayout() {
         addClassName("header_profile_layout");
 
+        avatarEditDialog = new AvatarEditDialog();
+
+        var avatarDiv = new Div();
+        avatarDiv.addClassName("avatar_div");
+
         userAvatar = new Avatar();
-        userAvatar.addThemeVariants(AvatarVariant.LUMO_XLARGE);
         userAvatar.addClassName("user_avatar");
+        userAvatar.addThemeVariants(AvatarVariant.LUMO_XLARGE);
+
+        editAvatarButton = new Button();
+        editAvatarButton.addClassName("edit_avatar_button");
+        editAvatarButton.setIcon(LumoIcon.EDIT.create());
+        editAvatarButton.addClickListener(event -> avatarEditDialog.open());
+
+        avatarDiv.add(userAvatar, editAvatarButton);
 
         userFullNameH3 = new H3("Михаил Никитин");
         userFullNameH3.addClassName("user_full_name_h3");
@@ -41,7 +58,7 @@ public class HeaderProfileLayout extends HorizontalLayout implements LocaleChang
         userLoginDateH4 = new H4("2023-08-20 : 10:00:23");
         userLoginDateH4.addClassName("user_login_date_h4");
 
-        add(userAvatar, userFullNameH3, userLoginDateH4, buildButtonHeaderDiv());
+        add(avatarDiv, userFullNameH3, userLoginDateH4, buildButtonHeaderDiv());
     }
 
     private Div buildButtonHeaderDiv() {
