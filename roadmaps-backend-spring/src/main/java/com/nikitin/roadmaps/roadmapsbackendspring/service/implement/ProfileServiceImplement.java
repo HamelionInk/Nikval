@@ -2,6 +2,7 @@ package com.nikitin.roadmaps.roadmapsbackendspring.service.implement;
 
 import com.nikitin.roadmaps.roadmapsbackendspring.dto.request.ProfileRequestDto;
 import com.nikitin.roadmaps.roadmapsbackendspring.dto.response.ProfileResponseDto;
+import com.nikitin.roadmaps.roadmapsbackendspring.entity.Profile;
 import com.nikitin.roadmaps.roadmapsbackendspring.exception.BadRequestException;
 import com.nikitin.roadmaps.roadmapsbackendspring.exception.NotFoundException;
 import com.nikitin.roadmaps.roadmapsbackendspring.mapper.ProfileMapper;
@@ -10,10 +11,15 @@ import com.nikitin.roadmaps.roadmapsbackendspring.service.ProfileService;
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.codec.binary.Base64;
+import org.apache.http.entity.ContentType;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.util.Objects;
 import java.util.Optional;
 
 @Slf4j
@@ -24,6 +30,7 @@ public class ProfileServiceImplement implements ProfileService {
     private static final String PROFILE_ALREADY_EXIST = "Профиль с указанной почтой уже используется - %s";
     private static final String PROFILE_WITH_EMAIL_NOT_FOUND = "Профиль с указанной почтой не найден - %s";
     private static final String PROFILE_WITH_ID_NOT_FOUND = "Профиль с указанным идентификатором не найден - %s";
+    private static final String UPLOAD_AVATAR_INVALID_FORMAT = "Неверный формат файла - %s";
 
     private final ProfileRepository profileRepository;
     private final ProfileMapper profileMapper;
@@ -38,6 +45,24 @@ public class ProfileServiceImplement implements ProfileService {
     }
 
     @Override
+    public String uploadAvatar(@NonNull Long id, @NonNull MultipartFile image) {
+        validateContentTypeUploadAvatar(image.getContentType());
+
+        try {
+            var imageData = image.getResource().getContentAsByteArray();
+            var encodeImageData = Base64.encodeBase64String(imageData);
+
+            patch(id, ProfileRequestDto.builder()
+                    .picture("data:" + image.getContentType() + ";base64," + encodeImageData)
+                    .build());
+
+            return encodeImageData;
+        } catch (IOException exception) {
+            throw new BadRequestException(exception.getMessage());
+        }
+    }
+
+    @Override
     public ProfileResponseDto patch(@NonNull Long id, @NonNull ProfileRequestDto profileRequestDto) {
         return profileRepository.findById(id)
                 .map(profileForUpdate -> {
@@ -48,11 +73,14 @@ public class ProfileServiceImplement implements ProfileService {
                 .orElseThrow(() -> new NotFoundException(String.format(PROFILE_WITH_ID_NOT_FOUND, id)));
     }
 
-    @Override
-    public ProfileResponseDto getById(@NonNull Long id) {
+    public Profile getEntityById(@NonNull Long id) {
         return profileRepository.findById(id)
-                .map(profileMapper::toResponseDto)
                 .orElseThrow(() -> new NotFoundException(String.format(PROFILE_WITH_ID_NOT_FOUND, id)));
+    }
+
+    @Override
+    public ProfileResponseDto getResponseById(@NonNull Long id) {
+        return profileMapper.toResponseDto(getEntityById(id));
     }
 
     @Override
@@ -76,5 +104,11 @@ public class ProfileServiceImplement implements ProfileService {
                         throw new BadRequestException(String.format(PROFILE_ALREADY_EXIST, emailFromDto));
                     }
                 });
+    }
+
+    private void validateContentTypeUploadAvatar(String contentType) {
+        if(!Objects.equals(contentType, ContentType.IMAGE_PNG.getMimeType()) && !Objects.equals(contentType, ContentType.IMAGE_JPEG.getMimeType())) {
+            throw new BadRequestException(String.format(UPLOAD_AVATAR_INVALID_FORMAT, contentType));
+        }
     }
 }

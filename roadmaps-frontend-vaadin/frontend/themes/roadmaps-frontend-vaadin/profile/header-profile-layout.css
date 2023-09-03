@@ -5,10 +5,24 @@
     box-shadow: 0 0 10px 5px rgba(221, 221, 221, 1);
 }
 
+.avatar_div {
+    position: relative;
+}
+
 .user_avatar {
     width: 150px;
     height: 150px;
     margin: 0.2%;
+}
+
+.edit_avatar_button {
+    background-color: rgba(184,187,191,0.55);
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    top: 70%;
+    left: 70%;
+    border-radius: 100%;
 }
 
 .user_full_name_h3 {

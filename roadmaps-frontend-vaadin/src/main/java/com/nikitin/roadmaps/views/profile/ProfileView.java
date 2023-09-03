@@ -6,6 +6,7 @@ import com.nikitin.roadmaps.dto.response.ProfileResponseDto;
 import com.nikitin.roadmaps.util.RestUtils;
 import com.nikitin.roadmaps.util.ViewUtils;
 import com.nikitin.roadmaps.views.MainLayout;
+import com.nikitin.roadmaps.views.profile.dialog.AvatarEditDialog;
 import com.nikitin.roadmaps.views.profile.div.RoadmapInfoDiv;
 import com.nikitin.roadmaps.views.profile.div.SaveInfoDiv;
 import com.nikitin.roadmaps.views.profile.div.UserInfoDiv;
@@ -169,7 +170,13 @@ public class ProfileView extends VerticalLayout implements LocaleChangeObserver 
             } else {
                 profileRequestDtoBinder.validate();
             }
+        });
 
+        headerProfileLayout.getAvatarEditDialog().getAvatarUpload().addSucceededListener(event -> {
+           var response = profileClient.uploadAvatar(profileResponseDto.getId(), headerProfileLayout.getAvatarEditDialog().getFileBuffer().getFileData(), true);
+           if (response.getStatusCode().is2xxSuccessful()) {
+               getProfile();
+           }
         });
     }
 
