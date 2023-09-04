@@ -113,6 +113,16 @@ public class ProfileView extends VerticalLayout implements LocaleChangeObserver 
         setProfile(profileResponseDto);
     }
 
+    private void uploadAvatar() {
+        var response = profileClient.uploadAvatar(profileResponseDto.getId(), headerProfileLayout.getAvatarEditDialog().getFileBuffer().getFileData(), true);
+
+        if(response.getStatusCode().is2xxSuccessful()) {
+            profileResponseDto.setPicture(response.getBody());
+        }
+
+        setProfile(profileResponseDto);
+    }
+
     private void binderProfileForm() {
         profileRequestDtoBinder.forField(userInfoDiv.getNameTextField())
                 .withValidator(
@@ -173,10 +183,8 @@ public class ProfileView extends VerticalLayout implements LocaleChangeObserver 
         });
 
         headerProfileLayout.getAvatarEditDialog().getAvatarUpload().addSucceededListener(event -> {
-           var response = profileClient.uploadAvatar(profileResponseDto.getId(), headerProfileLayout.getAvatarEditDialog().getFileBuffer().getFileData(), true);
-           if (response.getStatusCode().is2xxSuccessful()) {
-               getProfile();
-           }
+            uploadAvatar();
+            headerProfileLayout.getAvatarEditDialog().close();
         });
     }
 

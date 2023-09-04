@@ -50,10 +50,10 @@ public class ProfileServiceImplement implements ProfileService {
 
         try {
             var imageData = image.getResource().getContentAsByteArray();
-            var encodeImageData = Base64.encodeBase64String(imageData);
+            var encodeImageData = "data:" + image.getContentType() + ";base64," + Base64.encodeBase64String(imageData);
 
             patch(id, ProfileRequestDto.builder()
-                    .picture("data:" + image.getContentType() + ";base64," + encodeImageData)
+                    .picture(encodeImageData)
                     .build());
 
             return encodeImageData;
@@ -107,7 +107,7 @@ public class ProfileServiceImplement implements ProfileService {
     }
 
     private void validateContentTypeUploadAvatar(String contentType) {
-        if(!Objects.equals(contentType, ContentType.IMAGE_PNG.getMimeType()) && !Objects.equals(contentType, ContentType.IMAGE_JPEG.getMimeType())) {
+        if (!Objects.equals(contentType, ContentType.IMAGE_PNG.getMimeType()) && !Objects.equals(contentType, ContentType.IMAGE_JPEG.getMimeType())) {
             throw new BadRequestException(String.format(UPLOAD_AVATAR_INVALID_FORMAT, contentType));
         }
     }
