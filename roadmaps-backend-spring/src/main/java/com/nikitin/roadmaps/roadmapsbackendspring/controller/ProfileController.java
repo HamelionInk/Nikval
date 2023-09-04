@@ -30,6 +30,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -58,7 +59,7 @@ public class ProfileController {
 
     @PostMapping(value = "/upload/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<String> uploadAvatar(@PathVariable (name = "id") Long id,
-                                               @RequestParam (name = "image") MultipartFile image) {
+                                               @RequestPart(name = "image") MultipartFile image) {
             var responseBody = profileService.uploadAvatar(id, image);
 
             return ResponseEntity.status(HttpStatus.CREATED).body(responseBody);
