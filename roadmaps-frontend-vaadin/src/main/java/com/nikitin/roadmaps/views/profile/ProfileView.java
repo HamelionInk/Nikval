@@ -25,6 +25,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.util.StringUtils;
 
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 import java.util.regex.Pattern;
 
@@ -87,7 +89,13 @@ public class ProfileView extends VerticalLayout implements LocaleChangeObserver 
                 });
 
         Optional.ofNullable(profileResponseDto.getLastDateLogin())
-                .ifPresent(lastDateLogin -> headerProfileLayout.getUserLoginDateH4().setText(lastDateLogin.toString()));
+                .ifPresent(lastDateLogin -> {
+                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+                            .withZone(ZoneId.systemDefault());
+                    var formattedLastDateLogin = formatter.format(lastDateLogin);
+
+                    headerProfileLayout.getUserLoginDateH4().setText(formattedLastDateLogin);
+                });
     }
 
     private void getProfile() {
@@ -116,7 +124,7 @@ public class ProfileView extends VerticalLayout implements LocaleChangeObserver 
     private void uploadAvatar() {
         var response = profileClient.uploadAvatar(profileResponseDto.getId(), headerProfileLayout.getAvatarEditDialog().getFileBuffer().getFileData(), true);
 
-        if(response.getStatusCode().is2xxSuccessful()) {
+        if (response.getStatusCode().is2xxSuccessful()) {
             profileResponseDto.setPicture(response.getBody());
         }
 
