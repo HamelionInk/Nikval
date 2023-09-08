@@ -1,0 +1,30 @@
+.create_chapter_dialog {
+    width: 500px;
+    height: 800px;
+    display: flex;
+}
+
+.dialog_vertical_layout {
+    margin-top: -15%;
+
+}
+
+.header_name_h3 {
+    width: 70%;
+}
+
+.roadmap_accordion_panel {
+    margin-left: 1%;
+    margin-right: 1%;
+}
+
+.name_chapter_text_field {
+}
+
+.close_button {
+    margin-left: 7%;
+}
+
+.create_button {
+    width: 100%;
+}

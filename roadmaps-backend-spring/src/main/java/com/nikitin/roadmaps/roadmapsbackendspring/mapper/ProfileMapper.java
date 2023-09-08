@@ -8,10 +8,12 @@ import org.mapstruct.MappingTarget;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 
 @Mapper(componentModel = "spring", nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-public interface ProfileMapper {
+public abstract class ProfileMapper {
 
-    Profile toEntity(ProfileRequestDto dto);
-    Profile toPatchEntity(ProfileRequestDto dto, @MappingTarget Profile entityForUpdate);
-    ProfileResponseDto toResponseDto(Profile entity);
+    public abstract Profile toEntity(ProfileRequestDto dto);
+
+    public abstract Profile toPatchEntity(ProfileRequestDto dto, @MappingTarget Profile entityForUpdate);
+
+    public abstract ProfileResponseDto toResponseDto(Profile entity);
 
 }

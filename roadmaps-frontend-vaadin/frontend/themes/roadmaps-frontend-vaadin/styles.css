@@ -2,3 +2,12 @@
 @import url('login-view.css');
 @import url('sign-up-view.css');
 @import url('profile/profile-view.css');
+@import url('roadmaps/create_roadmap_view.css');
+
+.paragraph {
+    width: auto;
+}
+
+.text_field {
+    width: 82%;
+}

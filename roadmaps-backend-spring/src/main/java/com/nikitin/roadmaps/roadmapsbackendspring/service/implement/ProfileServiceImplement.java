@@ -64,13 +64,12 @@ public class ProfileServiceImplement implements ProfileService {
 
     @Override
     public ProfileResponseDto patch(@NonNull Long id, @NonNull ProfileRequestDto profileRequestDto) {
-        return profileRepository.findById(id)
-                .map(profileForUpdate -> {
-                    emailAlreadyExist(profileRequestDto.getEmail(), profileForUpdate.getEmail());
+        var profileForUpdate = getEntityById(id);
 
-                    return profileMapper.toResponseDto(profileRepository.save(profileMapper.toPatchEntity(profileRequestDto, profileForUpdate)));
-                })
-                .orElseThrow(() -> new NotFoundException(String.format(PROFILE_WITH_ID_NOT_FOUND, id)));
+        emailAlreadyExist(profileRequestDto.getEmail(), profileForUpdate.getEmail());
+
+        var profile = profileMapper.toPatchEntity(profileRequestDto, profileForUpdate);
+        return profileMapper.toResponseDto(profileRepository.save(profile));
     }
 
     public Profile getEntityById(@NonNull Long id) {

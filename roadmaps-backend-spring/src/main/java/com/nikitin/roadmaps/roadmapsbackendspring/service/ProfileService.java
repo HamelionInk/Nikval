@@ -8,15 +8,19 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
-
 public interface ProfileService {
 
     ProfileResponseDto create(@NonNull ProfileRequestDto profileRequestDto);
+
     String uploadAvatar(@NonNull Long id, @NonNull MultipartFile image);
+
     ProfileResponseDto patch(@NonNull Long id, @NonNull ProfileRequestDto profileRequestDto);
+
     Profile getEntityById(@NonNull Long id);
+
     ProfileResponseDto getResponseById(@NonNull Long id);
+
     ProfileResponseDto getByEmail(@NonNull String email);
+
     Page<ProfileResponseDto> getAll(@NonNull Pageable pageable);
 }

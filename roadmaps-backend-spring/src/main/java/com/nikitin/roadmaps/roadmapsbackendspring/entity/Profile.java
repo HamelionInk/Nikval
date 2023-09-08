@@ -33,26 +33,26 @@ public class Profile {
     @Column(name = "picture", columnDefinition = "text")
     private String picture;
 
-    @Column(name = "name", nullable = false)
+    @Column(name = "name", nullable = false, columnDefinition = "varchar(50)")
     private String name;
 
-    @Column(name = "last_name", nullable = false)
+    @Column(name = "last_name", nullable = false, columnDefinition = "varchar(50)")
     private String lastName;
 
     @Formula("CONCAT_WS( ' ', name, last_name)")
     private String fullName;
 
-    @Column(name = "email", nullable = false, unique = true)
+    @Column(name = "email", nullable = false, unique = true, columnDefinition = "varchar(50)")
     private String email;
 
-    @Column(name = "competence")
+    @Column(name = "competence", columnDefinition = "varchar(50)")
     @Enumerated(value = EnumType.STRING)
     private CompetenceType competence;
 
-    @Column(name = "speciality")
+    @Column(name = "speciality", columnDefinition = "varchar(50)")
     private String speciality;
 
-    @Column(name = "last_date_login")
+    @Column(name = "last_date_login", columnDefinition = "timestamptz")
     private Instant lastDateLogin;
 
 }

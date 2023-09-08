@@ -8,6 +8,7 @@ import com.nikitin.roadmaps.exception.VaadinExceptionHandler;
 import com.nikitin.roadmaps.util.RestUtils;
 import com.vaadin.flow.server.ServiceInitEvent;
 import com.vaadin.flow.server.VaadinServiceInitListener;
+import com.vaadin.flow.server.VaadinSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.checkerframework.checker.nullness.Opt;
@@ -67,16 +68,24 @@ public class VaadinServiceListener implements VaadinServiceInitListener {
                         profileClient.patch(profileResponseDto.getId(), ProfileRequestDto.builder()
                                 .lastDateLogin(userInfo.getAuthenticatedAt())
                                 .build(), false);
+                        VaadinSession.getCurrent().setAttribute("profileId", profileResponseDto.getId());
                     });
         }
 
         if (response.getStatusCode().is4xxClientError()) {
-            profileClient.create(ProfileRequestDto.builder()
+            var responseEntity = profileClient.create(ProfileRequestDto.builder()
                     .name(userInfo.getGivenName())
                     .lastName(userInfo.getFamilyName())
                     .email(userInfo.getEmail())
                     .lastDateLogin(userInfo.getAuthenticatedAt())
                     .build(), false);
+            if (responseEntity.getStatusCode().is2xxSuccessful()) {
+                Optional.ofNullable(responseEntity.getBody())
+                        .ifPresent(responseBody -> {
+                            var profileResponseDto = RestUtils.convertResponseToDto(responseBody, ProfileResponseDto.class);
+                            VaadinSession.getCurrent().setAttribute("profileId", profileResponseDto.getId());
+                        });
+            }
         }
     }
 }
