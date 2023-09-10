@@ -2,10 +2,12 @@ package com.nikitin.roadmaps.views;
 
 import com.nikitin.roadmaps.client.RoadmapClient;
 import com.nikitin.roadmaps.dto.response.RoadmapResponseDto;
+import com.nikitin.roadmaps.dto.response.pageable.PageableRoadmapResponseDto;
 import com.nikitin.roadmaps.util.RestUtils;
 import com.nikitin.roadmaps.views.helloworld.HelloWorldView;
 import com.nikitin.roadmaps.views.homepage.HomePageView;
 import com.nikitin.roadmaps.views.profile.ProfileView;
+import com.nikitin.roadmaps.views.roadmaps.RoadmapView;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.DrawerToggle;
@@ -30,6 +32,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Optional;
 
 @Slf4j
 @Getter
@@ -90,9 +93,17 @@ public class MainLayout extends AppLayout implements LocaleChangeObserver {
                 profileNavItem);
 
         roadmapsSideNavigation.setCollapsible(true);
-        roadmapsSideNavigation.addItem(
+
+        if(!roadmapResponseDtos.isEmpty()) {
+            roadmapResponseDtos.forEach(roadmapResponseDto -> {
+                var route = "roadmaps/" + roadmapResponseDto.getId();
+                roadmapsSideNavigation.addItem(new SideNavItem(roadmapResponseDto.getName(),
+                        route, VaadinIcon.SITEMAP.create()));
+            });
+        }
+        //roadmapsSideNavigation.addItem(
                 //new SideNavItem("Создать карту", CreateRoadmapView.class, LumoIcon.PLUS.create()),
-                new SideNavItem("Java backend", HelloWorldView.class, VaadinIcon.SITEMAP.create()));
+                //new SideNavItem("Java backend", HelloWorldView.class, VaadinIcon.SITEMAP.create()));
 
         localeChangeComboBox.addClassNames("localeChangeComboBox");
         localeChangeComboBox.setItems(i18NProvider.getProvidedLocales());
@@ -110,9 +121,12 @@ public class MainLayout extends AppLayout implements LocaleChangeObserver {
     private void getAllRoadmapsByProfileId(Long id) {
         var response = roadmapClient.getAllByProfileId(id, true);
         if(response.getStatusCode().is2xxSuccessful()) {
+            Optional.ofNullable(response.getBody())
+                    .ifPresent(body -> {
+                        var pageableRoadmapResponseDto = RestUtils.convertResponseToDto(body, PageableRoadmapResponseDto.class);
+                        roadmapResponseDtos = pageableRoadmapResponseDto.getRoadmapResponseDtos();
+                    });
         }
-
-        log.info(response.getBody());
     }
 
     private void saveLocalPreference(Locale locale) {

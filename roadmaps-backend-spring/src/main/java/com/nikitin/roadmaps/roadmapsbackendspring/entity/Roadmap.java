@@ -16,6 +16,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -38,5 +39,15 @@ public class Roadmap {
     private Profile profile;
 
     @OneToMany(mappedBy = "roadmap", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<RoadmapChapter> roadmapChapters;
+    private List<RoadmapChapter> roadmapChapters = new ArrayList<>();
+
+    public void addRoadmapChapter(RoadmapChapter roadmapChapter) {
+        roadmapChapters.add(roadmapChapter);
+        roadmapChapter.setRoadmap(this);
+    }
+
+    public void removeRoadmapChapter(RoadmapChapter roadmapChapter) {
+        roadmapChapters.remove(roadmapChapter);
+        roadmapChapter.setRoadmap(null);
+    }
 }
