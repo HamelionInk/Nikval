@@ -80,6 +80,14 @@ public class RoadmapController {
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(responseBody);
     }
 
+    @PatchMapping("/topic/{id}")
+    public ResponseEntity<RoadmapTopicResponseDto> patchTopicById(@PathVariable(name = "id") Long id,
+                                                                  @RequestBody @Validated(value = Patch.class) RoadmapTopicRequestDto roadmapTopicRequestDto) {
+        var responseBody = roadmapService.patchTopicById(id, roadmapTopicRequestDto);
+
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(responseBody);
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<RoadmapResponseDto> getById(@PathVariable(name = "id") Long id) {
         var responseBody = roadmapService.getResponseById(id);
