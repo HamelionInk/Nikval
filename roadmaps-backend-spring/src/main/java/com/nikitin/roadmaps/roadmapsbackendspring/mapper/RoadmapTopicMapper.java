@@ -18,6 +18,7 @@ public abstract class RoadmapTopicMapper {
     @Mapping(source = "dto.roadmapQuestionRequestDtos", target = "roadmapQuestions")
     public abstract RoadmapTopic toEntity(RoadmapTopicRequestDto dto);
 
+    @Mapping(source = "dto.roadmapQuestionRequestDtos", target = "roadmapQuestions")
     public abstract RoadmapTopic toPatchEntity(RoadmapTopicRequestDto dto, @MappingTarget RoadmapTopic entityForUpdate);
 
     @Mapping(source = "entity.roadmapQuestions", target = "roadmapQuestionResponseDtos")

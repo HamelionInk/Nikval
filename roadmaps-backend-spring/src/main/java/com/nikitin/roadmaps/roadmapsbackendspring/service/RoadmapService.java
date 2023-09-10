@@ -28,6 +28,8 @@ public interface RoadmapService {
 
     RoadmapResponseDto patch(@NonNull Long id, @NonNull RoadmapRequestDto roadmapRequestDto);
 
+    RoadmapTopicResponseDto patchTopicById(@NonNull Long id, @NonNull RoadmapTopicRequestDto roadmapTopicRequestDto);
+
     Roadmap getEntityById(@NonNull Long id);
 
     RoadmapResponseDto getResponseById(@NonNull Long id);

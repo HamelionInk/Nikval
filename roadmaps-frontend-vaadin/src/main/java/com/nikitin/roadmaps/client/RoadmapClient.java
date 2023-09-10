@@ -47,6 +47,13 @@ public class RoadmapClient extends Client {
                 notificationError);
     }
 
+    public ResponseEntity<String> patchTopicById(Long topicId, RoadmapTopicRequestDto roadmapTopicRequestDto, Boolean notificationError) {
+        return request("/roadmaps/topic/" + topicId,
+                HttpMethod.PATCH,
+                buildRequestBody(roadmapTopicRequestDto, null),
+                notificationError);
+    }
+
     public ResponseEntity<String> getById(Long id, Boolean notificationError) {
         return request("/roadmaps/" + id,
                 HttpMethod.GET,

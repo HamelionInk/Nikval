@@ -105,6 +105,14 @@ public class RoadmapServiceImplement implements RoadmapService {
     }
 
     @Override
+    public RoadmapTopicResponseDto patchTopicById(@NonNull Long id, @NonNull RoadmapTopicRequestDto roadmapTopicRequestDto) {
+        var roadmapTopicForUpdate = getEntityTopicById(id);
+
+        var roadmapTopic = roadmapTopicMapper.toPatchEntity(roadmapTopicRequestDto, roadmapTopicForUpdate);
+        return roadmapTopicMapper.toResponseDto(roadmapTopicRepository.save(roadmapTopic));
+    }
+
+    @Override
     public Roadmap getEntityById(@NonNull Long id) {
         return roadmapRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException(String.format(ROADMAP_WITH_ID_NOT_FOUND, id)));
