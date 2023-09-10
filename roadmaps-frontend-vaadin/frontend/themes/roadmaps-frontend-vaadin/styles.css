@@ -2,12 +2,11 @@
 @import url('login-view.css');
 @import url('sign-up-view.css');
 @import url('profile/profile-view.css');
-@import url('roadmaps/create_roadmap_view.css');
+@import url('roadmaps/roadmap_view.css');
 
-.paragraph {
-    width: auto;
-}
-
-.text_field {
-    width: 82%;
+.div_element {
+    width: 100%;
+    height: 100%;
+    margin-right: 2%;
+    box-shadow: 0 0 10px 5px rgba(221, 221, 221, 1);
 }

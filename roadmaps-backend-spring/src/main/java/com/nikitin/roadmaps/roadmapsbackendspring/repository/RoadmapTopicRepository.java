@@ -1,6 +1,6 @@
 package com.nikitin.roadmaps.roadmapsbackendspring.repository;
 
-import com.nikitin.roadmaps.roadmapsbackendspring.entity.Roadmap;
+import com.nikitin.roadmaps.roadmapsbackendspring.entity.RoadmapTopic;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface RoadmapRepository extends JpaRepository<Roadmap, Long>, JpaSpecificationExecutor<Roadmap> {
+public interface RoadmapTopicRepository extends JpaRepository<RoadmapTopic, Long>, JpaSpecificationExecutor<RoadmapTopic> {
 
-    Page<Roadmap> findAllByProfileId(Long id, Pageable pageable);
+    Page<RoadmapTopic> findAllByRoadmapChapterId(Long chapterId, Pageable pageable);
 }

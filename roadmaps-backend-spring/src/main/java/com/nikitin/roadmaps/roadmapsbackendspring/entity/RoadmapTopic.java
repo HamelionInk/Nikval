@@ -17,6 +17,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -45,9 +46,27 @@ public class RoadmapTopic {
     private RoadmapChapter roadmapChapter;
 
     @OneToMany(mappedBy = "roadmapTopic", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<RoadmapQuestion> roadmapQuestions;
+    private List<RoadmapQuestion> roadmapQuestions = new ArrayList<>();
 
     public void incrementExploredQuestion() {
         numberExploredQuestion++;
+    }
+
+    public void incrementNumberOfQuestion() {
+        numberOfQuestion++;
+    }
+
+    public void decrementNumberOfQuestion() {
+        numberOfQuestion--;
+    }
+
+    public void addRoadmapQuestion(RoadmapQuestion roadmapQuestion) {
+        roadmapQuestions.add(roadmapQuestion);
+        roadmapQuestion.setRoadmapTopic(this);
+    }
+
+    public void removeRoadmapQuestion(RoadmapQuestion roadmapQuestion) {
+        roadmapQuestions.remove(roadmapQuestion);
+        roadmapQuestion.setRoadmapTopic(null);
     }
 }

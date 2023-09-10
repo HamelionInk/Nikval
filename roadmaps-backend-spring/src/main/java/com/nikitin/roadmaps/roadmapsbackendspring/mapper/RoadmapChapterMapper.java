@@ -2,12 +2,17 @@ package com.nikitin.roadmaps.roadmapsbackendspring.mapper;
 
 import com.nikitin.roadmaps.roadmapsbackendspring.dto.request.RoadmapChapterRequestDto;
 import com.nikitin.roadmaps.roadmapsbackendspring.dto.response.RoadmapChapterResponseDto;
+import com.nikitin.roadmaps.roadmapsbackendspring.entity.Profile;
+import com.nikitin.roadmaps.roadmapsbackendspring.entity.Roadmap;
 import com.nikitin.roadmaps.roadmapsbackendspring.entity.RoadmapChapter;
+import com.nikitin.roadmaps.roadmapsbackendspring.service.RoadmapService;
 import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
+import org.mapstruct.Named;
 import org.mapstruct.NullValuePropertyMappingStrategy;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Optional;
 
