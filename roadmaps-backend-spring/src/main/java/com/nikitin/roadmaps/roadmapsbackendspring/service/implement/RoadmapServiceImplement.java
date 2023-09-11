@@ -85,15 +85,16 @@ public class RoadmapServiceImplement implements RoadmapService {
 
     @Override
     public RoadmapTopicResponseDto createQuestion(@NonNull Long topicId, @NonNull RoadmapQuestionRequestDto roadmapQuestionRequestDto) {
-        var topic = getEntityTopicById(topicId);
+        var roadmapTopic = getEntityTopicById(topicId);
         var roadmapQuestion = roadmapQuestionMapper.toEntity(roadmapQuestionRequestDto);
 
-        topic.addRoadmapQuestion(roadmapQuestion);
-        topic.incrementNumberOfQuestion();
+        roadmapTopic.addRoadmapQuestion(roadmapQuestion);
         if(roadmapQuestion.getIsExplored()) {
-            topic.incrementExploredQuestion();
+            roadmapTopic.incrementExploredQuestion();
         }
-        return roadmapTopicMapper.toResponseDto(roadmapTopicRepository.save(topic));
+        roadmapTopic.incrementNumberOfQuestion();
+
+        return roadmapTopicMapper.toResponseDto(roadmapTopicRepository.save(roadmapTopic));
     }
 
     @Override
@@ -110,6 +111,25 @@ public class RoadmapServiceImplement implements RoadmapService {
 
         var roadmapTopic = roadmapTopicMapper.toPatchEntity(roadmapTopicRequestDto, roadmapTopicForUpdate);
         return roadmapTopicMapper.toResponseDto(roadmapTopicRepository.save(roadmapTopic));
+    }
+
+    @Override
+    public RoadmapQuestionResponseDto patchQuestionById(@NonNull Long id, @NonNull RoadmapQuestionRequestDto roadmapQuestionRequestDto) {
+        var roadmapQuestionForUpdate = getEntityQuestionById(id);
+        var roadmapQuestion = roadmapQuestionMapper.toPatchEntity(roadmapQuestionRequestDto, roadmapQuestionForUpdate);
+
+        var roadmapTopic = getEntityTopicById(roadmapQuestion.getRoadmapTopic().getId());
+
+        roadmapTopic.addRoadmapQuestion(roadmapQuestion);
+        if(roadmapQuestion.getIsExplored()) {
+            roadmapTopic.incrementExploredQuestion();
+        } else {
+            roadmapTopic.decrementExploredQuestion();
+        }
+
+        roadmapTopicRepository.save(roadmapTopic);
+
+        return roadmapQuestionMapper.toResponseDto(roadmapQuestion);
     }
 
     @Override

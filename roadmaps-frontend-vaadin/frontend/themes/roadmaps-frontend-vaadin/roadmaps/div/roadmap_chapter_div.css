@@ -14,6 +14,12 @@
 
 }
 
+.question_status {
+    width: 15px;
+    height: 15px;
+    margin-left: 24%;
+}
+
 .save_edited_topic_name {
     margin-left: 15%;
 }
