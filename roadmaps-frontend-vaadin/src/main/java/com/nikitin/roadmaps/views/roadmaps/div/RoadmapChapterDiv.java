@@ -11,8 +11,10 @@ import com.nikitin.roadmaps.dto.response.pageable.PageableRoadmapQuestionRespons
 import com.nikitin.roadmaps.dto.response.pageable.PageableRoadmapTopicResponseDto;
 import com.nikitin.roadmaps.util.RestUtils;
 import com.nikitin.roadmaps.views.roadmaps.RoadmapView;
+import com.nikitin.roadmaps.views.roadmaps.dialog.QuestionInfoDialog;
 import com.nikitin.roadmaps.views.roadmaps.from.RoadmapQuestionFormLayout;
 import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.grid.Grid;
@@ -25,6 +27,7 @@ import com.vaadin.flow.component.menubar.MenuBarVariant;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.progressbar.ProgressBar;
 import com.vaadin.flow.component.splitlayout.SplitLayout;
+import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
 import lombok.Getter;
@@ -95,6 +98,37 @@ public class RoadmapChapterDiv extends Div {
         return editedTopicNameColumn;
     }
 
+    private Component configurationEditedQuestionColumn() {
+        var editedQuestionColumn = new TextArea();
+        editedQuestionColumn.addClassName("edited_question_column");
+
+        var saveEditedQuestion = new Button(VaadinIcon.CHECK.create());
+        saveEditedQuestion.addClassName("save_edited_topic_name");
+        saveEditedQuestion.addThemeVariants(ButtonVariant.LUMO_SMALL, ButtonVariant.LUMO_TERTIARY_INLINE);
+        saveEditedQuestion.addClickListener(event -> secondaryGrid.getSelectedItems().stream().findFirst().ifPresent(item -> {
+            var response = roadmapClient.patchQuestionById(item.getId(), RoadmapQuestionRequestDto.builder()
+                    .question(editedQuestionColumn.getValue())
+                    .build(), true);
+            if (response.getStatusCode().is2xxSuccessful()) {
+                updateSecondaryGrid(getSelectedTopicId());
+            }
+        }));
+
+        var cancelEditedQuestion = new Button(VaadinIcon.CLOSE.create());
+        cancelEditedQuestion.addThemeVariants(ButtonVariant.LUMO_SMALL, ButtonVariant.LUMO_TERTIARY_INLINE, ButtonVariant.LUMO_ERROR);
+        cancelEditedQuestion.addClassName("cancel_edited_topic_name");
+        cancelEditedQuestion.addClickListener(event -> secondaryGrid.getEditor().cancel());
+
+        var buttonLayout = new HorizontalLayout();
+        buttonLayout.addClassName("button_layout");
+        buttonLayout.add(saveEditedQuestion, cancelEditedQuestion);
+
+        editedQuestionColumn.setSuffixComponent(buttonLayout);
+        editedQuestionColumn.setWidthFull();
+
+        return editedQuestionColumn;
+    }
+
     private void configurationPrimaryGrid() {
         primaryGrid.setClassName("roadmap_primary_grid");
         primaryGrid.addThemeVariants(GridVariant.LUMO_NO_BORDER);
@@ -132,11 +166,31 @@ public class RoadmapChapterDiv extends Div {
         secondaryGrid.setClassName("roadmap_secondary_grid");
         secondaryGrid.setSelectionMode(Grid.SelectionMode.SINGLE);
 
+        var secondaryEditor = secondaryGrid.getEditor();
+        Binder<RoadmapQuestionResponseDto> secondaryBinder = new Binder<>(RoadmapQuestionResponseDto.class);
+        secondaryEditor.setBinder(secondaryBinder);
+        secondaryEditor.setBuffered(true);
+
+        secondaryGrid.addItemDoubleClickListener(event -> {
+            var questionInfoDialog = new QuestionInfoDialog(event.getItem(), roadmapClient, this);
+            questionInfoDialog.open();
+        });
+
         Grid.Column<RoadmapQuestionResponseDto> questionColumn = secondaryGrid
                 .addColumn(RoadmapQuestionResponseDto::getQuestion).setHeader("Вопрос");
 
         Grid.Column<RoadmapQuestionResponseDto> isExploredColumn = secondaryGrid
-                .addColumn(RoadmapQuestionResponseDto::getIsExplored).setHeader("Статус");
+                .addComponentColumn(roadmapQuestionResponseDto -> {
+                    if (roadmapQuestionResponseDto.getIsExplored()) {
+                        return createStatusIcon(VaadinIcon.CHECK, "green");
+                    } else {
+                        return createStatusIcon(VaadinIcon.CLOSE, "red");
+                    }
+                }).setHeader("Статус")
+                .setWidth("100px")
+                .setFlexGrow(0);
+
+        questionColumn.setEditorComponent(configurationEditedQuestionColumn());
     }
 
     private void configurationPrimaryMenuBar() {
@@ -145,7 +199,7 @@ public class RoadmapChapterDiv extends Div {
 
         var addTopic = new Icon(VaadinIcon.PLUS);
         addTopic.addClickListener(event -> {
-            var response = roadmapClient.createTopic(getRoadmapId(), RoadmapTopicRequestDto.builder()
+            var response = roadmapClient.createTopic(getRoadmapChapterId(), RoadmapTopicRequestDto.builder()
                     .name("Новая тема")
                     .roadmapQuestionRequestDtos(new ArrayList<>())
                     .build(), true);
@@ -155,15 +209,13 @@ public class RoadmapChapterDiv extends Div {
         });
 
         var deleteTopic = new Icon(VaadinIcon.MINUS);
-        deleteTopic.addClickListener(event -> {
-            primaryGrid.getSelectedItems().stream().findFirst().ifPresent(item -> {
-                var response = roadmapClient.deleteTopicById(item.getId(), true);
-                if (response.getStatusCode().is2xxSuccessful()) {
-                    updatePrimaryGrid();
-                    updateSecondaryGrid(null);
-                }
-            });
-        });
+        deleteTopic.addClickListener(event -> primaryGrid.getSelectedItems().stream().findFirst().ifPresent(item -> {
+            var response = roadmapClient.deleteTopicById(item.getId(), true);
+            if (response.getStatusCode().is2xxSuccessful()) {
+                updatePrimaryGrid();
+                updateSecondaryGrid(null);
+            }
+        }));
 
         var editTopic = new Icon(VaadinIcon.EDIT);
         editTopic.addClickListener(event -> primaryGrid.getSelectedItems().stream().findFirst().ifPresent(item -> {
@@ -206,7 +258,22 @@ public class RoadmapChapterDiv extends Div {
         }));
 
         var editQuestion = new Icon(VaadinIcon.EDIT);
+        editQuestion.addClickListener(event -> secondaryGrid.getSelectedItems().stream().findFirst().ifPresent(item -> {
+            var questionInfoDialog = new QuestionInfoDialog(item, roadmapClient, this);
+            questionInfoDialog.setEditedStatus();
+            questionInfoDialog.open();
+        }));
+
         var exploredQuestion = new Icon(VaadinIcon.CHECK);
+        exploredQuestion.addClickListener(event -> secondaryGrid.getSelectedItems().stream().findFirst().ifPresent(item -> {
+            var response = roadmapClient.patchQuestionById(item.getId(), RoadmapQuestionRequestDto.builder()
+                    .isExplored(!item.getIsExplored())
+                    .build(), true);
+            if (response.getStatusCode().is2xxSuccessful()) {
+                updatePrimaryGrid();
+                updateSecondaryGrid(item.getRoadmapTopicId());
+            }
+        }));
 
         Stream.of(addQuestion, deleteQuestion, editQuestion, exploredQuestion).forEach(item -> secondaryMenuBar.addItem(item));
     }
@@ -221,6 +288,14 @@ public class RoadmapChapterDiv extends Div {
         addClassName("roadmap_div_element");
 
         add(splitLayout);
+    }
+
+    private Component createStatusIcon(VaadinIcon icon, String color) {
+        var statusIcon = new Icon(icon);
+        statusIcon.setClassName("question_status");
+        statusIcon.setColor(color);
+
+        return statusIcon;
     }
 
     public void updatePrimaryGrid() {

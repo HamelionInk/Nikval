@@ -52,6 +52,10 @@ public class RoadmapTopic {
         numberExploredQuestion++;
     }
 
+    public void decrementExploredQuestion() {
+        numberExploredQuestion--;
+    }
+
     public void incrementNumberOfQuestion() {
         numberOfQuestion++;
     }
