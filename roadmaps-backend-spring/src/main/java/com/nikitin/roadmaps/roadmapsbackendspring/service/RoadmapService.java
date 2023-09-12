@@ -20,47 +20,15 @@ public interface RoadmapService {
 
     RoadmapResponseDto create(@NonNull RoadmapRequestDto roadmapRequestDto);
 
-    RoadmapResponseDto createChapter(@NonNull Long roadmapId,@NonNull RoadmapChapterRequestDto roadmapChapterRequestDto);
-
-    RoadmapChapterResponseDto createTopic(@NonNull Long chapterId, @NonNull RoadmapTopicRequestDto roadmapTopicRequestDto);
-
-    RoadmapTopicResponseDto createQuestion(@NonNull Long topicId, @NonNull RoadmapQuestionRequestDto roadmapQuestionRequestDto);
-
     RoadmapResponseDto patch(@NonNull Long id, @NonNull RoadmapRequestDto roadmapRequestDto);
-
-    RoadmapTopicResponseDto patchTopicById(@NonNull Long id, @NonNull RoadmapTopicRequestDto roadmapTopicRequestDto);
-
-    RoadmapQuestionResponseDto patchQuestionById(@NonNull Long id, @NonNull RoadmapQuestionRequestDto roadmapQuestionRequestDto);
 
     Roadmap getEntityById(@NonNull Long id);
 
     RoadmapResponseDto getResponseById(@NonNull Long id);
 
-    RoadmapChapter getEntityChapterById(@NonNull Long id);
-
-    RoadmapChapterResponseDto getResponseChapterById(@NonNull Long id);
-
-    RoadmapTopic getEntityTopicById(@NonNull Long id);
-
-    RoadmapTopicResponseDto getResponseTopicById(@NonNull Long id);
-
-    RoadmapQuestion getEntityQuestionById(@NonNull Long id);
-
-    RoadmapQuestionResponseDto getResponseQuestionById(@NonNull Long id);
-
     Page<RoadmapResponseDto> getAll(@NonNull Pageable pageable);
 
     Page<RoadmapResponseDto> getAllByProfileId(@NonNull Long id, @NonNull Pageable pageable);
 
-    Page<RoadmapTopicResponseDto> getAllTopicByChapterId(@NonNull Long id, @NonNull Pageable pageable);
-
-    Page<RoadmapQuestionResponseDto> getAllQuestionByTopicId(@NonNull Long id, @NonNull Pageable pageable);
-
-    void deleteRoadmapById(@NonNull Long id);
-
-    void deleteChapterById(@NonNull Long id);
-
-    void deleteTopicById(@NonNull Long id);
-
-    void deleteQuestionById(@NonNull Long id);
+    void deleteById(@NonNull Long id);
 }

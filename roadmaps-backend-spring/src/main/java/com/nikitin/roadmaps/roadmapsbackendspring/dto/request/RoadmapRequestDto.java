@@ -6,6 +6,7 @@ import com.nikitin.roadmaps.roadmapsbackendspring.validation.annotation.NotBlank
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -29,9 +30,6 @@ public class RoadmapRequestDto {
 
     @Schema(description = "Идентификатор кому пренадлежит карта развития", example = "5")
     @NotNull(message = "Поле <profileId> не может быть null", groups = Create.class)
+    @Positive(message = "Идентификатор не может быть отрицательным значением", groups = { Create.class, Patch.class })
     private Long profileId;
-
-    @Schema(description = "Список разделов для карты развития", example = "")
-    @Valid
-    private List<RoadmapChapterRequestDto> roadmapChapterRequestDtos;
 }

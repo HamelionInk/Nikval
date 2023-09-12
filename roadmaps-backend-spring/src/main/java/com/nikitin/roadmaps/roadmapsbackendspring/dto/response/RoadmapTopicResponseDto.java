@@ -29,7 +29,4 @@ public class RoadmapTopicResponseDto {
 
     @Schema(description = "Идентификатор отношения к разделу", example = "8")
     private Long roadmapChapterId;
-
-    @Schema(description = "", example = "")
-    private List<RoadmapQuestionResponseDto> roadmapQuestionResponseDtos;
 }

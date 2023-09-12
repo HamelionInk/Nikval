@@ -28,7 +28,8 @@ public class RoadmapTopicRequestDto {
     @NotBlank(message = "Поле <name> должно иметь значение", allowNull = true, groups = { Create.class, Patch.class })
     private String name;
 
-    @Schema(description = "Список вопросов для темы", example = "")
-    @Valid
-    private List<RoadmapQuestionRequestDto> roadmapQuestionRequestDtos;
+    @Schema(description = "Идентификатор раздела", example = "34")
+    @NotNull(message = "Поле <roadmapChapterId> не может быть null", groups = Create.class)
+    @Positive(message = "Идентификатор не может быть отрицательным значением", groups = { Create.class, Patch.class })
+    private Long roadmapChapterId;
 }

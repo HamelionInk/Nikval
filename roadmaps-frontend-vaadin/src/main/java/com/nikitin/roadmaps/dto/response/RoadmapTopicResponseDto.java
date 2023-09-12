@@ -20,5 +20,4 @@ public class RoadmapTopicResponseDto {
     private Integer numberOfQuestion;
     private Integer numberExploredQuestion;
     private Long roadmapChapterId;
-    private List<RoadmapQuestionResponseDto> roadmapQuestionResponseDtos;
 }

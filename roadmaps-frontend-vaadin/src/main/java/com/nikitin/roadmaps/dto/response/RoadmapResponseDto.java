@@ -18,5 +18,4 @@ public class RoadmapResponseDto {
     private Long id;
     private String name;
     private Long profileId;
-    private List<RoadmapChapterResponseDto> roadmapChapterResponseDtos;
 }

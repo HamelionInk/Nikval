@@ -59,11 +59,9 @@ public class MainLayout extends AppLayout implements LocaleChangeObserver {
     private final SideNavItem profileNavItem;
 
     private RoadmapClient roadmapClient;
-    private List<RoadmapResponseDto> roadmapResponseDtos;
 
     public MainLayout(@Autowired I18NProvider i18NProvider, @Autowired RoadmapClient roadmapClient) {
         this.roadmapClient = roadmapClient;
-        roadmapResponseDtos = new ArrayList<>();
 
         applicationNameText = new H1(getTranslation(APPLICATION_NAME_KEY));
 
@@ -74,8 +72,6 @@ public class MainLayout extends AppLayout implements LocaleChangeObserver {
         profileNavItem = new SideNavItem(getTranslation(SIDE_NAV_ITEM_PROFILE_KEY), ProfileView.class, VaadinIcon.USER_CARD.create());
 
         this.i18NProvider = i18NProvider;
-
-        getAllRoadmapsByProfileId((long) VaadinSession.getCurrent().getAttribute("profileId"));
 
         buildNavigationSideBar();
     }
@@ -94,16 +90,17 @@ public class MainLayout extends AppLayout implements LocaleChangeObserver {
 
         roadmapsSideNavigation.setCollapsible(true);
 
-        if(!roadmapResponseDtos.isEmpty()) {
-            roadmapResponseDtos.forEach(roadmapResponseDto -> {
-                var route = "roadmaps/" + roadmapResponseDto.getId();
-                roadmapsSideNavigation.addItem(new SideNavItem(roadmapResponseDto.getName(),
-                        route, VaadinIcon.SITEMAP.create()));
+        var pageableRoadmapResponseDto = getAllByProfileId((long) UI.getCurrent().getSession().getAttribute("profileId"));
+        if(!pageableRoadmapResponseDto.getRoadmapResponseDtos().isEmpty()) {
+            pageableRoadmapResponseDto.getRoadmapResponseDtos().forEach(item -> {
+                var route = "roadmaps/" + item.getId();
+                roadmapsSideNavigation.addItem(new SideNavItem(item.getName(), route, VaadinIcon.SITEMAP.create()));
             });
         }
+
         //roadmapsSideNavigation.addItem(
-                //new SideNavItem("Создать карту", CreateRoadmapView.class, LumoIcon.PLUS.create()),
-                //new SideNavItem("Java backend", HelloWorldView.class, VaadinIcon.SITEMAP.create()));
+        //new SideNavItem("Создать карту", CreateRoadmapView.class, LumoIcon.PLUS.create()),
+        //new SideNavItem("Java backend", HelloWorldView.class, VaadinIcon.SITEMAP.create()));
 
         localeChangeComboBox.addClassNames("localeChangeComboBox");
         localeChangeComboBox.setItems(i18NProvider.getProvidedLocales());
@@ -118,15 +115,12 @@ public class MainLayout extends AppLayout implements LocaleChangeObserver {
         addToDrawer(generalSideNavigation, roadmapsSideNavigation);
     }
 
-    private void getAllRoadmapsByProfileId(Long id) {
+    private PageableRoadmapResponseDto getAllByProfileId(Long id) {
         var response = roadmapClient.getAllByProfileId(id, true);
-        if(response.getStatusCode().is2xxSuccessful()) {
-            Optional.ofNullable(response.getBody())
-                    .ifPresent(body -> {
-                        var pageableRoadmapResponseDto = RestUtils.convertResponseToDto(body, PageableRoadmapResponseDto.class);
-                        roadmapResponseDtos = pageableRoadmapResponseDto.getRoadmapResponseDtos();
-                    });
+        if (response.getStatusCode().is2xxSuccessful()) {
+            return RestUtils.convertResponseToDto(response.getBody(), PageableRoadmapResponseDto.class);
         }
+        return new PageableRoadmapResponseDto();
     }
 
     private void saveLocalPreference(Locale locale) {
