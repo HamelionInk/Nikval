@@ -1,7 +1,7 @@
 package com.nikitin.roadmaps.dto.response.pageable;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.nikitin.roadmaps.dto.response.RoadmapResponseDto;
+import com.nikitin.roadmaps.dto.response.RoadmapChapterResponseDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -16,9 +16,10 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class PageableRoadmapResponseDto extends Pageable {
+public class PageableRoadmapChapterResponseDto extends Pageable {
 
     @JsonProperty("content")
     @Builder.Default
-    private List<RoadmapResponseDto> roadmapResponseDtos = new ArrayList<>();
+    private List<RoadmapChapterResponseDto> roadmapChapterResponseDtos = new ArrayList<>();
+
 }

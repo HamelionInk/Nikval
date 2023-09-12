@@ -1,20 +1,17 @@
 package com.nikitin.roadmaps.views.roadmaps.div;
 
 import com.nikitin.roadmaps.client.RoadmapClient;
+import com.nikitin.roadmaps.client.RoadmapQuestionClient;
+import com.nikitin.roadmaps.client.RoadmapTopicClient;
 import com.nikitin.roadmaps.dto.request.RoadmapQuestionRequestDto;
 import com.nikitin.roadmaps.dto.request.RoadmapTopicRequestDto;
-import com.nikitin.roadmaps.dto.response.RoadmapChapterResponseDto;
 import com.nikitin.roadmaps.dto.response.RoadmapQuestionResponseDto;
-import com.nikitin.roadmaps.dto.response.RoadmapResponseDto;
 import com.nikitin.roadmaps.dto.response.RoadmapTopicResponseDto;
 import com.nikitin.roadmaps.dto.response.pageable.PageableRoadmapQuestionResponseDto;
 import com.nikitin.roadmaps.dto.response.pageable.PageableRoadmapTopicResponseDto;
 import com.nikitin.roadmaps.util.RestUtils;
-import com.nikitin.roadmaps.views.roadmaps.RoadmapView;
 import com.nikitin.roadmaps.views.roadmaps.dialog.QuestionInfoDialog;
-import com.nikitin.roadmaps.views.roadmaps.from.RoadmapQuestionFormLayout;
 import com.vaadin.flow.component.Component;
-import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.grid.Grid;
@@ -52,10 +49,15 @@ public class RoadmapChapterDiv extends Div {
     private Long selectedTopicId;
     private Long roadmapChapterId;
     private Long roadmapId;
-    private RoadmapClient roadmapClient;
 
-    public RoadmapChapterDiv(RoadmapClient roadmapClient) {
+    private RoadmapClient roadmapClient;
+    private RoadmapTopicClient roadmapTopicClient;
+    private RoadmapQuestionClient roadmapQuestionClient;
+
+    public RoadmapChapterDiv(RoadmapClient roadmapClient, RoadmapTopicClient roadmapTopicClient, RoadmapQuestionClient roadmapQuestionClient) {
         this.roadmapClient = roadmapClient;
+        this.roadmapTopicClient = roadmapTopicClient;
+        this.roadmapQuestionClient = roadmapQuestionClient;
 
         configurationPrimaryGrid();
         configurationSecondaryGrid();
@@ -75,7 +77,7 @@ public class RoadmapChapterDiv extends Div {
         saveEditedTopicName.addClassName("save_edited_topic_name");
         saveEditedTopicName.addThemeVariants(ButtonVariant.LUMO_SMALL, ButtonVariant.LUMO_TERTIARY_INLINE);
         saveEditedTopicName.addClickListener(event -> {
-            var response = roadmapClient.patchTopicById(getSelectedTopicId(), RoadmapTopicRequestDto.builder()
+            var response = roadmapTopicClient.patch(getSelectedTopicId(), RoadmapTopicRequestDto.builder()
                     .name(editedTopicNameColumn.getValue())
                     .build(), true);
             if (response.getStatusCode().is2xxSuccessful()) {
@@ -106,7 +108,7 @@ public class RoadmapChapterDiv extends Div {
         saveEditedQuestion.addClassName("save_edited_topic_name");
         saveEditedQuestion.addThemeVariants(ButtonVariant.LUMO_SMALL, ButtonVariant.LUMO_TERTIARY_INLINE);
         saveEditedQuestion.addClickListener(event -> secondaryGrid.getSelectedItems().stream().findFirst().ifPresent(item -> {
-            var response = roadmapClient.patchQuestionById(item.getId(), RoadmapQuestionRequestDto.builder()
+            var response = roadmapQuestionClient.patch(item.getId(), RoadmapQuestionRequestDto.builder()
                     .question(editedQuestionColumn.getValue())
                     .build(), true);
             if (response.getStatusCode().is2xxSuccessful()) {
@@ -172,7 +174,7 @@ public class RoadmapChapterDiv extends Div {
         secondaryEditor.setBuffered(true);
 
         secondaryGrid.addItemDoubleClickListener(event -> {
-            var questionInfoDialog = new QuestionInfoDialog(event.getItem(), roadmapClient, this);
+            var questionInfoDialog = new QuestionInfoDialog(event.getItem(), roadmapQuestionClient, this);
             questionInfoDialog.open();
         });
 
@@ -199,9 +201,9 @@ public class RoadmapChapterDiv extends Div {
 
         var addTopic = new Icon(VaadinIcon.PLUS);
         addTopic.addClickListener(event -> {
-            var response = roadmapClient.createTopic(getRoadmapChapterId(), RoadmapTopicRequestDto.builder()
+            var response = roadmapTopicClient.create(RoadmapTopicRequestDto.builder()
                     .name("Новая тема")
-                    .roadmapQuestionRequestDtos(new ArrayList<>())
+                    .roadmapChapterId(getRoadmapChapterId())
                     .build(), true);
             if (response.getStatusCode().is2xxSuccessful()) {
                 updatePrimaryGrid();
@@ -210,7 +212,7 @@ public class RoadmapChapterDiv extends Div {
 
         var deleteTopic = new Icon(VaadinIcon.MINUS);
         deleteTopic.addClickListener(event -> primaryGrid.getSelectedItems().stream().findFirst().ifPresent(item -> {
-            var response = roadmapClient.deleteTopicById(item.getId(), true);
+            var response = roadmapTopicClient.deleteById(item.getId(), true);
             if (response.getStatusCode().is2xxSuccessful()) {
                 updatePrimaryGrid();
                 updateSecondaryGrid(null);
@@ -237,9 +239,10 @@ public class RoadmapChapterDiv extends Div {
 
         var addQuestion = new Icon(VaadinIcon.PLUS);
         addQuestion.addClickListener(event -> {
-            var response = roadmapClient.createQuestion(getSelectedTopicId(), RoadmapQuestionRequestDto.builder()
+            var response = roadmapQuestionClient.create(RoadmapQuestionRequestDto.builder()
                     .question("Новый вопрос")
                     .answer("Новый ответ")
+                    .roadmapTopicId(getSelectedTopicId())
                     .isExplored(false)
                     .build(), true);
             if (response.getStatusCode().is2xxSuccessful()) {
@@ -250,7 +253,7 @@ public class RoadmapChapterDiv extends Div {
 
         var deleteQuestion = new Icon(VaadinIcon.MINUS);
         deleteQuestion.addClickListener(event -> secondaryGrid.getSelectedItems().stream().findFirst().ifPresent(item -> {
-            var response = roadmapClient.deleteQuestionById(item.getId(), true);
+            var response = roadmapQuestionClient.deleteById(item.getId(), true);
             if (response.getStatusCode().is2xxSuccessful()) {
                 updatePrimaryGrid();
                 updateSecondaryGrid(getSelectedTopicId());
@@ -259,14 +262,14 @@ public class RoadmapChapterDiv extends Div {
 
         var editQuestion = new Icon(VaadinIcon.EDIT);
         editQuestion.addClickListener(event -> secondaryGrid.getSelectedItems().stream().findFirst().ifPresent(item -> {
-            var questionInfoDialog = new QuestionInfoDialog(item, roadmapClient, this);
+            var questionInfoDialog = new QuestionInfoDialog(item, roadmapQuestionClient, this);
             questionInfoDialog.setEditedStatus();
             questionInfoDialog.open();
         }));
 
         var exploredQuestion = new Icon(VaadinIcon.CHECK);
         exploredQuestion.addClickListener(event -> secondaryGrid.getSelectedItems().stream().findFirst().ifPresent(item -> {
-            var response = roadmapClient.patchQuestionById(item.getId(), RoadmapQuestionRequestDto.builder()
+            var response = roadmapQuestionClient.patch(item.getId(), RoadmapQuestionRequestDto.builder()
                     .isExplored(!item.getIsExplored())
                     .build(), true);
             if (response.getStatusCode().is2xxSuccessful()) {
@@ -299,7 +302,7 @@ public class RoadmapChapterDiv extends Div {
     }
 
     public void updatePrimaryGrid() {
-        var response = roadmapClient.getAllTopicByChapterId(getRoadmapChapterId(), true);
+        var response = roadmapTopicClient.getAllByChapterId(getRoadmapChapterId(), true);
         if (response.getStatusCode().is2xxSuccessful()) {
             var responseBody = RestUtils.convertResponseToDto(response.getBody(), PageableRoadmapTopicResponseDto.class);
             primaryGrid.setItems(responseBody.getRoadmapTopicResponseDtos());
@@ -308,7 +311,7 @@ public class RoadmapChapterDiv extends Div {
 
     public void updateSecondaryGrid(Long topicId) {
         if (Objects.nonNull(topicId)) {
-            var response = roadmapClient.getAllQuestionByTopicId(topicId, true);
+            var response = roadmapQuestionClient.getAllByTopicId(topicId, true);
             if (response.getStatusCode().is2xxSuccessful()) {
                 var responseBody = RestUtils.convertResponseToDto(response.getBody(), PageableRoadmapQuestionResponseDto.class);
                 secondaryGrid.setItems(responseBody.getRoadmapQuestionResponseDtos());

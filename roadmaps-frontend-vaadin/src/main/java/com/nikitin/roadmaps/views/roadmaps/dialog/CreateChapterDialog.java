@@ -1,5 +1,6 @@
 package com.nikitin.roadmaps.views.roadmaps.dialog;
 
+import com.nikitin.roadmaps.client.RoadmapChapterClient;
 import com.nikitin.roadmaps.client.RoadmapClient;
 import com.nikitin.roadmaps.dto.request.RoadmapChapterRequestDto;
 import com.nikitin.roadmaps.views.roadmaps.RoadmapView;
@@ -24,10 +25,12 @@ public class CreateChapterDialog extends Dialog {
     private Button createButton;
 
     private Long roadmapId;
-    private RoadmapClient roadmapClient;
+    private RoadmapChapterClient roadmapChapterClient;
     private RoadmapView roadmapView;
 
-    public CreateChapterDialog() {
+    public CreateChapterDialog(RoadmapChapterClient roadmapChapterClient) {
+        this.roadmapChapterClient = roadmapChapterClient;
+
         configurationComponents();
         configurationCreateChapterDialog();
     }
@@ -57,9 +60,9 @@ public class CreateChapterDialog extends Dialog {
         createButton = new Button("Создать");
         createButton.addClassName("create_button");
         createButton.addClickListener(event -> {
-            var response = roadmapClient.createChapter(roadmapId, RoadmapChapterRequestDto.builder()
+            var response = roadmapChapterClient.create(RoadmapChapterRequestDto.builder()
                     .name(nameChapter.getValue())
-                    .roadmapTopicRequestDtos(new ArrayList<>())
+                    .roadmapId(roadmapId)
                     .build(), true);
             if (response.getStatusCode().is2xxSuccessful()) {
                 roadmapView.updateData(roadmapId);

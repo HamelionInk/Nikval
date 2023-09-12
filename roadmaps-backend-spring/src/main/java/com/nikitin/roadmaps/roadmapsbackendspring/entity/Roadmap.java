@@ -37,17 +37,4 @@ public class Roadmap {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "profile_id", nullable = false, columnDefinition = "int8")
     private Profile profile;
-
-    @OneToMany(mappedBy = "roadmap", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<RoadmapChapter> roadmapChapters = new ArrayList<>();
-
-    public void addRoadmapChapter(RoadmapChapter roadmapChapter) {
-        roadmapChapters.add(roadmapChapter);
-        roadmapChapter.setRoadmap(this);
-    }
-
-    public void removeRoadmapChapter(RoadmapChapter roadmapChapter) {
-        roadmapChapters.remove(roadmapChapter);
-        roadmapChapter.setRoadmap(null);
-    }
 }

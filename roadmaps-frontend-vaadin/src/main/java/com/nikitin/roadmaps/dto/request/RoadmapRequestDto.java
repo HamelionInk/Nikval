@@ -17,5 +17,4 @@ public class RoadmapRequestDto {
 
     private String name;
     private Long profileId;
-    private List<RoadmapChapterRequestDto> roadmapChapterRequestDtos;
 }

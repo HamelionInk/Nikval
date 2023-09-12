@@ -1,6 +1,7 @@
 package com.nikitin.roadmaps.views.roadmaps.dialog;
 
 import com.nikitin.roadmaps.client.RoadmapClient;
+import com.nikitin.roadmaps.client.RoadmapQuestionClient;
 import com.nikitin.roadmaps.dto.request.RoadmapQuestionRequestDto;
 import com.nikitin.roadmaps.dto.response.RoadmapQuestionResponseDto;
 import com.nikitin.roadmaps.views.roadmaps.RoadmapView;
@@ -33,12 +34,12 @@ public class QuestionInfoDialog extends Dialog {
     private Boolean readOnly = true;
 
     private RoadmapQuestionResponseDto roadmapQuestionResponseDto;
-    private RoadmapClient roadmapClient;
+    private RoadmapQuestionClient roadmapQuestionClient;
     private RoadmapChapterDiv roadmapChapterDiv;
 
-    public QuestionInfoDialog(RoadmapQuestionResponseDto roadmapQuestionResponseDto, RoadmapClient roadmapClient, RoadmapChapterDiv roadmapChapterDiv) {
+    public QuestionInfoDialog(RoadmapQuestionResponseDto roadmapQuestionResponseDto, RoadmapQuestionClient roadmapQuestionClient, RoadmapChapterDiv roadmapChapterDiv) {
         this.roadmapQuestionResponseDto = roadmapQuestionResponseDto;
-        this.roadmapClient = roadmapClient;
+        this.roadmapQuestionClient = roadmapQuestionClient;
         this.roadmapChapterDiv = roadmapChapterDiv;
 
         configurationHeader();
@@ -83,7 +84,7 @@ public class QuestionInfoDialog extends Dialog {
         saveButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         saveButton.setVisible(false);
         saveButton.addClickListener(event -> {
-            var response = roadmapClient.patchQuestionById(getRoadmapQuestionResponseDto().getId(), RoadmapQuestionRequestDto.builder()
+            var response = roadmapQuestionClient.patch(getRoadmapQuestionResponseDto().getId(), RoadmapQuestionRequestDto.builder()
                     .isExplored(isExplored.getValue())
                     .question(questionText.getValue())
                     .answer(answerText.getValue())

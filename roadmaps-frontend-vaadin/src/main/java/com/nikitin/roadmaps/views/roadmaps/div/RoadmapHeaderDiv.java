@@ -1,5 +1,6 @@
 package com.nikitin.roadmaps.views.roadmaps.div;
 
+import com.nikitin.roadmaps.client.RoadmapChapterClient;
 import com.nikitin.roadmaps.client.RoadmapClient;
 import com.nikitin.roadmaps.dto.response.RoadmapResponseDto;
 import com.nikitin.roadmaps.views.roadmaps.RoadmapView;
@@ -22,11 +23,11 @@ public class RoadmapHeaderDiv extends Div {
     private Button deleteChapterButton = new Button();
     private Button editNameChapterButton = new Button();
     private Button shareRoadmapButton = new Button();
-    private CreateChapterDialog createChapterDialog = new CreateChapterDialog();
 
     private RoadmapResponseDto roadmapResponseDto = new RoadmapResponseDto();
 
     private RoadmapClient roadmapClient;
+    private RoadmapChapterClient roadmapChapterClient;
     private RoadmapView roadmapView;
 
     public RoadmapHeaderDiv() {
@@ -42,9 +43,9 @@ public class RoadmapHeaderDiv extends Div {
         addChapterButton.addClassName("roadmap_button");
         addChapterButton.setText("Добавить раздел");
         addChapterButton.addClickListener(event -> {
+            var createChapterDialog = new CreateChapterDialog(roadmapChapterClient);
             createChapterDialog.setRoadmapView(getRoadmapView());
             createChapterDialog.setRoadmapId(getRoadmapResponseDto().getId());
-            createChapterDialog.setRoadmapClient(getRoadmapClient());
             createChapterDialog.open();
         });
 

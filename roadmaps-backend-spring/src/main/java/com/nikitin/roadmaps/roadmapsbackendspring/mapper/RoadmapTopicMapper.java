@@ -1,55 +1,40 @@
 package com.nikitin.roadmaps.roadmapsbackendspring.mapper;
 
-import com.nikitin.roadmaps.roadmapsbackendspring.dto.request.RoadmapRequestDto;
 import com.nikitin.roadmaps.roadmapsbackendspring.dto.request.RoadmapTopicRequestDto;
 import com.nikitin.roadmaps.roadmapsbackendspring.dto.response.RoadmapTopicResponseDto;
+import com.nikitin.roadmaps.roadmapsbackendspring.entity.Roadmap;
+import com.nikitin.roadmaps.roadmapsbackendspring.entity.RoadmapChapter;
 import com.nikitin.roadmaps.roadmapsbackendspring.entity.RoadmapTopic;
-import org.mapstruct.AfterMapping;
+import com.nikitin.roadmaps.roadmapsbackendspring.service.RoadmapChapterService;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
+import org.mapstruct.Named;
 import org.mapstruct.NullValuePropertyMappingStrategy;
+import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.Optional;
-
-@Mapper(componentModel = "spring", nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE, uses = RoadmapQuestionMapper.class)
+@Mapper(componentModel = "spring", nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
 public abstract class RoadmapTopicMapper {
 
-    @Mapping(source = "dto.roadmapQuestionRequestDtos", target = "roadmapQuestions")
+    @Autowired
+    private RoadmapChapterService roadmapChapterService;
+
+    @Mapping(source = "dto.roadmapChapterId", target = "roadmapChapter", qualifiedByName = "converterToEntityRoadmapChapter")
     public abstract RoadmapTopic toEntity(RoadmapTopicRequestDto dto);
 
-    @Mapping(source = "dto.roadmapQuestionRequestDtos", target = "roadmapQuestions")
+    @Mapping(source = "dto.roadmapChapterId", target = "roadmapChapter", qualifiedByName = "converterToEntityRoadmapChapter")
     public abstract RoadmapTopic toPatchEntity(RoadmapTopicRequestDto dto, @MappingTarget RoadmapTopic entityForUpdate);
 
-    @Mapping(source = "entity.roadmapQuestions", target = "roadmapQuestionResponseDtos")
+    @Mapping(source = "entity.roadmapChapter", target = "roadmapChapterId", qualifiedByName = "converterToResponseDtoRoadmapChapterId")
     public abstract RoadmapTopicResponseDto toResponseDto(RoadmapTopic entity);
 
-    @AfterMapping
-    protected void setRoadmapTopic(@MappingTarget RoadmapTopic entity) {
-        Optional.ofNullable(entity.getRoadmapQuestions())
-                .ifPresent(roadmapQuestions ->
-                        roadmapQuestions.forEach(roadmapQuestion ->
-                                roadmapQuestion.setRoadmapTopic(entity)));
+    @Named("converterToEntityRoadmapChapter")
+    protected RoadmapChapter converterToEntityRoadmapChapter(Long roadmapChapterId) {
+        return roadmapChapterService.getEntityById(roadmapChapterId);
     }
 
-    @AfterMapping
-    protected void setRoadmapTopicId(@MappingTarget RoadmapTopicResponseDto dto) {
-        Optional.ofNullable(dto.getRoadmapQuestionResponseDtos())
-                .ifPresent(roadmapQuestionResponseDtos ->
-                        roadmapQuestionResponseDtos.forEach(roadmapQuestionResponseDto ->
-                                roadmapQuestionResponseDto.setRoadmapTopicId(dto.getId())));
-    }
-
-    @AfterMapping
-    protected void setInfoOfQuestions(@MappingTarget RoadmapTopic entity) {
-        Optional.ofNullable(entity.getRoadmapQuestions())
-                .ifPresent(roadmapQuestions -> {
-                    roadmapQuestions.forEach(roadmapQuestion -> {
-                        if (roadmapQuestion.getIsExplored()) {
-                            entity.incrementExploredQuestion();
-                        }
-                    });
-                    entity.setNumberOfQuestion(roadmapQuestions.size());
-                });
+    @Named("converterToResponseDtoRoadmapChapterId")
+    protected Long converterToResponseDtoRoadmapChapterId(RoadmapChapter roadmapChapter) {
+        return roadmapChapter.getId();
     }
 }

@@ -16,5 +16,5 @@ import java.util.List;
 public class RoadmapTopicRequestDto {
 
     private String name;
-    private List<RoadmapQuestionRequestDto> roadmapQuestionRequestDtos;
+    private Long roadmapChapterId;
 }

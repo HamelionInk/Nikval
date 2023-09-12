@@ -1,8 +1,8 @@
 package com.nikitin.roadmaps.roadmapsbackendspring.controller;
 
-import com.nikitin.roadmaps.roadmapsbackendspring.dto.request.RoadmapRequestDto;
-import com.nikitin.roadmaps.roadmapsbackendspring.dto.response.RoadmapResponseDto;
-import com.nikitin.roadmaps.roadmapsbackendspring.service.RoadmapService;
+import com.nikitin.roadmaps.roadmapsbackendspring.dto.request.RoadmapQuestionRequestDto;
+import com.nikitin.roadmaps.roadmapsbackendspring.dto.response.RoadmapQuestionResponseDto;
+import com.nikitin.roadmaps.roadmapsbackendspring.service.RoadmapQuestionService;
 import com.nikitin.roadmaps.roadmapsbackendspring.validation.Create;
 import com.nikitin.roadmaps.roadmapsbackendspring.validation.Patch;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -29,55 +29,55 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/roadmaps")
-@Tag(name = "Карта развития")
-public class RoadmapController {
+@RequestMapping("/roadmap-questions")
+@Tag(name = "Вопросы по теме")
+public class RoadmapQuestionController {
 
-    private final RoadmapService roadmapService;
+    private final RoadmapQuestionService roadmapQuestionService;
 
     @PostMapping
-    public ResponseEntity<RoadmapResponseDto> create(@RequestBody @Validated(value = Create.class) RoadmapRequestDto roadmapRequestDto) {
-        var responseBody = roadmapService.create(roadmapRequestDto);
+    public ResponseEntity<RoadmapQuestionResponseDto> create(@RequestBody @Validated(value = Create.class) RoadmapQuestionRequestDto roadmapQuestionRequestDto) {
+        var responseBody = roadmapQuestionService.create(roadmapQuestionRequestDto);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(responseBody);
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<RoadmapResponseDto> patch(@PathVariable(name = "id") Long id,
-                                                    @RequestBody @Validated(value = Patch.class) RoadmapRequestDto roadmapRequestDto) {
-        var responseBody = roadmapService.patch(id, roadmapRequestDto);
+    public ResponseEntity<RoadmapQuestionResponseDto> patch(@PathVariable(name = "id") Long id,
+                                                            @RequestBody @Validated(value = Patch.class) RoadmapQuestionRequestDto roadmapQuestionRequestDto) {
+        var responseBody = roadmapQuestionService.patch(id, roadmapQuestionRequestDto);
 
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(responseBody);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<RoadmapResponseDto> getById(@PathVariable(name = "id") Long id) {
-        var responseBody = roadmapService.getResponseById(id);
+    public ResponseEntity<RoadmapQuestionResponseDto> getById(@PathVariable(name = "id") Long id) {
+        var responseBody = roadmapQuestionService.getResponseById(id);
 
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(responseBody);
     }
 
     @PageableAsQueryParam
     @GetMapping
-    public ResponseEntity<Page<RoadmapResponseDto>> getAll(@ParameterObject @PageableDefault(sort = "id",
+    public ResponseEntity<Page<RoadmapQuestionResponseDto>> getAll(@ParameterObject @PageableDefault(sort = "id",
             direction = Sort.Direction.ASC, size = Integer.MAX_VALUE) Pageable pageable) {
-        var responseBody = roadmapService.getAll(pageable);
+        var responseBody = roadmapQuestionService.getAll(pageable);
 
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(responseBody);
     }
 
     @PageableAsQueryParam
-    @GetMapping("/profile/{id}")
-    public ResponseEntity<Page<RoadmapResponseDto>> getAllByProfileId(@PathVariable(name = "id") Long id, @ParameterObject @PageableDefault(
+    @GetMapping("/roadmap-topic/{id}")
+    public ResponseEntity<Page<RoadmapQuestionResponseDto>> getAllByTopicId(@PathVariable(name = "id") Long id, @ParameterObject @PageableDefault(
             sort = "id", direction = Sort.Direction.ASC, size = Integer.MAX_VALUE) Pageable pageable) {
-        var responseBody = roadmapService.getAllByProfileId(id, pageable);
+        var responseBody = roadmapQuestionService.getAllByTopicId(id, pageable);
 
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(responseBody);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteById(@PathVariable(name = "id") Long id) {
-        roadmapService.deleteById(id);
+        roadmapQuestionService.deleteById(id);
 
         return ResponseEntity.status(HttpStatus.ACCEPTED).build();
     }
