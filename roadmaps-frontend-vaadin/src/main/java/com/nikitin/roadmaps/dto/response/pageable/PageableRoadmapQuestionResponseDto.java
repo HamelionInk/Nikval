@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -18,5 +19,6 @@ import java.util.List;
 public class PageableRoadmapQuestionResponseDto extends Pageable {
 
     @JsonProperty("content")
-    private List<RoadmapQuestionResponseDto> roadmapQuestionResponseDtos;
+    @Builder.Default
+    private List<RoadmapQuestionResponseDto> roadmapQuestionResponseDtos = new ArrayList<>();
 }

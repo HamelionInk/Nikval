@@ -1,7 +1,11 @@
 package com.nikitin.roadmaps.views.roadmaps;
 
+import com.nikitin.roadmaps.client.RoadmapChapterClient;
 import com.nikitin.roadmaps.client.RoadmapClient;
+import com.nikitin.roadmaps.client.RoadmapQuestionClient;
+import com.nikitin.roadmaps.client.RoadmapTopicClient;
 import com.nikitin.roadmaps.dto.response.RoadmapResponseDto;
+import com.nikitin.roadmaps.dto.response.pageable.PageableRoadmapChapterResponseDto;
 import com.nikitin.roadmaps.util.RestUtils;
 import com.nikitin.roadmaps.views.MainLayout;
 import com.nikitin.roadmaps.views.roadmaps.div.RoadmapBodyDiv;
@@ -34,12 +38,18 @@ public class RoadmapView extends VerticalLayout implements LocaleChangeObserver,
     private RoadmapHeaderDiv roadmapHeaderDiv = new RoadmapHeaderDiv();
     private RoadmapBodyDiv roadmapBodyDiv = new RoadmapBodyDiv();
     private Accordion accordion = new Accordion();
-    private RoadmapResponseDto roadmapResponseDto = new RoadmapResponseDto();
 
     private RoadmapClient roadmapClient;
+    private RoadmapChapterClient roadmapChapterClient;
+    private RoadmapTopicClient roadmapTopicClient;
+    private RoadmapQuestionClient roadmapQuestionClient;
 
-    public RoadmapView(@Autowired RoadmapClient roadmapClient) {
+    public RoadmapView(@Autowired RoadmapClient roadmapClient, @Autowired RoadmapChapterClient roadmapChapterClient,
+                       @Autowired RoadmapTopicClient roadmapTopicClient, @Autowired RoadmapQuestionClient roadmapQuestionClient) {
         this.roadmapClient = roadmapClient;
+        this.roadmapChapterClient = roadmapChapterClient;
+        this.roadmapTopicClient = roadmapTopicClient;
+        this.roadmapQuestionClient = roadmapQuestionClient;
         configurationAccordion();
         configurationRoadmapView();
     }
@@ -52,30 +62,38 @@ public class RoadmapView extends VerticalLayout implements LocaleChangeObserver,
         add(roadmapHeaderDiv, roadmapBodyDiv);
     }
 
-    private void getRoadmapById(Long id) {
+    private RoadmapResponseDto getRoadmapById(Long id) {
         var response = roadmapClient.getById(id, true);
         if (response.getStatusCode().is2xxSuccessful()) {
-            Optional.ofNullable(response.getBody())
-                    .ifPresent(body -> roadmapResponseDto = RestUtils.convertResponseToDto(body, RoadmapResponseDto.class));
+            return RestUtils.convertResponseToDto(response.getBody(), RoadmapResponseDto.class);
         }
+        return new RoadmapResponseDto();
+    }
+
+    private PageableRoadmapChapterResponseDto getAllByRoadmapId(Long id) {
+        var response = roadmapChapterClient.getAllByRoadmapId(id, true);
+        if (response.getStatusCode().is2xxSuccessful()) {
+            return RestUtils.convertResponseToDto(response.getBody(), PageableRoadmapChapterResponseDto.class);
+        }
+        return new PageableRoadmapChapterResponseDto();
     }
 
     public void updateData(Long roadmapId) {
-        getRoadmapById(roadmapId);
         remove(getRoadmapBodyDiv());
         setRoadmapBodyDiv(new RoadmapBodyDiv());
-        configurationRoadmapBody();
+        configurationRoadmapBody(getRoadmapById(roadmapId));
         configurationRoadmapView();
     }
 
-    private void configurationRoadmapBody() {
+    private void configurationRoadmapBody(RoadmapResponseDto roadmapResponseDto) {
         roadmapHeaderDiv.getRoadmapName().setText(roadmapResponseDto.getName());
-        roadmapHeaderDiv.setRoadmapResponseDto(getRoadmapResponseDto());
+        roadmapHeaderDiv.setRoadmapResponseDto(roadmapResponseDto);
         roadmapHeaderDiv.setRoadmapClient(getRoadmapClient());
+        roadmapHeaderDiv.setRoadmapChapterClient(getRoadmapChapterClient());
         roadmapHeaderDiv.setRoadmapView(this);
 
-        roadmapResponseDto.getRoadmapChapterResponseDtos().forEach(roadmapChapterResponseDto -> {
-            var roadmapChapter = new RoadmapChapterDiv(roadmapClient);
+        getAllByRoadmapId(roadmapResponseDto.getId()).getRoadmapChapterResponseDtos().forEach(roadmapChapterResponseDto -> {
+            var roadmapChapter = new RoadmapChapterDiv(roadmapClient, roadmapTopicClient, roadmapQuestionClient);
             roadmapChapter.setRoadmapChapterId(roadmapChapterResponseDto.getId());
             roadmapChapter.setRoadmapId(roadmapChapterResponseDto.getRoadmapId());
             roadmapChapter.updatePrimaryGrid();

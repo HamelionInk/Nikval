@@ -23,7 +23,4 @@ public class RoadmapResponseDto {
 
     @Schema(description = "Идентификатор кому пренадлежит карта развития", example = "5")
     private Long profileId;
-
-    @Schema(description = "", example = "")
-    private List<RoadmapChapterResponseDto> roadmapChapterResponseDtos;
 }

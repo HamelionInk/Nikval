@@ -6,6 +6,7 @@ import com.nikitin.roadmaps.roadmapsbackendspring.validation.annotation.NotBlank
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -33,4 +34,9 @@ public class RoadmapQuestionRequestDto {
     @Schema(description = "Состояние, показывающее изучен вопрос или нет", example = "false")
     @NotNull(message = "Поле <isExplored> не может быть null", groups = Create.class)
     private Boolean isExplored;
+
+    @Schema(description = "Идентификатор темы", example = "43")
+    @NotNull(message = "Поле <roadmapTopicId> не может быть null", groups = Create.class)
+    @Positive(message = "Идентификатор не может быть отрицательным значением", groups = { Create.class, Patch.class })
+    private Long roadmapTopicId;
 }

@@ -16,4 +16,5 @@ public class RoadmapQuestionRequestDto {
     private String question;
     private String answer;
     private Boolean isExplored;
+    private Long roadmapTopicId;
 }

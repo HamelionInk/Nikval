@@ -15,6 +15,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,19 +37,7 @@ public class RoadmapChapter {
     private String name;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "roadmap_id", nullable = false, columnDefinition = "int8")
     private Roadmap roadmap;
-
-    @OneToMany(mappedBy = "roadmapChapter", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<RoadmapTopic> roadmapTopics = new ArrayList<>();
-
-    public void addRoadmapTopic(RoadmapTopic roadmapTopic) {
-        roadmapTopics.add(roadmapTopic);
-        roadmapTopic.setRoadmapChapter(this);
-    }
-
-    public void removeRoadmapTopic(RoadmapTopic roadmapTopic) {
-        roadmapTopics.remove(roadmapTopic);
-        roadmapTopic.setRoadmapChapter(null);
-    }
 }
