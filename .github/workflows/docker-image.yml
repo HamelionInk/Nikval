@@ -7,8 +7,8 @@ on:
     branches: [ "master", "develop" ]
 
 env:
-  BACKEND_IMAGE: hamelion/roadmapsBackendSpring
-  FRONTEND_IMAGE: hamelion/roadmaps-frontend-vaadin
+  BACKEND_IMAGE: hamelion/backendspring
+  FRONTEND_IMAGE: hamelion/frontendvaadin
 
 jobs:
   build-backend:
