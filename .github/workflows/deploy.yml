@@ -39,6 +39,9 @@ jobs:
       - name: chekout repo
         uses: actions/checkout@v3
 
+      - name: Package
+        run: mvn clean package -Pproduction
+
       - name: Build image
         run: mvn dockerfile:build
 
