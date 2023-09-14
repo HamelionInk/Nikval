@@ -37,7 +37,7 @@ jobs:
     needs: prepare-enviroment
     steps:
       - name: chekout repo
-        uses: actions/checkou@v3
+        uses: actions/checkout@v3
       - name: docker-compose
         run: docker-compose up -d
 
