@@ -9,7 +9,7 @@ spring:
         git:
           uri: https://github.com/HamelionInk/Nikval.git
           search-paths: config
-          password: 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
+          password: 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
           username: Hamelionink
           default-label: master
 server:

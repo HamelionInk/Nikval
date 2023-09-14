@@ -2,12 +2,15 @@ package com.nikitin.roadmaps.views.roadmaps.div;
 
 import com.nikitin.roadmaps.client.RoadmapChapterClient;
 import com.nikitin.roadmaps.client.RoadmapClient;
+import com.nikitin.roadmaps.component.TextFieldWithLabel;
 import com.nikitin.roadmaps.dto.response.RoadmapResponseDto;
 import com.nikitin.roadmaps.views.roadmaps.RoadmapView;
 import com.nikitin.roadmaps.views.roadmaps.dialog.CreateChapterDialog;
+import com.nikitin.roadmaps.views.roadmaps.dialog.DeleteChapterDialog;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H1;
+import com.vaadin.flow.component.html.Paragraph;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -51,6 +54,10 @@ public class RoadmapHeaderDiv extends Div {
 
         deleteChapterButton.addClassName("roadmap_button");
         deleteChapterButton.setText("Удалить раздел");
+        deleteChapterButton.addClickListener(event -> {
+            var deleteChapterDialog = new DeleteChapterDialog(roadmapChapterClient);
+            deleteChapterDialog.open();
+        });
 
         editNameChapterButton.addClassName("roadmap_button");
         editNameChapterButton.setText("Переименовать раздел");
@@ -70,6 +77,7 @@ public class RoadmapHeaderDiv extends Div {
 
     private void configurationRoadmapHeaderDiv() {
         addClassName("div_element");
+
         add(roadmapName, buttonDiv);
     }
 }
