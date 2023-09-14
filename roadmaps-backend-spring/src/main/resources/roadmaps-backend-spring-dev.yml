@@ -1,6 +1,0 @@
-spring:
-  datasource:
-    driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://10.129.0.23/roadmaps
-    username: postgres
-    password: 12345
