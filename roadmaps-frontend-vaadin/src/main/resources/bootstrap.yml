@@ -1,7 +1,0 @@
-spring:
-  application:
-    name: roadmaps-frontend-vaadin
-
-  cloud:
-    config:
-      uri: http://localhost:8082

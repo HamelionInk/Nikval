@@ -17,7 +17,6 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 
 @EnableCaching
 @SpringBootApplication
-@EnableDiscoveryClient
 @Theme(value = "roadmaps-frontend-vaadin")
 public class RoadmapsFrontendVaadinApplication implements AppShellConfigurator {
 
