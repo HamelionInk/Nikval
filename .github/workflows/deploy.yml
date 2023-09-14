@@ -1,0 +1,41 @@
+name: Deploy
+
+on:
+  push:
+    branches: [ "master", "develop" ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: cd into repo
+        uses: actions/setup-java@v3
+
+      - name: set up Java and Maven
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: maven
+
+      - name: run tests
+        run: mvn test
+
+  prepare-enviroment:
+    runs-on: self-hosted
+    needs: test
+    steps:
+      - name: Stop and remove containers, network
+        run: docker-compose down
+      - name: Remove unused data
+        run: docker system prune -a -f
+
+  deploy:
+    runs-on: self-hosted
+    needs: prepare-enviroment
+    steps:
+      - name: chekout repo
+        uses: actions/checkou@v3
+      - name: docker-compose
+        run: docker-compose up -d
+

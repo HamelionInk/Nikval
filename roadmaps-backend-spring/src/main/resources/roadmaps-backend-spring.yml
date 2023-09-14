@@ -25,17 +25,6 @@ spring:
         jwt:
           issuer-uri: http://localhost:8085/realms/roadmaps
 
-eureka:
-  instance:
-    preferIpAddress: true
-  client:
-    registerWithEureka: true
-    fetchRegistry: true
-    serviceUrl:
-      defaultZone: http://localhost:8083/eureka/
-  server:
-    waitTimeInMsWhenSyncEmpty: 5
-
 management:
   endpoints:
     web:
