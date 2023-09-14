@@ -5,8 +5,8 @@ on:
     branches: [ "master" ]
 
 env:
-  BACKEND_IMAGE: ${{secrets.DOCKER_HUB_USERNAME}}/roadmaps-backend-spring
-  FRONTEND_IMAGE: ${{secrets.DOCKER_HUB_USERNAME}}/roadmaps-frontend-vaadin
+  BACKEND_IMAGE: hamelion/roadmaps-backend-spring
+  FRONTEND_IMAGE: hamelion/roadmaps-frontend-vaadin
 
 jobs:
   build-backend:
