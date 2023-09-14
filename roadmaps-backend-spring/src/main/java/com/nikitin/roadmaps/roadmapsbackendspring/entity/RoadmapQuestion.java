@@ -20,8 +20,7 @@ import org.hibernate.annotations.OnDeleteAction;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity(name = "RoadmapQuestion")
-@Table(name = "roadmap_question")
+@Entity(name = "roadmap_question")
 public class RoadmapQuestion {
 
     @Id
