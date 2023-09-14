@@ -1,55 +1,12 @@
 version: '3.9'
 
 services:
-  configserver:
-    image: roadmaps/roadmaps-config-server:0.0.1-SNAPSHOT
-    ports:
-      - "8082:8082"
-    environment:
-      SPRING_PROFILES_ACTIVE: dev
-      ENCRYPT_KEY: "fje83Ki8403Iod87dne7Yjsl3THueh48jfuO9j4U2hf64Lo"
-    networks:
-      backend:
-        aliases:
-          - "config-server"
-
-  eurekaserver:
-    image: roadmaps/roadmaps-eureka-server:0.0.1-SNAPSHOT
-    ports:
-      - "8083:8083"
-    environment:
-      SPRING_PROFILES_ACTIVE: dev
-    depends_on:
-      - configserver
-    networks:
-      backend:
-        aliases:
-          - "eureka-server"
-
-  gatewayserver:
-    image: roadmaps/roadmaps-gateway-server:0.0.1-SNAPSHOT
-    ports:
-      - "8084:8084"
-    environment:
-      SPRING_PROFILES_ACTIVE: dev
-    depends_on:
-      - configserver
-      - eurekaserver
-    networks:
-      backend:
-        aliases:
-          - "gateway-server"
-
   backendspring:
     image: roadmaps/roadmaps-backend-spring:0.0.1-SNAPSHOT
     ports:
       - "8081:8081"
     environment:
       SPRING_PROFILES_ACTIVE: dev
-    depends_on:
-      - configserver
-      - eurekaserver
-      - gatewayserver
     networks:
       backend:
         aliases:
@@ -61,15 +18,19 @@ services:
       - "8080:8080"
     environment:
       SPRING_PROFILES_ACTIVE: dev
-    depends_on:
-      - configserver
-      - eurekaserver
-      - gatewayserver
-      - backendspring
     networks:
       backend:
         aliases:
           - "frontend-vaadin"
+
+  postgres:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_DB: "roadmaps"
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "12345"
+    ports:
+      - "5432:5432"
 
   postgreskeycloak:
     image: postgres
