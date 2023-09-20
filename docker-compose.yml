@@ -7,6 +7,11 @@ services:
       - "8083:8083"
     environment:
       SPRING_PROFILES_ACTIVE: dev
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.keycloak.rule=Host(`swagger.roadmaps-nikval.ru`)"
+      - "traefik.http.routers.keycloak.tls=true"
+      - "traefik.http.routers.keycloak.tls.certresolver=mytlschallenge"
 
   frontendvaadin:
     image: roadmaps/roadmaps-frontend-vaadin:0.0.1-SNAPSHOT
