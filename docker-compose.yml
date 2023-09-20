@@ -7,8 +7,6 @@ services:
       - "8081:8081"
     environment:
       SPRING_PROFILES_ACTIVE: dev
-    networks:
-      - intranet
 
   frontendvaadin:
     image: roadmaps/roadmaps-frontend-vaadin:0.0.1-SNAPSHOT
@@ -16,8 +14,6 @@ services:
       - "8080:8080"
     environment:
       SPRING_PROFILES_ACTIVE: dev
-    networks:
-      - intranet
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.keycloak.rule=Host(`roadmaps-nikval.ru`)"
@@ -32,7 +28,3 @@ services:
       POSTGRES_DB: "roadmaps"
       POSTGRES_USER: "postgres"
       POSTGRES_PASSWORD: "12345"
-
-networks:
-  intranet:
-    name: intranet
