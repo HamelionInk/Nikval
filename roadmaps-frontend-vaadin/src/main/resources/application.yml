@@ -12,11 +12,11 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          issuer-uri: https://keycloak.roadmaps-nikval.ru/realms/roadmaps
+          issuer-uri: https://localhost:8080/realms/roadmaps
       client:
         provider:
           keycloak:
-            issuer-uri: https://keycloak.roadmaps-nikval.ru/realms/roadmaps
+            issuer-uri: https://localhost:8080/realms/roadmaps
         registration:
           keycloak:
             client-secret: ojwa2aHY0wjXI1Q2X1SyEZfnEFeshQBM

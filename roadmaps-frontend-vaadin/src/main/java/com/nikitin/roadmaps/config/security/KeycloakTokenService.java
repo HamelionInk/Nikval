@@ -23,7 +23,7 @@ import java.time.Instant;
 @Component
 public class KeycloakTokenService {
 
-    private static final String URL_REFRESH_TOKEN = "https://keycloak.roadmaps-nikval.ru/realms/roadmaps/protocol/openid-connect/token";
+    private static final String URL_REFRESH_TOKEN = "https://localhost:8080/realms/roadmaps/protocol/openid-connect/token";
 
     private final RestTemplate restTemplate;
 

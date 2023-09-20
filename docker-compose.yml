@@ -14,6 +14,11 @@ services:
       - "8082:8082"
     environment:
       SPRING_PROFILES_ACTIVE: dev
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.keycloak.rule=Host(`roadmaps-nikval.ru`)"
+      - "traefik.http.routers.keycloak.tls=true"
+      - "traefik.http.routers.keycloak.tls.certresolver=mytlschallenge"
 
   postgres:
     image: postgres:15-alpine
