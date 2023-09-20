@@ -39,6 +39,18 @@ jobs:
       - name: chekout repo
         uses: actions/checkout@v3
 
+      - name: Set up Maven
+        uses: stCarolas/setup-maven@v4.5
+        with:
+          maven-version: 3.9.4
+
+      - name: set up Java and Maven
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'adopt'
+          java-version: '17'
+          cache: maven
+
       - name: Package
         run: mvn clean package -Pproduction
 
