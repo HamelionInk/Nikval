@@ -8,4 +8,4 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          issuer-uri: http://keycloak/realms/roadmaps
+          issuer-uri: https://keycloak.roadmaps-nikval.ru/realms/roadmaps

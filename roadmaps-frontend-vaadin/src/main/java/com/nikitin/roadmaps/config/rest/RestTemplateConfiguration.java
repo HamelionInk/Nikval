@@ -9,7 +9,7 @@ import org.springframework.web.util.DefaultUriBuilderFactory;
 @Configuration
 public class RestTemplateConfiguration {
 
-    private final String url = "http://localhost:8081/api/v1/roadmaps";
+    private final String url = "http://0.0.0.0:8081/api/v1/roadmaps";
 
     @Bean("KeycloakRestTemplate")
     public RestTemplate keycloakRestTemplate() {
