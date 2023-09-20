@@ -1,7 +1,7 @@
 spring:
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://0.0.0.0:5432/roadmaps
+    url: jdbc:postgresql://postgres/roadmaps
     username: postgres
     password: 12345
   security:
