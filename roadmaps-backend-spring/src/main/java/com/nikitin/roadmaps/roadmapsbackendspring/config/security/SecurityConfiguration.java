@@ -41,7 +41,7 @@ public class SecurityConfiguration {
 
     @Bean
     public JwtDecoder jwtDecoder() {
-        return JwtDecoders.fromOidcIssuerLocation("http:/0.0.0.0:8085/realms/roadmaps");
+        return JwtDecoders.fromOidcIssuerLocation("https://keycloak.roadmaps-nikval.ru/realms/roadmaps");
     }
 
     @Bean

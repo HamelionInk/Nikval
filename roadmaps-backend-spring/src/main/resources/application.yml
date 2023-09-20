@@ -26,7 +26,7 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          issuer-uri: http://localhost:8085/realms/roadmaps
+          issuer-uri: https://keycloak.roadmaps-nikval.ru/realms/roadmaps
 
 management:
   endpoints:
