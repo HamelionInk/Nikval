@@ -32,3 +32,7 @@ services:
       POSTGRES_DB: "roadmaps"
       POSTGRES_USER: "postgres"
       POSTGRES_PASSWORD: "12345"
+
+networks:
+  intranet:
+    name: intranet
