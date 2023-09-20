@@ -16,9 +16,9 @@ services:
       SPRING_PROFILES_ACTIVE: dev
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.keycloak.rule=Host(`roadmaps-nikval.ru`)"
-      - "traefik.http.routers.keycloak.tls=true"
-      - "traefik.http.routers.keycloak.tls.certresolver=mytlschallenge"
+      - "traefik.http.routers.frontendvaadin.rule=Host(`roadmaps-nikval.ru`)"
+      - "traefik.http.routers.frontendvaadin.tls=true"
+      - "traefik.http.routers.frontendvaadin.tls.certresolver=mytlschallenge"
 
   postgres:
     image: postgres:15-alpine
