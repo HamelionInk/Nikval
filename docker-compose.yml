@@ -1,34 +1,34 @@
 version: '3.9'
 
-  services:
-    backendspring:
-      image: roadmaps/roadmaps-backend-spring:0.0.1-SNAPSHOT
-      ports:
-        - "8081:8081"
-      environment:
-        SPRING_PROFILES_ACTIVE: dev
-      networks:
-        - intranet
+services:
+  backendspring:
+    image: roadmaps/roadmaps-backend-spring:0.0.1-SNAPSHOT
+    ports:
+      - "8081:8081"
+    environment:
+      SPRING_PROFILES_ACTIVE: dev
+    networks:
+      - intranet
 
-    frontendvaadin:
-      image: roadmaps/roadmaps-frontend-vaadin:0.0.1-SNAPSHOT
-      ports:
-        - "8080:8080"
-      environment:
-        SPRING_PROFILES_ACTIVE: dev
-      networks:
-        - intranet
-      labels:
-        - "traefik.enable=true"
-        - "traefik.http.routers.keycloak.rule=Host(`roadmaps-nikval.ru`)"
-        - "traefik.http.routers.keycloak.tls=true"
-        - "traefik.http.routers.keycloak.tls.certresolver=mytlschallenge"
+  frontendvaadin:
+    image: roadmaps/roadmaps-frontend-vaadin:0.0.1-SNAPSHOT
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_PROFILES_ACTIVE: dev
+    networks:
+      - intranet
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.keycloak.rule=Host(`roadmaps-nikval.ru`)"
+      - "traefik.http.routers.keycloak.tls=true"
+      - "traefik.http.routers.keycloak.tls.certresolver=mytlschallenge"
 
-    postgres:
-      image: postgres:15-alpine
-      environment:
-        POSTGRES_DB: "roadmaps"
-        POSTGRES_USER: "postgres"
-        POSTGRES_PASSWORD: "12345"
-      ports:
-        - "5432:5432"
+  postgres:
+    image: postgres:15-alpine
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: "roadmaps"
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "12345"
