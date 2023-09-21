@@ -20,7 +20,7 @@ jobs:
          cache: maven
 
       - name: run tests
-        run: mvn clean package
+        run: mvn test
 
   prepare-enviroment:
     runs-on: self-hosted
