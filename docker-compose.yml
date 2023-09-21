@@ -29,28 +29,7 @@ services:
     networks:
       - proxy-intranet
 
-  postgres:
-    image: postgres:15-alpine
-    ports:
-      - "5432:5432"
-    environment:
-      POSTGRES_DB: "roadmaps"
-      POSTGRES_USER: "postgres"
-      POSTGRES_PASSWORD: "12345"
-    volumes:
-      - postgres:/var/lib/postgresql/data
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.postgres.rule=Host(`postgres.roadmaps-nikval.ru`)"
-      - "traefik.http.routers.postgres.tls=true"
-      - "traefik.http.routers.postgres.tls.certresolver=mytlschallenge"
-    networks:
-      - proxy-intranet
-
 networks:
   proxy-intranet:
     external:
       name: intranet
-
-volumes:
-  postgres:
