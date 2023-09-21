@@ -9,6 +9,8 @@ services:
       SPRING_PROFILES_ACTIVE: dev
     labels:
       - "traefik.docker.network=intranet"
+    networks:
+      - intranet
 
   frontendvaadin:
     image: roadmaps/roadmaps-frontend-vaadin:0.0.1-SNAPSHOT
@@ -22,6 +24,8 @@ services:
       - "traefik.http.routers.frontendvaadin.tls=true"
       - "traefik.http.routers.frontendvaadin.tls.certresolver=mytlschallenge"
       - "traefik.docker.network=intranet"
+    networks:
+      - intranet
 
   postgres:
     image: postgres:15-alpine
@@ -33,6 +37,8 @@ services:
       POSTGRES_PASSWORD: "12345"
     volumes:
       - postgres:/var/lib/postgresql/data
+    networks:
+      - intranet
 
 volumes:
   postgres:
