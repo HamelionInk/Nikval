@@ -7,6 +7,11 @@ services:
       - "8083:8083"
     environment:
       SPRING_PROFILES_ACTIVE: dev
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.backendspring.rule=Host(`api.roadmaps-nikval.ru`)"
+      - "traefik.http.routers.backendspring.tls=true"
+      - "traefik.http.routers.backendspring.tls.certresolver=mytlschallenge"
     networks:
       - proxy-intranet
 
@@ -34,6 +39,11 @@ services:
       POSTGRES_PASSWORD: "12345"
     volumes:
       - postgres:/var/lib/postgresql/data
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.postgres.rule=Host(`roadmaps-nikval.ru`)"
+      - "traefik.http.routers.postgres.tls=true"
+      - "traefik.http.routers.postgres.tls.certresolver=mytlschallenge"
     networks:
       - proxy-intranet
 
