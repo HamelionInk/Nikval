@@ -1,6 +1,7 @@
 package com.nikitin.roadmaps.client;
 
 import com.nikitin.roadmaps.config.security.KeycloakTokenService;
+import com.nikitin.roadmaps.dto.filter.RoadmapTopicFilter;
 import com.nikitin.roadmaps.dto.request.RoadmapChapterRequestDto;
 import com.nikitin.roadmaps.dto.request.RoadmapTopicRequestDto;
 import lombok.extern.slf4j.Slf4j;
@@ -37,10 +38,11 @@ public class RoadmapTopicClient extends Client{
                 notificationError);
     }
 
-    public ResponseEntity<String> getAll(Boolean notificationError) {
-        return request("/roadmap-topics",
+    public ResponseEntity<String> getAll(RoadmapTopicFilter roadmapTopicFilter, Boolean notificationError) {
+        return request("/roadmap-topics?roadmapChapterId=" + roadmapTopicFilter.getRoadmapChapterId() +
+                        "&startWithName=" + roadmapTopicFilter.getStartWithName(),
                 HttpMethod.GET,
-                buildRequestBody(null, null),
+                buildRequestBody(roadmapTopicFilter, null),
                 notificationError);
     }
 
