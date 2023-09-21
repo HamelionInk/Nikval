@@ -25,8 +25,7 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity(name = "RoadmapChapter")
-@Table(name = "roadmap_chapter")
+@Entity(name = "roadmap_chapter")
 public class RoadmapChapter {
 
     @Id

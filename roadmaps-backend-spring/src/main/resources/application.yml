@@ -1,7 +1,7 @@
 server:
   servlet:
     context-path: /api/v1/roadmaps
-  port: 8081
+  port: 8083
 
 spring:
   http:
@@ -15,6 +15,9 @@ spring:
     username: postgres
     password: 12345
   jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
       ddl-auto: update
   profiles:
@@ -23,18 +26,7 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          issuer-uri: http://localhost:8085/realms/roadmaps
-
-eureka:
-  instance:
-    preferIpAddress: true
-  client:
-    registerWithEureka: true
-    fetchRegistry: true
-    serviceUrl:
-      defaultZone: http://localhost:8083/eureka/
-  server:
-    waitTimeInMsWhenSyncEmpty: 5
+          issuer-uri: https://keycloak.roadmaps-nikval.ru/realms/roadmaps
 
 management:
   endpoints:

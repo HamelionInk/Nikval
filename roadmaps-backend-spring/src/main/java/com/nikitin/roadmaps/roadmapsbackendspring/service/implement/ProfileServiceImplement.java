@@ -8,11 +8,11 @@ import com.nikitin.roadmaps.roadmapsbackendspring.exception.NotFoundException;
 import com.nikitin.roadmaps.roadmapsbackendspring.mapper.ProfileMapper;
 import com.nikitin.roadmaps.roadmapsbackendspring.repository.ProfileRepository;
 import com.nikitin.roadmaps.roadmapsbackendspring.service.ProfileService;
+import com.nimbusds.common.contenttype.ContentType;
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.codec.binary.Base64;
-import org.apache.http.entity.ContentType;
+import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -106,7 +106,7 @@ public class ProfileServiceImplement implements ProfileService {
     }
 
     private void validateContentTypeUploadAvatar(String contentType) {
-        if (!Objects.equals(contentType, ContentType.IMAGE_PNG.getMimeType()) && !Objects.equals(contentType, ContentType.IMAGE_JPEG.getMimeType())) {
+        if (!Objects.equals(contentType, ContentType.IMAGE_PNG.getType()) && !Objects.equals(contentType, ContentType.IMAGE_JPEG.getType())) {
             throw new BadRequestException(String.format(UPLOAD_AVATAR_INVALID_FORMAT, contentType));
         }
     }

@@ -8,7 +8,6 @@ import com.vaadin.flow.server.VaadinServletRequest;
 import com.vaadin.flow.server.VaadinSession;
 import jakarta.servlet.ServletException;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang.StringUtils;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -24,7 +23,7 @@ import java.time.Instant;
 @Component
 public class KeycloakTokenService {
 
-    private static final String URL_REFRESH_TOKEN = "http://localhost:8085/realms/roadmaps/protocol/openid-connect/token";
+    private static final String URL_REFRESH_TOKEN = "https://keycloak.roadmaps-nikval.ru/realms/roadmaps/protocol/openid-connect/token";
 
     private final RestTemplate restTemplate;
 
@@ -38,7 +37,8 @@ public class KeycloakTokenService {
             return (String) VaadinSession.getCurrent().getAttribute(KeycloakSessionAttribute.ACCESS_TOKEN.getValue());
         } catch (TokenExpiredException exception) {
             logout();
-            return StringUtils.EMPTY;
+            //todo - переделать
+            return "";
         }
     }
 
@@ -84,7 +84,7 @@ public class KeycloakTokenService {
         parameters.add("grant_type", "refresh_token");
         parameters.add("client_id", "frontend-vaadin");
         parameters.add("refresh_token", refreshToken);
-        parameters.add("client_secret", "XFiV7e9cXlCiy2Txh9UMJuAkt8dYXc19");
+        parameters.add("client_secret", "ojwa2aHY0wjXI1Q2X1SyEZfnEFeshQBM");
 
         return parameters;
     }

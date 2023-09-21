@@ -23,8 +23,7 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity(name = "Roadmap")
-@Table(name = "roadmap")
+@Entity(name = "roadmap")
 public class Roadmap {
 
     @Id
