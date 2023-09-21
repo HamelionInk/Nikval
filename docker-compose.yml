@@ -7,10 +7,8 @@ services:
       - "8083:8083"
     environment:
       SPRING_PROFILES_ACTIVE: dev
-    labels:
-      - "traefik.docker.network=intranet"
     networks:
-      - intranet
+      - proxy-intranet
 
   frontendvaadin:
     image: roadmaps/roadmaps-frontend-vaadin:0.0.1-SNAPSHOT
@@ -23,9 +21,8 @@ services:
       - "traefik.http.routers.frontendvaadin.rule=Host(`roadmaps-nikval.ru`)"
       - "traefik.http.routers.frontendvaadin.tls=true"
       - "traefik.http.routers.frontendvaadin.tls.certresolver=mytlschallenge"
-      - "traefik.docker.network=intranet"
     networks:
-      - intranet
+      - proxy-intranet
 
   postgres:
     image: postgres:15-alpine
@@ -38,7 +35,12 @@ services:
     volumes:
       - postgres:/var/lib/postgresql/data
     networks:
-      - intranet
+      - proxy-intranet
+
+networks:
+  proxy-intranet:
+    external:
+      name: intranet
 
 volumes:
   postgres:
