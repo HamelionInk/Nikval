@@ -2,11 +2,12 @@ name: build
 
 on:
   pull_request:
+    types:
+      - 'opened'
+      - 'synchronize'
+      - 'reopened'
     branches:
       - '*'
-  push:
-    branches:
-      - 'develop'
 
 jobs:
   build:
