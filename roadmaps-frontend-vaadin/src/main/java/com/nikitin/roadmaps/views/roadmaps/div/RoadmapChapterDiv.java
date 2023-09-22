@@ -3,6 +3,7 @@ package com.nikitin.roadmaps.views.roadmaps.div;
 import com.nikitin.roadmaps.client.RoadmapClient;
 import com.nikitin.roadmaps.client.RoadmapQuestionClient;
 import com.nikitin.roadmaps.client.RoadmapTopicClient;
+import com.nikitin.roadmaps.dto.filter.RoadmapTopicFilter;
 import com.nikitin.roadmaps.dto.request.RoadmapQuestionRequestDto;
 import com.nikitin.roadmaps.dto.request.RoadmapTopicRequestDto;
 import com.nikitin.roadmaps.dto.response.RoadmapQuestionResponseDto;
@@ -23,6 +24,7 @@ import com.vaadin.flow.component.menubar.MenuBar;
 import com.vaadin.flow.component.menubar.MenuBarVariant;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.progressbar.ProgressBar;
+import com.vaadin.flow.component.progressbar.ProgressBarVariant;
 import com.vaadin.flow.component.splitlayout.SplitLayout;
 import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
@@ -30,6 +32,7 @@ import com.vaadin.flow.data.binder.Binder;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -157,6 +160,12 @@ public class RoadmapChapterDiv extends Div {
                     var progressBar = new ProgressBar();
                     progressBar.setMax(roadmapTopicResponseDto.getNumberOfQuestion());
                     progressBar.setValue(roadmapTopicResponseDto.getNumberExploredQuestion());
+                    if (progressBar.getValue() <= (progressBar.getMax() / 4)) {
+                        progressBar.addThemeVariants(ProgressBarVariant.LUMO_ERROR);
+                    }
+                    if (progressBar.getValue() >= (progressBar.getMax() / 1.5)) {
+                        progressBar.addThemeVariants(ProgressBarVariant.LUMO_SUCCESS);
+                    }
 
                     return progressBar;
                 }).setHeader("Прогресс");
@@ -166,6 +175,7 @@ public class RoadmapChapterDiv extends Div {
 
     private void configurationSecondaryGrid() {
         secondaryGrid.setClassName("roadmap_secondary_grid");
+        secondaryGrid.addThemeVariants(GridVariant.LUMO_NO_BORDER);
         secondaryGrid.setSelectionMode(Grid.SelectionMode.SINGLE);
 
         var secondaryEditor = secondaryGrid.getEditor();
@@ -282,9 +292,43 @@ public class RoadmapChapterDiv extends Div {
     }
 
     private void configurationSplitLayout() {
+        var searchTopics = new TextField();
+        searchTopics.addClassName("roadmap_search");
+        searchTopics.setPlaceholder("Поиск");
+        searchTopics.setClearButtonVisible(true);
+        searchTopics.setPrefixComponent(VaadinIcon.SEARCH.create());
+        searchTopics.addValueChangeListener(event -> {
+            var response = roadmapTopicClient.getAll(RoadmapTopicFilter.builder()
+                    .roadmapChapterId(getRoadmapChapterId())
+                    .startWithName(event.getValue())
+                    .build(), true);
+            log.info(event.getValue());
+            if (response.getStatusCode().is2xxSuccessful()) {
+                var responseBody = RestUtils.convertResponseToDto(response.getBody(), PageableRoadmapTopicResponseDto.class);
+                primaryGrid.setItems(responseBody.getRoadmapTopicResponseDtos());
+                if (!StringUtils.hasText(event.getValue())) {
+                    updatePrimaryGrid();
+                }
+            }
+        });
+
+        var primaryMenu = new HorizontalLayout();
+        primaryMenu.addClassName("roadmap_menu");
+        primaryMenu.add(primaryMenuBar, searchTopics);
+
+        var searchQuestions = new TextField();
+        searchQuestions.addClassName("roadmap_search");
+        searchQuestions.setPlaceholder("Поиск");
+        searchQuestions.setClearButtonVisible(true);
+        searchQuestions.setPrefixComponent(VaadinIcon.SEARCH.create());
+
+        var secondaryMenu = new HorizontalLayout();
+        secondaryMenu.addClassName("roadmap_menu");
+        secondaryMenu.add(secondaryMenuBar, searchQuestions);
+
         splitLayout.addClassName("roadmap_split_layout");
-        splitLayout.addToPrimary(primaryMenuBar, primaryGrid);
-        splitLayout.addToSecondary(secondaryMenuBar, secondaryGrid);
+        splitLayout.addToPrimary(primaryMenu, primaryGrid);
+        splitLayout.addToSecondary(secondaryMenu, secondaryGrid);
     }
 
     private void configurationRoadmapBodyDiv() {

@@ -1,7 +1,9 @@
 package com.nikitin.roadmaps.roadmapsbackendspring.service.implement;
 
+import com.nikitin.roadmaps.roadmapsbackendspring.dto.filter.RoadmapTopicFilter;
 import com.nikitin.roadmaps.roadmapsbackendspring.dto.request.RoadmapTopicRequestDto;
 import com.nikitin.roadmaps.roadmapsbackendspring.dto.response.RoadmapTopicResponseDto;
+import com.nikitin.roadmaps.roadmapsbackendspring.dto.specification.RoadmapTopicSpecification;
 import com.nikitin.roadmaps.roadmapsbackendspring.entity.RoadmapTopic;
 import com.nikitin.roadmaps.roadmapsbackendspring.exception.NotFoundException;
 import com.nikitin.roadmaps.roadmapsbackendspring.mapper.RoadmapTopicMapper;
@@ -67,8 +69,8 @@ public class RoadmapTopicServiceImplement implements RoadmapTopicService {
 
     @Transactional(readOnly = true)
     @Override
-    public Page<RoadmapTopicResponseDto> getAll(@NonNull Pageable pageable) {
-        return roadmapTopicRepository.findAll(pageable)
+    public Page<RoadmapTopicResponseDto> getAll(@NonNull RoadmapTopicFilter roadmapTopicFilter, @NonNull Pageable pageable) {
+        return roadmapTopicRepository.findAll(RoadmapTopicSpecification.filterBy(roadmapTopicFilter), pageable)
                 .map(roadmapTopicMapper::toResponseDto);
     }
 

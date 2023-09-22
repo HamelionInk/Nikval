@@ -23,6 +23,28 @@ public class TextFieldWithLabel extends HorizontalLayout {
         add(paragraph, textField);
     }
 
+    public TextFieldWithLabel() {
+        paragraph = new Paragraph();
+        paragraph.addClassName("paragraph");
+
+        textField = new TextField();
+        textField.addClassName("text_field");
+
+        add(paragraph, textField);
+    }
+
+    public void setReadOnly(Boolean readOnly) {
+        textField.setReadOnly(readOnly);
+    }
+
+    public void setLabel(String text) {
+        paragraph.setText(text);
+    }
+
+    public void setValue(String text) {
+        textField.setValue(text);
+    }
+
     public String getValue() {
         return this.textField.getValue();
     }

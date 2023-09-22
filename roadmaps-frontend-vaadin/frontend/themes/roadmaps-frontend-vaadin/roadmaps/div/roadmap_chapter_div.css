@@ -14,6 +14,19 @@
 
 }
 
+.roadmap_menu_bar {
+}
+
+.roadmap_menu {
+    position: relative;
+}
+
+.roadmap_search {
+    position: absolute;
+    left: 65%;
+    right: 2%;
+}
+
 .question_status {
     width: 15px;
     height: 15px;
