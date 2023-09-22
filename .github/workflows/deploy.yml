@@ -1,12 +1,12 @@
-name: Deploy
+name: deploy
 
 on:
   push:
-    branches: [ "master", "develop" ]
+    branches: [ "develop" ]
 
 jobs:
   test:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     timeout-minutes: 15
     steps:
       - name: cd into repo
@@ -15,9 +15,9 @@ jobs:
       - name: set up Java and Maven
         uses: actions/setup-java@v3
         with:
-         distribution: 'adopt'
-         java-version: '17'
-         cache: maven
+          distribution: 'adopt'
+          java-version: '17'
+          cache: maven
 
       - name: run tests
         run: mvn test
