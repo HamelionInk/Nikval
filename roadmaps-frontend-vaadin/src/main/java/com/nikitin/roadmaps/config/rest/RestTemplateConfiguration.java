@@ -9,7 +9,8 @@ import org.springframework.web.util.DefaultUriBuilderFactory;
 @Configuration
 public class RestTemplateConfiguration {
 
-    private final String url = "https://api.roadmaps-nikval.ru/api/v1/roadmaps";
+    //todo - перенести в application
+    private final String url = "http://localhost:8083/api/v1/roadmaps";
 
     @Bean("KeycloakRestTemplate")
     public RestTemplate keycloakRestTemplate() {

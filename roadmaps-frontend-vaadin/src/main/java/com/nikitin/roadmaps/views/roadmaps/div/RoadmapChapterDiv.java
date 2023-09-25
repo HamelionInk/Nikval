@@ -175,7 +175,7 @@ public class RoadmapChapterDiv extends Div {
 
     private void configurationSecondaryGrid() {
         secondaryGrid.setClassName("roadmap_secondary_grid");
-        secondaryGrid.addThemeVariants(GridVariant.LUMO_NO_BORDER);
+        primaryGrid.addThemeVariants(GridVariant.LUMO_NO_BORDER);
         secondaryGrid.setSelectionMode(Grid.SelectionMode.SINGLE);
 
         var secondaryEditor = secondaryGrid.getEditor();
@@ -210,6 +210,7 @@ public class RoadmapChapterDiv extends Div {
         primaryMenuBar.addThemeVariants(MenuBarVariant.LUMO_TERTIARY_INLINE);
 
         var addTopic = new Icon(VaadinIcon.PLUS);
+        addTopic.setColor("#86C232");
         addTopic.addClickListener(event -> {
             var response = roadmapTopicClient.create(RoadmapTopicRequestDto.builder()
                     .name("Новая тема")
@@ -221,6 +222,7 @@ public class RoadmapChapterDiv extends Div {
         });
 
         var deleteTopic = new Icon(VaadinIcon.MINUS);
+        deleteTopic.setColor("#86C232");
         deleteTopic.addClickListener(event -> primaryGrid.getSelectedItems().stream().findFirst().ifPresent(item -> {
             var response = roadmapTopicClient.deleteById(item.getId(), true);
             if (response.getStatusCode().is2xxSuccessful()) {
@@ -230,6 +232,7 @@ public class RoadmapChapterDiv extends Div {
         }));
 
         var editTopic = new Icon(VaadinIcon.EDIT);
+        editTopic.setColor("#86C232");
         editTopic.addClickListener(event -> primaryGrid.getSelectedItems().stream().findFirst().ifPresent(item -> {
             var editor = primaryGrid.getEditor();
 
@@ -248,6 +251,7 @@ public class RoadmapChapterDiv extends Div {
         secondaryMenuBar.addThemeVariants(MenuBarVariant.LUMO_TERTIARY_INLINE);
 
         var addQuestion = new Icon(VaadinIcon.PLUS);
+        addQuestion.setColor("#86C232");
         addQuestion.addClickListener(event -> {
             var response = roadmapQuestionClient.create(RoadmapQuestionRequestDto.builder()
                     .question("Новый вопрос")
@@ -262,6 +266,7 @@ public class RoadmapChapterDiv extends Div {
         });
 
         var deleteQuestion = new Icon(VaadinIcon.MINUS);
+        deleteQuestion.setColor("#86C232");
         deleteQuestion.addClickListener(event -> secondaryGrid.getSelectedItems().stream().findFirst().ifPresent(item -> {
             var response = roadmapQuestionClient.deleteById(item.getId(), true);
             if (response.getStatusCode().is2xxSuccessful()) {
@@ -271,6 +276,7 @@ public class RoadmapChapterDiv extends Div {
         }));
 
         var editQuestion = new Icon(VaadinIcon.EDIT);
+        editQuestion.setColor("#86C232");
         editQuestion.addClickListener(event -> secondaryGrid.getSelectedItems().stream().findFirst().ifPresent(item -> {
             var questionInfoDialog = new QuestionInfoDialog(item, roadmapQuestionClient, this);
             questionInfoDialog.setEditedStatus();
@@ -278,6 +284,7 @@ public class RoadmapChapterDiv extends Div {
         }));
 
         var exploredQuestion = new Icon(VaadinIcon.CHECK);
+        exploredQuestion.setColor("#86C232");
         exploredQuestion.addClickListener(event -> secondaryGrid.getSelectedItems().stream().findFirst().ifPresent(item -> {
             var response = roadmapQuestionClient.patch(item.getId(), RoadmapQuestionRequestDto.builder()
                     .isExplored(!item.getIsExplored())

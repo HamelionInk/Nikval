@@ -11,7 +11,6 @@ import org.springframework.cache.annotation.EnableCaching;
 @Theme(value = "roadmaps-frontend-vaadin")
 public class RoadmapsFrontendVaadinApplication implements AppShellConfigurator {
 
-    //
     public static void main(String[] args) {
         SpringApplication.run(RoadmapsFrontendVaadinApplication.class, args);
     }

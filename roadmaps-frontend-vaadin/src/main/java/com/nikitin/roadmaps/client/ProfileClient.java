@@ -52,6 +52,13 @@ public class ProfileClient extends Client {
         );
     }
 
+    public ResponseEntity<String> getById(Long id, Boolean notificationError) {
+        return request("/profiles/" + id,
+                HttpMethod.GET,
+                buildRequestBody(null, null),
+                notificationError);
+    }
+
     public ResponseEntity<String> getByEmail(String email, Boolean notificationError) {
         return request("/profiles/email/" + email,
                 HttpMethod.GET,

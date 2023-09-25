@@ -1,28 +1,36 @@
-@import url('roadmap-info-div.css');
-@import url('header-profile-layout.css');
-@import url('user-info-div.css');
-@import url('save-info-div.css');
-
-[slot='summary'] {
-    color: black;
-    font-size: larger;
+.profile_view {
+    display: flex;
+    box-shadow: inset 1px 1px 10px -1px #6B6E70;
+    margin-right: 1vh;
+    height: 90vh;
 }
 
-.profile_info_div {
+.profile_header_layout {
     width: 100%;
-    height: 100%;
-    margin-right: 2%;
-    box-shadow: 0 0 10px 5px rgba(221, 221, 221, 1);
 }
 
-.profile_accordion_panel {
-    margin-left: 1%;
+.profile_bottom_layout {
+    width: 100%;
 }
 
-.profile_text_field {
-    width: 30%;
-    margin-left: 2%;
+.profile_button_layout {
+    margin-left: auto;
 }
+
+.profile_button_layout_2 {
+    margin-top: 5%;
+    margin-left: auto;
+}
+
+.profile_avatar {
+    width: 70px;
+    height: 70px;
+}
+
+.profile_full_name {
+    color: white;
+}
+
 
 
 
