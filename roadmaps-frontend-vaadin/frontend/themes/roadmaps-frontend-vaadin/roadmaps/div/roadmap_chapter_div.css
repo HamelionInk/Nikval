@@ -1,7 +1,3 @@
-.roadmap_split_layout {
-
-}
-
 .roadmap_primary_grid {
 
 }
@@ -11,7 +7,7 @@
 }
 
 .roadmap_div_element {
-
+    width: 100%;
 }
 
 .roadmap_menu_bar {

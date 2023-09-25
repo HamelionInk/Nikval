@@ -1,5 +1,6 @@
 package com.nikitin.roadmaps.views.profile.dialog;
 
+import com.nikitin.roadmaps.client.ProfileClient;
 import com.nikitin.roadmaps.exception.UploadAvatarException;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dialog.Dialog;

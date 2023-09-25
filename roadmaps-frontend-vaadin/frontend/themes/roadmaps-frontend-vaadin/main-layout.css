@@ -2,10 +2,6 @@ vaadin-scroller[slot="drawer"] {
     padding: var(--lumo-space-s);
 }
 
-vaadin-button:hover {
-    background-color: #d3dadc;
-}
-
 [slot="drawer"]:is(header, footer) {
     display: flex;
     align-items: center;
@@ -19,22 +15,43 @@ vaadin-button:hover {
     display: none;
 }
 
-vaadin-side-nav-item:hover {
-    background-color: #d3dadc;
+
+
+:host([selected]) {
+    background: #8860D0;
 }
 
-.applicationNameText {
-    margin-left: 1%;
-    font-family: cursive;
-    font-size: xx-large;
+.main_layout {
+    background: #222629;
 }
 
-.localeChangeComboBox {
+.main_navigation_bar_tabs {
+    align-content: center;
+    margin-left: auto;
+    margin-right: -10%;
+    width: 100%;
+}
+
+.application_name_text {
+    margin-left: 5%;
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.locale_change {
     margin-right: 1%;
     margin-left: auto;
+    animation: show 1s;
 }
 
-.logo {
-    margin-left: 1%;
-    height: 70px;
+@keyframes show {
+    0% {
+        opacity: 0;
+    }
+    50% {
+        opacity: 60%;
+    }
+    100% {
+        opacity: 100%;
+    }
 }

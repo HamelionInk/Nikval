@@ -1,34 +1,39 @@
 package com.nikitin.roadmaps.views.profile;
 
 import com.nikitin.roadmaps.client.ProfileClient;
+import com.nikitin.roadmaps.dto.enums.CompetenceType;
 import com.nikitin.roadmaps.dto.request.ProfileRequestDto;
 import com.nikitin.roadmaps.dto.response.ProfileResponseDto;
 import com.nikitin.roadmaps.util.RestUtils;
 import com.nikitin.roadmaps.util.ViewUtils;
 import com.nikitin.roadmaps.views.MainLayout;
 import com.nikitin.roadmaps.views.profile.dialog.AvatarEditDialog;
-import com.nikitin.roadmaps.views.profile.div.RoadmapInfoDiv;
-import com.nikitin.roadmaps.views.profile.div.SaveInfoDiv;
-import com.nikitin.roadmaps.views.profile.div.UserInfoDiv;
-import com.nikitin.roadmaps.views.profile.layout.HeaderProfileLayout;
+import com.vaadin.flow.component.AbstractSinglePropertyField;
+import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.UI;
+import com.vaadin.flow.component.avatar.Avatar;
+import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.combobox.ComboBox;
+import com.vaadin.flow.component.formlayout.FormLayout;
+import com.vaadin.flow.component.html.Paragraph;
+import com.vaadin.flow.component.icon.VaadinIcon;
+import com.vaadin.flow.component.notification.Notification;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.data.binder.BeanValidationBinder;
-import com.vaadin.flow.data.binder.Binder;
+import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.i18n.LocaleChangeEvent;
 import com.vaadin.flow.i18n.LocaleChangeObserver;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
+import com.vaadin.flow.server.VaadinServletRequest;
+import com.vaadin.flow.theme.lumo.LumoIcon;
 import jakarta.annotation.security.RolesAllowed;
+import jakarta.servlet.ServletException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.oauth2.core.oidc.user.OidcUser;
-import org.springframework.util.StringUtils;
 
-import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
 import java.util.Optional;
-import java.util.regex.Pattern;
+import java.util.stream.Stream;
 
 @Slf4j
 @PageTitle("Profile")
@@ -36,172 +41,199 @@ import java.util.regex.Pattern;
 @RolesAllowed(value = {"ROLE_USER"})
 public class ProfileView extends VerticalLayout implements LocaleChangeObserver {
 
-    private ProfileClient profileClient;
-    private HeaderProfileLayout headerProfileLayout;
-    private UserInfoDiv userInfoDiv;
-    private RoadmapInfoDiv roadmapInfoDiv;
-    private SaveInfoDiv saveInfoDiv;
+    private final HorizontalLayout headerLayout = new HorizontalLayout();
+    private final FormLayout formLayout = new FormLayout();
+    private final HorizontalLayout bottomLayout = new HorizontalLayout();
 
-    private ProfileResponseDto profileResponseDto;
-    private final Binder<ProfileRequestDto> profileRequestDtoBinder;
+    private final Avatar avatar = new Avatar();
+    private final AvatarEditDialog avatarEditDialog = new AvatarEditDialog();
+    private final Paragraph fullName = new Paragraph("Тестович Тестов");
+    private final Button editButton = new Button();
+    private final Button logoutButton = new Button();
+    private final Button editAvatarButton = new Button();
+
+    private final TextField name = new TextField();
+    private final TextField surname = new TextField();
+    private final TextField email = new TextField();
+    private final ComboBox<CompetenceType> competence = new ComboBox<>();
+    private final TextField speciality = new TextField();
+
+    private final Button cancelButton = new Button();
+    private final Button saveButton = new Button();
+
+    private ProfileClient profileClient;
 
     public ProfileView(@Autowired ProfileClient profileClient) {
+        addClassName("profile_view");
+
         this.profileClient = profileClient;
-        this.profileRequestDtoBinder = new BeanValidationBinder<>(ProfileRequestDto.class);
 
-        headerProfileLayout = new HeaderProfileLayout();
-        userInfoDiv = new UserInfoDiv();
-        roadmapInfoDiv = new RoadmapInfoDiv();
-        saveInfoDiv = new SaveInfoDiv();
+        buildHeaderLayout();
+        buildFormLayout();
+        buildBottomLayout();
 
-        profileResponseDto = new ProfileResponseDto();
-
-        binderProfileForm();
-        addEventListeners();
-        getProfile();
-
-        add(headerProfileLayout, userInfoDiv, roadmapInfoDiv, saveInfoDiv);
+        add(headerLayout, formLayout, bottomLayout);
     }
 
-    private void setProfile(ProfileResponseDto profileResponseDto) {
-        Optional.ofNullable(profileResponseDto.getName())
-                .ifPresent(name -> userInfoDiv.getNameTextField().setValue(name));
+    private void buildHeaderLayout() {
+        headerLayout.addClassName("profile_header_layout");
 
-        Optional.ofNullable(profileResponseDto.getLastName())
-                .ifPresent(lastName -> userInfoDiv.getLastNameTextField().setValue(lastName));
+        avatar.addClassName("profile_avatar");
 
-        Optional.ofNullable(profileResponseDto.getEmail())
-                .ifPresent(email -> userInfoDiv.getEmailTextField().setValue(email));
+        fullName.addClassName("profile_full_name");
 
-        Optional.ofNullable(profileResponseDto.getCompetence())
-                .ifPresent(competence -> userInfoDiv.getCompetenceComboBox().setValue(competence));
+        editButton.addClassName("profile_edit_button");
+        editButton.setIcon(LumoIcon.EDIT.create());
+        editButton.addClickListener(event -> changeEditState());
 
-        Optional.ofNullable(profileResponseDto.getSpeciality())
-                .ifPresent(speciality -> userInfoDiv.getSpecialityTextField().setValue(speciality));
+        logoutButton.addClassName("profile_logout_button");
+        logoutButton.setIcon(VaadinIcon.SIGN_OUT.create());
+        logoutButton.addClickListener(event -> logout());
+
+        editAvatarButton.addClassName("profile_edit_avatar_button");
+        editAvatarButton.setIcon(VaadinIcon.UPLOAD_ALT.create());
+        editAvatarButton.addClickListener(event -> avatarEditDialog.open());
+        editAvatarButton.setVisible(false);
+
+        var buttonLayout = new HorizontalLayout();
+        buttonLayout.addClassName("profile_button_layout");
+        buttonLayout.add(editAvatarButton, editButton, logoutButton);
+
+        avatarEditDialog.getAvatarUpload().addSucceededListener(event -> avatar.setImage(uploadAvatar()));
+
+        headerLayout.add(avatar, fullName, buttonLayout);
+    }
+
+    private void buildFormLayout() {
+        formLayout.addClassName("profile_form_layout");
+
+        name.addClassName("profile_name");
+        name.setLabel("Name");
+
+        surname.addClassName("profile_surname");
+        surname.setLabel("Surname");
+
+        email.addClassName("profile_email");
+        email.setLabel("Email");
+
+        competence.addClassName("profile_competence");
+        competence.setLabel("Competence");
+        competence.setItems(CompetenceType.getAllValue());
+        competence.setItemLabelGenerator(CompetenceType::getName);
+
+        speciality.addClassName("profile_speciality");
+        speciality.setLabel("Speciality");
+
+        Stream.<Component>of(name, surname, email, competence, speciality).forEach(item ->
+                ((AbstractSinglePropertyField<?, ?>) item).setReadOnly(true));
+
+        formLayout.add(name, surname, email, competence, speciality);
+
+        setFormLayout(getProfileById());
+    }
+
+    private void buildBottomLayout() {
+        bottomLayout.addClassName("profile_bottom_layout");
+
+        cancelButton.addClassName("profile_cancel_button");
+        cancelButton.setText("Cancel");
+        cancelButton.addClickListener(event -> changeEditState());
+
+        saveButton.addClassName("profile_save_button");
+        saveButton.setText("Save");
+        saveButton.addClickListener(event -> {
+            setFormLayout(saveProfileById());
+            changeEditState();
+        });
+
+        var buttonLayout = new HorizontalLayout();
+        buttonLayout.addClassName("profile_button_layout_2");
+        buttonLayout.add(cancelButton, saveButton);
+
+        Stream.<Component>of(cancelButton, saveButton).forEach(item -> item.setVisible(false));
+
+        bottomLayout.add(buttonLayout);
+    }
+
+    private void changeEditState() {
+        Stream.<Component>of(name, surname, email, competence, speciality).forEach(item ->
+                ((AbstractSinglePropertyField<?, ?>) item).setReadOnly(!Boolean.TRUE.equals(((AbstractSinglePropertyField<?, ?>) item).isReadOnly())));
+        Stream.<Component>of(cancelButton, saveButton, editAvatarButton).forEach(item ->
+                item.setVisible(!Boolean.TRUE.equals(item.isVisible())));
+    }
+
+    private void logout() {
+        try {
+            VaadinServletRequest.getCurrent().logout();
+        } catch (ServletException e) {
+            Notification.show("Logout failed");
+        }
+    }
+
+    private ProfileResponseDto getProfileById() {
+        var response = profileClient.getById((long) UI.getCurrent().getSession().getAttribute("profileId"), true);
+
+        if (response.getStatusCode().is2xxSuccessful()) {
+            return RestUtils.convertResponseToDto(response.getBody(), ProfileResponseDto.class);
+        } else {
+            return ProfileResponseDto.builder().build();
+        }
+    }
+
+    private ProfileResponseDto saveProfileById() {
+        var profileRequestDto = ProfileRequestDto.builder()
+                .name(ViewUtils.hasStringValue(name.getValue()))
+                .lastName(ViewUtils.hasStringValue(surname.getValue()))
+                .email(ViewUtils.hasStringValue(email.getValue()))
+                .competence(competence.getValue())
+                .speciality(ViewUtils.hasStringValue(speciality.getValue()))
+                .build();
+
+        var response = profileClient.patch(
+                (long) UI.getCurrent().getSession().getAttribute("profileId"),
+                profileRequestDto,
+                true);
+
+        if (response.getStatusCode().is2xxSuccessful()) {
+            return RestUtils.convertResponseToDto(response.getBody(), ProfileResponseDto.class);
+        } else {
+            return ProfileResponseDto.builder().build();
+        }
+    }
+
+    private String uploadAvatar() {
+        var response = profileClient.uploadAvatar(
+                (long) UI.getCurrent().getSession().getAttribute("profileId"),
+                avatarEditDialog.getFileBuffer().getFileData(), true);
+
+        if (response.getStatusCode().is2xxSuccessful()) {
+            return response.getBody();
+        } else {
+            return "";
+        }
+    }
+
+    private void setFormLayout(ProfileResponseDto profileResponseDto) {
+        Optional.ofNullable(profileResponseDto.getFullName())
+                        .ifPresent(fullName::setText);
 
         Optional.ofNullable(profileResponseDto.getPicture())
-                .ifPresent(picture -> headerProfileLayout.getUserAvatar().setImage(picture));
+                        .ifPresent(avatar::setImage);
 
-        Optional.ofNullable(profileResponseDto.getFullName())
-                .ifPresent(fullName -> {
-                    headerProfileLayout.getUserFullNameH3().setText(fullName);
-                    headerProfileLayout.getUserAvatar().setName(fullName);
-                });
+        Optional.ofNullable(profileResponseDto.getName())
+                        .ifPresent(name::setValue);
 
-        Optional.ofNullable(profileResponseDto.getLastDateLogin())
-                .ifPresent(lastDateLogin -> {
-                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
-                            .withZone(ZoneId.systemDefault());
-                    var formattedLastDateLogin = formatter.format(lastDateLogin);
+        Optional.ofNullable(profileResponseDto.getLastName())
+                        .ifPresent(surname::setValue);
 
-                    headerProfileLayout.getUserLoginDateH4().setText(formattedLastDateLogin);
-                });
-    }
+        Optional.ofNullable(profileResponseDto.getEmail())
+                        .ifPresent(email::setValue);
 
-    private void getProfile() {
-        var oidcUser = (OidcUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        var response = profileClient.getByEmail(oidcUser.getEmail(), true);
+        Optional.ofNullable(profileResponseDto.getCompetence())
+                        .ifPresent(competence::setValue);
 
-        if (response.getStatusCode().is2xxSuccessful()) {
-            Optional.ofNullable(response.getBody())
-                    .ifPresent(body -> profileResponseDto = RestUtils.convertResponseToDto(body, ProfileResponseDto.class));
-        }
-
-        setProfile(profileResponseDto);
-    }
-
-    private void patchProfile(ProfileRequestDto profileRequestDto) {
-        var response = profileClient.patch(profileResponseDto.getId(), profileRequestDto, true);
-
-        if (response.getStatusCode().is2xxSuccessful()) {
-            Optional.ofNullable(response.getBody())
-                    .ifPresent(body -> profileResponseDto = RestUtils.convertResponseToDto(body, ProfileResponseDto.class));
-        }
-
-        setProfile(profileResponseDto);
-    }
-
-    private void uploadAvatar() {
-        var response = profileClient.uploadAvatar(profileResponseDto.getId(), headerProfileLayout.getAvatarEditDialog().getFileBuffer().getFileData(), true);
-
-        if (response.getStatusCode().is2xxSuccessful()) {
-            profileResponseDto.setPicture(response.getBody());
-        }
-
-        setProfile(profileResponseDto);
-    }
-
-    private void binderProfileForm() {
-        profileRequestDtoBinder.forField(userInfoDiv.getNameTextField())
-                .withValidator(
-                        StringUtils::hasText,
-                        "Поле не заполнено")
-                .withValidator(name -> name.length() >= 3,
-                        "Поле должно быть > 2 символов")
-                .bind(ProfileRequestDto::getName, ProfileRequestDto::setName);
-
-        profileRequestDtoBinder.forField(userInfoDiv.getLastNameTextField())
-                .withValidator(
-                        StringUtils::hasText,
-                        "Поле не заполнено")
-                .withValidator(lastName -> lastName.length() >= 3,
-                        "Поле должно быть > 2 символов")
-                .bind(ProfileRequestDto::getLastName, ProfileRequestDto::setLastName);
-
-        profileRequestDtoBinder.forField(userInfoDiv.getEmailTextField())
-                .withValidator(
-                        StringUtils::hasText,
-                        "Поле не заполнено")
-                .withValidator(email -> Pattern.compile("^([a-zA-Z0-9_\\-+])+@[a-zA-Z0-9-.]+\\.[a-zA-Z0-9-]{2,}$")
-                                .matcher(email)
-                                .matches(),
-                        "Неверный формат почты")
-                .bind(ProfileRequestDto::getEmail, ProfileRequestDto::setEmail);
-    }
-
-    private void addEventListeners() {
-        headerProfileLayout.getUserInfoEditButton().addClickListener(click -> {
-            if (headerProfileLayout.getUserInfoEditButton().getIsActive()) {
-                readOnlyFieldsStatus(true);
-                saveInfoDiv.getSaveUserInfoButton().setVisible(false);
-                headerProfileLayout.getUserInfoEditButton().setIsActive(false);
-                setProfile(profileResponseDto);
-            } else {
-                readOnlyFieldsStatus(false);
-                saveInfoDiv.getSaveUserInfoButton().setVisible(true);
-                headerProfileLayout.getUserInfoEditButton().setIsActive(true);
-            }
-        });
-
-        saveInfoDiv.getSaveUserInfoButton().addClickListener(click -> {
-            if (profileRequestDtoBinder.isValid()) {
-                readOnlyFieldsStatus(true);
-                saveInfoDiv.getSaveUserInfoButton().setVisible(false);
-                headerProfileLayout.getUserInfoEditButton().setIsActive(false);
-                patchProfile(ProfileRequestDto.builder()
-                        .name(ViewUtils.hasStringValue(userInfoDiv.getNameTextField().getValue()))
-                        .lastName(ViewUtils.hasStringValue(userInfoDiv.getLastNameTextField().getValue()))
-                        .email(ViewUtils.hasStringValue(userInfoDiv.getEmailTextField().getValue()))
-                        .competence(userInfoDiv.getCompetenceComboBox().getValue())
-                        .speciality(ViewUtils.hasStringValue(userInfoDiv.getSpecialityTextField().getValue()))
-                        .build());
-            } else {
-                profileRequestDtoBinder.validate();
-            }
-        });
-
-        headerProfileLayout.getAvatarEditDialog().getAvatarUpload().addSucceededListener(event -> {
-            uploadAvatar();
-            headerProfileLayout.getAvatarEditDialog().close();
-        });
-    }
-
-    private void readOnlyFieldsStatus(Boolean status) {
-        userInfoDiv.getNameTextField().setReadOnly(status);
-        userInfoDiv.getLastNameTextField().setReadOnly(status);
-        userInfoDiv.getEmailTextField().setReadOnly(status);
-        userInfoDiv.getSpecialityTextField().setReadOnly(status);
-        userInfoDiv.getCompetenceComboBox().setReadOnly(status);
+        Optional.ofNullable(profileResponseDto.getSpeciality())
+                        .ifPresent(speciality::setValue);
     }
 
     @Override

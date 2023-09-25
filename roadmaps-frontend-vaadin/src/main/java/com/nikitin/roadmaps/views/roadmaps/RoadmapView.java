@@ -59,6 +59,8 @@ public class RoadmapView extends VerticalLayout implements LocaleChangeObserver,
     }
 
     private void configurationRoadmapView() {
+        addClassName("roadmaps_view");
+
         add(roadmapHeaderDiv, roadmapBodyDiv);
     }
 
