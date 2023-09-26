@@ -1,3 +1,6 @@
+backend:
+  url: https://api.roadmaps-nikval.ru/api/v1/roadmaps
+
 spring:
   security:
     oauth2:

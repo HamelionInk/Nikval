@@ -30,6 +30,9 @@ vaadin:
     login-route: /oauth2/authorization/keycloak
     back-channel-logout: true
 
+backend:
+  url: http://localhost:8083/api/v1/roadmaps
+
 management:
   endpoints:
     web:
