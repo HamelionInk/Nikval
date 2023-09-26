@@ -31,7 +31,7 @@ vaadin:
     back-channel-logout: true
 
 backend:
-  url: http://localhost:8083/api/v1/roadmaps
+  url: "http://localhost:8083/api/v1/roadmaps"
 
 management:
   endpoints:

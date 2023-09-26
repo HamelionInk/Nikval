@@ -11,7 +11,7 @@ import org.springframework.web.util.DefaultUriBuilderFactory;
 public class RestTemplateConfiguration {
 
     @Value("${backend.url}")
-    private final String url = "http://localhost:8083/api/v1/roadmaps";
+    private String url;
 
     @Bean("KeycloakRestTemplate")
     public RestTemplate keycloakRestTemplate() {
