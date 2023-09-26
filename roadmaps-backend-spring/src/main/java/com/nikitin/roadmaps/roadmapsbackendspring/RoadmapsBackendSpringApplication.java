@@ -9,5 +9,4 @@ public class RoadmapsBackendSpringApplication {
     public static void main(String[] args) {
         SpringApplication.run(RoadmapsBackendSpringApplication.class, args);
     }
-
 }
