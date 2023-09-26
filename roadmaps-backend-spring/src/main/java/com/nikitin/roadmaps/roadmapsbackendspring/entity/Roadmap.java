@@ -36,4 +36,7 @@ public class Roadmap {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "profile_id", nullable = false, columnDefinition = "int8")
     private Profile profile;
+
+    @Column(name = "custom", nullable = false, columnDefinition = "boolean")
+    private Boolean custom;
 }

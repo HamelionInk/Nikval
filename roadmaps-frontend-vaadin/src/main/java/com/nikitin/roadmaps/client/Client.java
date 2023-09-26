@@ -17,6 +17,7 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.Map;
 import java.util.Objects;
 
 @Slf4j
@@ -27,11 +28,11 @@ public abstract class Client {
     private final RestTemplate restTemplate;
     private final KeycloakTokenService keycloakTokenService;
 
-    public ResponseEntity<String> request(String url, HttpMethod httpMethod, HttpEntity<?> request, Boolean notificationError) {
+    public ResponseEntity<String> request(String url, HttpMethod httpMethod, HttpEntity<?> request, Map<String, ?> uriParams, Boolean notificationError) {
         if (notificationError) {
-            return requestWithNotificationError(url, httpMethod, request);
+            return requestWithNotificationError(url, httpMethod, request, uriParams);
         }
-        return requestWithoutNotificationError(url, httpMethod, request);
+        return requestWithoutNotificationError(url, httpMethod, request, uriParams);
     }
 
     public <T> HttpEntity<T> buildRequestBody(T requestDto, MultiValueMap<String, String> customHeader) {
@@ -42,9 +43,9 @@ public abstract class Client {
         return this.restTemplate;
     }
 
-    private ResponseEntity<String> requestWithNotificationError(String url, HttpMethod httpMethod, HttpEntity<?> request) {
+    private ResponseEntity<String> requestWithNotificationError(String url, HttpMethod httpMethod, HttpEntity<?> request, Map<String, ?> uriParams) {
         try {
-            return restTemplate.exchange(url, httpMethod, request, String.class);
+            return restTemplate.exchange(url, httpMethod, request, String.class, uriParams);
         } catch (HttpStatusCodeException exception) {
             if(!exception.getStatusCode().equals(HttpStatus.UNAUTHORIZED)) {
                 var exceptionResponseBody = RestUtils.convertResponseToDto(exception.getResponseBodyAsString(), ExceptionResponseDto.class);
@@ -56,9 +57,9 @@ public abstract class Client {
         }
     }
 
-    private ResponseEntity<String> requestWithoutNotificationError(String url, HttpMethod httpMethod, HttpEntity<?> request) {
+    private ResponseEntity<String> requestWithoutNotificationError(String url, HttpMethod httpMethod, HttpEntity<?> request, Map<String, ?> uriParams) {
         try {
-            return restTemplate.exchange(url, httpMethod, request, String.class);
+            return restTemplate.exchange(url, httpMethod, request, String.class, uriParams);
         } catch (HttpStatusCodeException exception) {
             return ResponseEntity.status(exception.getStatusCode()).body(exception.getResponseBodyAsString());
         }

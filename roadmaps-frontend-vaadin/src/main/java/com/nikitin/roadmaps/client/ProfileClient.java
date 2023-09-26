@@ -15,6 +15,8 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.Collections;
+
 @Slf4j
 @Component
 public class ProfileClient extends Client {
@@ -27,6 +29,7 @@ public class ProfileClient extends Client {
         return request("/profiles",
                 HttpMethod.POST,
                 buildRequestBody(profileRequestDto, null),
+                Collections.EMPTY_MAP,
                 notificationError
         );
     }
@@ -38,31 +41,35 @@ public class ProfileClient extends Client {
             MultipartBodyBuilder multipartBodyBuilder = new MultipartBodyBuilder();
             multipartBodyBuilder.part("image", new FileSystemResource(image.getFile()), MediaType.valueOf(image.getMimeType()));
 
-            return request("/profiles/upload/" + id,
+            return request("/profiles/upload/{id}",
                     HttpMethod.POST,
                     buildRequestBody(multipartBodyBuilder.build(), customHeader),
+                    Collections.singletonMap("id", id),
                     notificationError);
     }
 
     public ResponseEntity<String> patch(Long id, ProfileRequestDto profileRequestDto, Boolean notificationError) {
-        return request("/profiles/" + id,
+        return request("/profiles/{id}",
                 HttpMethod.PATCH,
                 buildRequestBody(profileRequestDto, null),
+                Collections.singletonMap("id", id),
                 notificationError
         );
     }
 
     public ResponseEntity<String> getById(Long id, Boolean notificationError) {
-        return request("/profiles/" + id,
+        return request("/profiles/{id}",
                 HttpMethod.GET,
                 buildRequestBody(null, null),
+                Collections.singletonMap("id", id),
                 notificationError);
     }
 
     public ResponseEntity<String> getByEmail(String email, Boolean notificationError) {
-        return request("/profiles/email/" + email,
+        return request("/profiles/email/{email}",
                 HttpMethod.GET,
                 buildRequestBody(null, null),
+                Collections.singletonMap("email", email),
                 notificationError
         );
     }

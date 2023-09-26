@@ -7,6 +7,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
 @Builder
@@ -15,7 +17,7 @@ import lombok.Setter;
 public class RoadmapTopicFilter {
 
     @Schema(description = "Фильтр по идентификатору раздела", example = "4")
-    private Long roadmapChapterId;
+    private List<Long> roadmapChapterIds;
 
     @Schema(description = "Фильтр по имени темы", example = "Stream API")
     private String startWithName;

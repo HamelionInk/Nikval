@@ -13,8 +13,10 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class RoadmapTopicFilter {
+public class RoadmapFilter {
 
-    private List<Long> roadmapChapterIds;
+    private List<Long> ids;
     private String startWithName;
+    private List<Long> profileIds;
+    private Boolean custom;
 }

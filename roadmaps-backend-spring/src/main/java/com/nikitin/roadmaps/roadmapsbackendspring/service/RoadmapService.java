@@ -1,5 +1,6 @@
 package com.nikitin.roadmaps.roadmapsbackendspring.service;
 
+import com.nikitin.roadmaps.roadmapsbackendspring.dto.filter.RoadmapFilter;
 import com.nikitin.roadmaps.roadmapsbackendspring.dto.request.RoadmapChapterRequestDto;
 import com.nikitin.roadmaps.roadmapsbackendspring.dto.request.RoadmapQuestionRequestDto;
 import com.nikitin.roadmaps.roadmapsbackendspring.dto.request.RoadmapRequestDto;
@@ -26,7 +27,7 @@ public interface RoadmapService {
 
     RoadmapResponseDto getResponseById(@NonNull Long id);
 
-    Page<RoadmapResponseDto> getAll(@NonNull Pageable pageable);
+    Page<RoadmapResponseDto> getAll(@NonNull RoadmapFilter roadmapFilter, @NonNull Pageable pageable);
 
     Page<RoadmapResponseDto> getAllByProfileId(@NonNull Long id, @NonNull Pageable pageable);
 
