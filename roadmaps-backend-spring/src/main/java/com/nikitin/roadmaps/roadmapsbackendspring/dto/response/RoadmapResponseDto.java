@@ -23,4 +23,7 @@ public class RoadmapResponseDto {
 
     @Schema(description = "Идентификатор кому пренадлежит карта развития", example = "5")
     private Long profileId;
+
+    @Schema(description = "Флаг стандартной карты или созданной пользователем")
+    private Boolean custom;
 }

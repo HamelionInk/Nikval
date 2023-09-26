@@ -1,6 +1,7 @@
 package com.nikitin.roadmaps.views.roadmaps;
 
 import com.nikitin.roadmaps.client.RoadmapClient;
+import com.nikitin.roadmaps.dto.filter.RoadmapFilter;
 import com.nikitin.roadmaps.dto.response.RoadmapResponseDto;
 import com.nikitin.roadmaps.dto.response.pageable.PageableRoadmapResponseDto;
 import com.nikitin.roadmaps.util.RestUtils;
@@ -28,6 +29,7 @@ import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.Collections;
 import java.util.List;
 
 @Slf4j
@@ -40,6 +42,8 @@ public class RoadmapInfoView extends VerticalLayout implements LocaleChangeObser
 
     private RoadmapClient roadmapClient;
     private Grid<RoadmapResponseDto> roadmapsGrid;
+    private Grid<RoadmapResponseDto> defaultRoadmapsGrid;
+
 
     private final VerticalLayout roadmapsLayout = new VerticalLayout();
     private final VerticalLayout defaultRoadmapsLayout = new VerticalLayout();
@@ -56,15 +60,24 @@ public class RoadmapInfoView extends VerticalLayout implements LocaleChangeObser
         buildDefaultRoadmapsLayout();
 
         var roadmapSearch = generateSearchField();
+        roadmapSearch.addValueChangeListener(event -> roadmapsGrid.setItems(getAll(RoadmapFilter.builder()
+                .profileIds(List.of((long) UI.getCurrent().getSession().getAttribute("profileId")))
+                .startWithName(event.getValue())
+                .custom(true)
+                .build())));
         var roadmapHeaderLayout = new HorizontalLayout();
         roadmapHeaderLayout.addClassName("roadmaps_header_layout");
         roadmapHeaderLayout.add(roadmapName, roadmapSearch);
 
         var roadmapDefaultSearch = generateSearchField();
+        roadmapDefaultSearch.addValueChangeListener(event -> defaultRoadmapsGrid.setItems(getAll(RoadmapFilter.builder()
+                .profileIds(List.of((long) UI.getCurrent().getSession().getAttribute("profileId")))
+                .startWithName(event.getValue())
+                .custom(false)
+                .build())));
         var roadmapDefaultHeaderLayout = new HorizontalLayout();
         roadmapDefaultHeaderLayout.addClassName("roadmaps_header_layout");
         roadmapDefaultHeaderLayout.add(defaultRoadmapName, roadmapDefaultSearch);
-
 
         add(roadmapHeaderLayout, roadmapsLayout, roadmapDefaultHeaderLayout, defaultRoadmapsLayout);
     }
@@ -73,8 +86,12 @@ public class RoadmapInfoView extends VerticalLayout implements LocaleChangeObser
         roadmapsLayout.addClassName("roadmaps_layout");
         roadmapName.addClassName("roadmaps_name");
 
+        roadmapsGrid = generateGrid(getAll(RoadmapFilter.builder()
+                .profileIds(List.of((long) UI.getCurrent().getSession().getAttribute("profileId")))
+                .custom(true)
+                .build()));
 
-        roadmapsLayout.add(generateGrid(getAllRoadmapsByProfileId()));
+        roadmapsLayout.add(roadmapsGrid);
     }
 
     private void buildDefaultRoadmapsLayout() {
@@ -82,23 +99,28 @@ public class RoadmapInfoView extends VerticalLayout implements LocaleChangeObser
 
         defaultRoadmapName.addClassName("roadmaps_name");
 
-        defaultRoadmapsLayout.add(generateGrid(getAllRoadmapsByProfileId()));
+        defaultRoadmapsGrid = generateGrid(getAll(RoadmapFilter.builder()
+                .profileIds(List.of((long) UI.getCurrent().getSession().getAttribute("profileId")))
+                .custom(false)
+                .build()));
+
+        defaultRoadmapsLayout.add(defaultRoadmapsGrid);
     }
 
     private Grid<RoadmapResponseDto> generateGrid(List<RoadmapResponseDto> data) {
-        roadmapsGrid = new Grid<>(RoadmapResponseDto.class, false);
+        var grid = new Grid<>(RoadmapResponseDto.class, false);
 
-        roadmapsGrid.addClassName("roadmaps_grid");
-        roadmapsGrid.setAllRowsVisible(true);
-        roadmapsGrid.setItems(data);
+        grid.addClassName("roadmaps_grid");
+        grid.setAllRowsVisible(true);
+        grid.setItems(data);
 
-        roadmapsGrid.addItemDoubleClickListener(event ->
+        grid.addItemDoubleClickListener(event ->
                 UI.getCurrent().navigateToClient("http://localhost:8082/roadmaps/" + event.getItem().getId()));
 
-        Grid.Column<RoadmapResponseDto> roadmapNameColumn = roadmapsGrid
+        Grid.Column<RoadmapResponseDto> roadmapNameColumn = grid
                 .addColumn(RoadmapResponseDto::getName);
 
-        Grid.Column<RoadmapResponseDto> systemColumn = roadmapsGrid
+        Grid.Column<RoadmapResponseDto> systemColumn = grid
                 .addComponentColumn(roadmapResponseDto -> {
                     var icon = new Icon(VaadinIcon.TRASH);
                     icon.setColor("#86C232");
@@ -108,12 +130,23 @@ public class RoadmapInfoView extends VerticalLayout implements LocaleChangeObser
                     deleteButton.setIcon(icon);
                     deleteButton.addThemeVariants(ButtonVariant.LUMO_ICON);
                     deleteButton.addClickListener(event -> {
-
+                        roadmapClient.deleteById(roadmapResponseDto.getId(), true);
+                        if (roadmapResponseDto.getCustom()) {
+                            roadmapsGrid.setItems(getAll(RoadmapFilter.builder()
+                                    .profileIds(List.of((long) UI.getCurrent().getSession().getAttribute("profileId")))
+                                    .custom(true)
+                                    .build()));
+                        } else {
+                            defaultRoadmapsGrid.setItems(getAll(RoadmapFilter.builder()
+                                    .profileIds(List.of((long) UI.getCurrent().getSession().getAttribute("profileId")))
+                                    .custom(false)
+                                    .build()));
+                        }
                     });
                     return deleteButton;
                 }).setWidth("70px").setFlexGrow(0);
 
-        return roadmapsGrid;
+        return grid;
     }
 
     private TextField generateSearchField() {
@@ -126,13 +159,13 @@ public class RoadmapInfoView extends VerticalLayout implements LocaleChangeObser
         return searchField;
     }
 
-    private List<RoadmapResponseDto> getAllRoadmapsByProfileId() {
-        var response = roadmapClient.getAllByProfileId((long) UI.getCurrent().getSession().getAttribute("profileId"), true);
+    private List<RoadmapResponseDto> getAll(RoadmapFilter roadmapFilter) {
+        var response = roadmapClient.getAll(roadmapFilter, true);
 
-        if(response.getStatusCode().is2xxSuccessful()) {
+        if (response.getStatusCode().is2xxSuccessful()) {
             return RestUtils.convertResponseToDto(response.getBody(), PageableRoadmapResponseDto.class).getRoadmapResponseDtos();
         } else {
-            return List.of();
+            return Collections.emptyList();
         }
     }
 

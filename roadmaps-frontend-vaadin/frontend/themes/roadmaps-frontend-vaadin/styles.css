@@ -153,3 +153,8 @@ vaadin-accordion-heading::part(toggle) {
     display: flex;
     width: 100%;
 }
+
+
+vaadin-progress-bar::part(bar) {
+    background-color: unset;
+}

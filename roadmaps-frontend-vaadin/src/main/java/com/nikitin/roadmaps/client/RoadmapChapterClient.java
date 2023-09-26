@@ -8,6 +8,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.Collections;
+
 @Slf4j
 @Component
 public class RoadmapChapterClient extends Client {
@@ -19,20 +21,23 @@ public class RoadmapChapterClient extends Client {
         return request("/roadmap-chapters",
                 HttpMethod.POST,
                 buildRequestBody(roadmapChapterRequestDto, null),
+                Collections.EMPTY_MAP,
                 notificationError);
     }
 
     public ResponseEntity<String> patch(Long id, RoadmapChapterRequestDto roadmapChapterRequestDto, Boolean notificationError) {
-        return request("/roadmap-chapters/" + id,
+        return request("/roadmap-chapters/{id}",
                 HttpMethod.PATCH,
                 buildRequestBody(roadmapChapterRequestDto, null),
+                Collections.singletonMap("id", id),
                 notificationError);
     }
 
     public ResponseEntity<String> getById(Long id, Boolean notificationError) {
-        return request("/roadmap-chapters/" + id,
+        return request("/roadmap-chapters/{id}",
                 HttpMethod.GET,
                 buildRequestBody(null, null),
+                Collections.singletonMap("id", id),
                 notificationError);
     }
 
@@ -40,20 +45,23 @@ public class RoadmapChapterClient extends Client {
         return request("/roadmap-chapters",
                 HttpMethod.GET,
                 buildRequestBody(null, null),
+                Collections.EMPTY_MAP,
                 notificationError);
     }
 
     public ResponseEntity<String> getAllByRoadmapId(Long id, Boolean notificationError) {
-        return request("/roadmap-chapters/roadmap/" + id,
+        return request("/roadmap-chapters/roadmap/{id}",
                 HttpMethod.GET,
                 buildRequestBody(null, null),
+                Collections.singletonMap("id", id),
                 notificationError);
     }
 
     public ResponseEntity<String> deleteById(Long id, Boolean notificationError) {
-        return request("/roadmap-chapters/" + id,
+        return request("/roadmap-chapters/{id}",
                 HttpMethod.DELETE,
                 buildRequestBody(null, null),
+                Collections.singletonMap("id", id),
                 notificationError);
     }
 }

@@ -3,6 +3,7 @@ package com.nikitin.roadmaps.views.roadmaps.div;
 import com.nikitin.roadmaps.client.RoadmapClient;
 import com.nikitin.roadmaps.client.RoadmapQuestionClient;
 import com.nikitin.roadmaps.client.RoadmapTopicClient;
+import com.nikitin.roadmaps.dto.filter.RoadmapQuestionFilter;
 import com.nikitin.roadmaps.dto.filter.RoadmapTopicFilter;
 import com.nikitin.roadmaps.dto.request.RoadmapQuestionRequestDto;
 import com.nikitin.roadmaps.dto.request.RoadmapTopicRequestDto;
@@ -35,6 +36,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.stream.Stream;
 
@@ -306,10 +308,10 @@ public class RoadmapChapterDiv extends Div {
         searchTopics.setPrefixComponent(VaadinIcon.SEARCH.create());
         searchTopics.addValueChangeListener(event -> {
             var response = roadmapTopicClient.getAll(RoadmapTopicFilter.builder()
-                    .roadmapChapterId(getRoadmapChapterId())
+                    .roadmapChapterIds(List.of(getRoadmapChapterId()))
                     .startWithName(event.getValue())
                     .build(), true);
-            log.info(event.getValue());
+
             if (response.getStatusCode().is2xxSuccessful()) {
                 var responseBody = RestUtils.convertResponseToDto(response.getBody(), PageableRoadmapTopicResponseDto.class);
                 primaryGrid.setItems(responseBody.getRoadmapTopicResponseDtos());
@@ -328,6 +330,20 @@ public class RoadmapChapterDiv extends Div {
         searchQuestions.setPlaceholder("Поиск");
         searchQuestions.setClearButtonVisible(true);
         searchQuestions.setPrefixComponent(VaadinIcon.SEARCH.create());
+        searchQuestions.addValueChangeListener(event -> {
+            var response = roadmapQuestionClient.getAll(RoadmapQuestionFilter.builder()
+                    .roadmapTopicIds(List.of(getSelectedTopicId()))
+                    .startWithQuestion(event.getValue())
+                    .build(), true);
+
+            if (response.getStatusCode().is2xxSuccessful()) {
+                var responseBody = RestUtils.convertResponseToDto(response.getBody(), PageableRoadmapQuestionResponseDto.class);
+                secondaryGrid.setItems(responseBody.getRoadmapQuestionResponseDtos());
+                if (!StringUtils.hasText(event.getValue())) {
+                    updateSecondaryGrid(getSelectedTopicId());
+                }
+            }
+        });
 
         var secondaryMenu = new HorizontalLayout();
         secondaryMenu.addClassName("roadmap_menu");

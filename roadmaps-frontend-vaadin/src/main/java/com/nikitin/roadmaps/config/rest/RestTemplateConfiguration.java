@@ -10,15 +10,17 @@ import org.springframework.web.util.DefaultUriBuilderFactory;
 public class RestTemplateConfiguration {
 
     //todo - перенести в application
-    private final String url = "https://api.roadmaps-nikval.ru/api/v1/roadmaps";
+    private final String url = "http://localhost:8083/api/v1/roadmaps";
 
     @Bean("KeycloakRestTemplate")
     public RestTemplate keycloakRestTemplate() {
         var restTemplate = new RestTemplate();
         var requestFactory = new HttpComponentsClientHttpRequestFactory();
         requestFactory.setConnectTimeout(100000);
+        var defaultUriBuilderFactory = new DefaultUriBuilderFactory(url);
+        defaultUriBuilderFactory.setEncodingMode(DefaultUriBuilderFactory.EncodingMode.VALUES_ONLY);
 
-        restTemplate.setUriTemplateHandler(new DefaultUriBuilderFactory(url));
+        restTemplate.setUriTemplateHandler(defaultUriBuilderFactory);
         restTemplate.setRequestFactory(requestFactory);
         return restTemplate;
     }
