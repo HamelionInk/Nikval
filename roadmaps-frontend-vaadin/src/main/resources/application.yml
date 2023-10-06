@@ -12,16 +12,16 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          issuer-uri: https://keycloak.roadmaps-nikval.ru/realms/roadmaps
+          issuer-uri: ${KC_ISSUER_URI:http://localhost:8080/realms/roadmaps}
       client:
         provider:
           keycloak:
-            issuer-uri: https://keycloak.roadmaps-nikval.ru/realms/roadmaps
+            issuer-uri: ${KC_ISSUER_URI:http://localhost:8080/realms/roadmaps}
         registration:
           keycloak:
-            client-secret: ojwa2aHY0wjXI1Q2X1SyEZfnEFeshQBM
-            client-id: frontend-vaadin
-            scope: profile,openid,email,roles
+            client-secret: ${KC_CLIENT_SECRET:brqT8WCBezxJVikl7StgzaFY89wcSNA2}
+            client-id: ${KC_CLIENT_ID:frontend-vaadin}
+            scope: ${KC_SCOPE:profile,openid,email,roles}
 
 vaadin:
   launch-browser: true
@@ -31,7 +31,7 @@ vaadin:
     back-channel-logout: true
 
 backend:
-  url: "http://localhost:8083/api/v1/roadmaps"
+  url: ${BACKEND_URL:http://localhost:8081/api/v1/roadmaps}
 
 management:
   endpoints:

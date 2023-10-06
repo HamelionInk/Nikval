@@ -2,6 +2,7 @@ package com.nikitin.roadmaps.roadmapsbackendspring.config.security;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -22,6 +23,9 @@ public class SecurityConfiguration {
     private final JwtGrantedAuthoritiesConverter jwtAuthenticationConverter;
     private final HandlerExceptionResolver handlerExceptionResolver;
 
+    @Value("${spring.security.oauth2.resourceserver.jwt.issuer-uri}")
+    private String OIDC_ISSUER_LOCATION;
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
@@ -41,7 +45,7 @@ public class SecurityConfiguration {
 
     @Bean
     public JwtDecoder jwtDecoder() {
-        return JwtDecoders.fromOidcIssuerLocation("https://keycloak.roadmaps-nikval.ru/realms/roadmaps");
+        return JwtDecoders.fromOidcIssuerLocation(OIDC_ISSUER_LOCATION);
     }
 
     @Bean
