@@ -2,16 +2,16 @@ package com.nikitin.roadmaps.views.roadmaps;
 
 import com.nikitin.roadmaps.client.RoadmapClient;
 import com.nikitin.roadmaps.dto.filter.RoadmapFilter;
+import com.nikitin.roadmaps.dto.request.RoadmapRequestDto;
 import com.nikitin.roadmaps.dto.response.RoadmapResponseDto;
 import com.nikitin.roadmaps.dto.response.pageable.PageableRoadmapResponseDto;
 import com.nikitin.roadmaps.util.RestUtils;
 import com.nikitin.roadmaps.views.MainLayout;
+import com.nikitin.roadmaps.views.roadmaps.dialog.CreateRoadmapDialog;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.grid.Grid;
-import com.vaadin.flow.component.grid.GridVariant;
-import com.vaadin.flow.component.html.Anchor;
 import com.vaadin.flow.component.html.Paragraph;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
@@ -22,7 +22,6 @@ import com.vaadin.flow.i18n.LocaleChangeEvent;
 import com.vaadin.flow.i18n.LocaleChangeObserver;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
-import com.vaadin.flow.theme.lumo.LumoIcon;
 import jakarta.annotation.security.RolesAllowed;
 import lombok.Getter;
 import lombok.Setter;
@@ -44,13 +43,15 @@ public class RoadmapInfoView extends VerticalLayout implements LocaleChangeObser
     private Grid<RoadmapResponseDto> roadmapsGrid;
     private Grid<RoadmapResponseDto> defaultRoadmapsGrid;
 
-
     private final VerticalLayout roadmapsLayout = new VerticalLayout();
     private final VerticalLayout defaultRoadmapsLayout = new VerticalLayout();
 
-    private final Paragraph roadmapName = new Paragraph("My roadmaps :");
+    private final Button createRoadmapButton = new Button();
 
+    private final Paragraph roadmapName = new Paragraph("My roadmaps :");
     private final Paragraph defaultRoadmapName = new Paragraph("Default roadmaps :");
+
+    private final CreateRoadmapDialog createRoadmapDialog;
 
     public RoadmapInfoView(@Autowired RoadmapClient roadmapClient) {
         addClassName("roadmaps_view");
@@ -79,6 +80,9 @@ public class RoadmapInfoView extends VerticalLayout implements LocaleChangeObser
         roadmapDefaultHeaderLayout.addClassName("roadmaps_header_layout");
         roadmapDefaultHeaderLayout.add(defaultRoadmapName, roadmapDefaultSearch);
 
+        createRoadmapDialog = new CreateRoadmapDialog(roadmapClient);
+        createRoadmapDialog.setRoadmapInfoView(this);
+
         add(roadmapHeaderLayout, roadmapsLayout, roadmapDefaultHeaderLayout, defaultRoadmapsLayout);
     }
 
@@ -91,7 +95,13 @@ public class RoadmapInfoView extends VerticalLayout implements LocaleChangeObser
                 .custom(true)
                 .build()));
 
-        roadmapsLayout.add(roadmapsGrid);
+        createRoadmapButton.addClassName("roadmaps_create_button");
+        var createIcon = new Icon(VaadinIcon.PLUS);
+        createRoadmapButton.setPrefixComponent(createIcon);
+        createRoadmapButton.addThemeVariants(ButtonVariant.LUMO_ICON);
+        createRoadmapButton.addClickListener(event -> createRoadmapDialog.open());
+
+        roadmapsLayout.add(roadmapsGrid, createRoadmapButton);
     }
 
     private void buildDefaultRoadmapsLayout() {
@@ -159,7 +169,7 @@ public class RoadmapInfoView extends VerticalLayout implements LocaleChangeObser
         return searchField;
     }
 
-    private List<RoadmapResponseDto> getAll(RoadmapFilter roadmapFilter) {
+    public List<RoadmapResponseDto> getAll(RoadmapFilter roadmapFilter) {
         var response = roadmapClient.getAll(roadmapFilter, true);
 
         if (response.getStatusCode().is2xxSuccessful()) {

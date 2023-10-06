@@ -154,7 +154,14 @@ vaadin-accordion-heading::part(toggle) {
     width: 100%;
 }
 
-
 vaadin-progress-bar::part(bar) {
     background-color: unset;
+}
+
+vaadin-dialog-overlay::part(header) {
+    background: #222629
+}
+
+vaadin-dialog-overlay::part(content) {
+    background: #222629
 }

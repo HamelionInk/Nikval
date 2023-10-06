@@ -17,4 +17,5 @@ public class RoadmapRequestDto {
 
     private String name;
     private Long profileId;
+    private Boolean custom;
 }
