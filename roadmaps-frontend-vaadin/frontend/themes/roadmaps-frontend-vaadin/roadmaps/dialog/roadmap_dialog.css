@@ -1,0 +1,21 @@
+.dialog_header_div {
+    width: 100%;
+    display: flex;
+}
+
+.dialog_header_name {
+    color: white;
+}
+
+.dialog_name_text_field {
+    margin-bottom: 10%;
+    width: 100%;
+}
+
+.dialog_create_button {
+    width: 100%;
+}
+
+.dialog_close_button {
+    margin-left: auto;
+}

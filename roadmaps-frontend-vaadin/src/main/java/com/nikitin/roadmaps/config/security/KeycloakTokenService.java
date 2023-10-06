@@ -8,6 +8,7 @@ import com.vaadin.flow.server.VaadinServletRequest;
 import com.vaadin.flow.server.VaadinSession;
 import jakarta.servlet.ServletException;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -24,6 +25,13 @@ import java.time.Instant;
 public class KeycloakTokenService {
 
     private static final String URL_REFRESH_TOKEN = "https://keycloak.roadmaps-nikval.ru/realms/roadmaps/protocol/openid-connect/token";
+    private static final String GRANT_TYPE = "refresh_token";
+
+    @Value("${spring.security.oauth2.client.registration.keycloak.client-id}")
+    private String KC_CLIENT_ID;
+
+    @Value("${spring.security.oauth2.client.registration.keycloak.client-secret}")
+    private String KC_CLIENT_SECRET;
 
     private final RestTemplate restTemplate;
 
@@ -81,10 +89,10 @@ public class KeycloakTokenService {
 
     private MultiValueMap<String, String> buildParametersForRefreshToken(String refreshToken) {
         MultiValueMap<String, String> parameters = new LinkedMultiValueMap<>();
-        parameters.add("grant_type", "refresh_token");
-        parameters.add("client_id", "frontend-vaadin");
+        parameters.add("grant_type", GRANT_TYPE);
+        parameters.add("client_id", KC_CLIENT_ID);
         parameters.add("refresh_token", refreshToken);
-        parameters.add("client_secret", "ojwa2aHY0wjXI1Q2X1SyEZfnEFeshQBM");
+        parameters.add("client_secret", KC_CLIENT_SECRET);
 
         return parameters;
     }

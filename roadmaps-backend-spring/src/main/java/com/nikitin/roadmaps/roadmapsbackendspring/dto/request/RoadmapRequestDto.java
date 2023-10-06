@@ -32,4 +32,8 @@ public class RoadmapRequestDto {
     @NotNull(message = "Поле <profileId> не может быть null", groups = Create.class)
     @Positive(message = "Идентификатор не может быть отрицательным значением", groups = { Create.class, Patch.class })
     private Long profileId;
+
+    @Schema(description = "Флаг показывающий создание пользовательской карты развития")
+    @NotNull(message = "Поле <custom> не может быть null", groups = Create.class)
+    private Boolean custom;
 }

@@ -1,11 +1,16 @@
 package com.nikitin.roadmaps.views.roadmaps.dialog;
 
-import com.nikitin.roadmaps.client.RoadmapChapterClient;
+import com.nikitin.roadmaps.client.RoadmapClient;
+import com.nikitin.roadmaps.dto.filter.RoadmapFilter;
 import com.nikitin.roadmaps.dto.request.RoadmapChapterRequestDto;
-import com.nikitin.roadmaps.views.roadmaps.RoadmapView;
+import com.nikitin.roadmaps.dto.request.RoadmapRequestDto;
+import com.nikitin.roadmaps.dto.response.RoadmapResponseDto;
+import com.nikitin.roadmaps.views.roadmaps.RoadmapInfoView;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.dialog.Dialog;
+import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Paragraph;
 import com.vaadin.flow.component.icon.VaadinIcon;
@@ -15,22 +20,23 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.List;
+
 @Slf4j
 @Getter
 @Setter
-public class CreateChapterDialog extends Dialog {
+public class CreateRoadmapDialog extends Dialog {
 
-    private Paragraph headerName = new Paragraph();
-    private TextField nameChapter = new TextField();
-    private Button closeButton = new Button();
-    private Button createButton = new Button();
+    private final Paragraph headerName = new Paragraph();
+    private final TextField nameRoadmap = new TextField();
+    private final Button closeButton = new Button();
+    private final Button createButton = new Button();
 
-    private Long roadmapId;
-    private RoadmapChapterClient roadmapChapterClient;
-    private RoadmapView roadmapView;
+    private RoadmapClient roadmapClient;
+    private RoadmapInfoView roadmapInfoView;
 
-    public CreateChapterDialog(RoadmapChapterClient roadmapChapterClient) {
-        this.roadmapChapterClient = roadmapChapterClient;
+    public CreateRoadmapDialog(RoadmapClient roadmapClient) {
+        this.roadmapClient = roadmapClient;
 
         configurationComponents();
         configurationCreateChapterDialog();
@@ -49,31 +55,36 @@ public class CreateChapterDialog extends Dialog {
 
         VerticalLayout verticalLayout = new VerticalLayout();
         verticalLayout.addClassName("dialog_vertical_layout");
-        verticalLayout.add(nameChapter, createButton);
+        verticalLayout.add(nameRoadmap, createButton);
         add(verticalLayout);
     }
 
     private void configurationComponents() {
-        headerName.setText("Создать раздел");
+        headerName.setText("Создать карту развития");
         headerName.addClassName("dialog_header_name");
 
         closeButton.setIcon(VaadinIcon.CLOSE_SMALL.create());
         closeButton.addClassName("dialog_close_button");
         closeButton.addClickListener(event -> close());
 
-        nameChapter.setLabel("Название");
-        nameChapter.addClassName("dialog_name_text_field");
+        nameRoadmap.setLabel("Название");
+        nameRoadmap.addClassName("dialog_name_text_field");
 
         createButton.setText("Создать");
         createButton.addClassName("dialog_create_button");
         createButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         createButton.addClickListener(event -> {
-            var response = roadmapChapterClient.create(RoadmapChapterRequestDto.builder()
-                    .name(nameChapter.getValue())
-                    .roadmapId(roadmapId)
+            var response = roadmapClient.create(RoadmapRequestDto.builder()
+                    .name(nameRoadmap.getValue())
+                    .profileId((long) UI.getCurrent().getSession().getAttribute("profileId"))
+                    .custom(true)
                     .build(), true);
+
             if (response.getStatusCode().is2xxSuccessful()) {
-                roadmapView.updateData(roadmapId);
+                roadmapInfoView.getRoadmapsGrid().setItems(roadmapInfoView.getAll(RoadmapFilter.builder()
+                        .profileIds(List.of((long) UI.getCurrent().getSession().getAttribute("profileId")))
+                        .custom(true)
+                        .build()));
                 close();
             }
         });
