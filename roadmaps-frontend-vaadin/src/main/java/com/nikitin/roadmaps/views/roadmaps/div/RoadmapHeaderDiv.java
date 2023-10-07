@@ -2,15 +2,14 @@ package com.nikitin.roadmaps.views.roadmaps.div;
 
 import com.nikitin.roadmaps.client.RoadmapChapterClient;
 import com.nikitin.roadmaps.client.RoadmapClient;
-import com.nikitin.roadmaps.component.TextFieldWithLabel;
 import com.nikitin.roadmaps.dto.response.RoadmapResponseDto;
 import com.nikitin.roadmaps.views.roadmaps.RoadmapView;
 import com.nikitin.roadmaps.views.roadmaps.dialog.CreateChapterDialog;
 import com.nikitin.roadmaps.views.roadmaps.dialog.DeleteChapterDialog;
+import com.nikitin.roadmaps.views.roadmaps.dialog.EditChapterDialog;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H1;
-import com.vaadin.flow.component.html.Paragraph;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -56,11 +55,19 @@ public class RoadmapHeaderDiv extends Div {
         deleteChapterButton.setText("Удалить раздел");
         deleteChapterButton.addClickListener(event -> {
             var deleteChapterDialog = new DeleteChapterDialog(roadmapChapterClient);
+            deleteChapterDialog.setRoadmapView(getRoadmapView());
+            deleteChapterDialog.setRoadmapId(getRoadmapResponseDto().getId());
             deleteChapterDialog.open();
         });
 
         editNameChapterButton.addClassName("roadmap_button");
         editNameChapterButton.setText("Переименовать раздел");
+        editNameChapterButton.addClickListener(event -> {
+            var editChapterDialog = new EditChapterDialog(getRoadmapChapterClient());
+            editChapterDialog.setRoadmapView(getRoadmapView());
+            editChapterDialog.setRoadmapId(getRoadmapResponseDto().getId());
+            editChapterDialog.open();
+        });
 
         shareRoadmapButton.addClassName("roadmap_button");
         shareRoadmapButton.setText("Поделиться");

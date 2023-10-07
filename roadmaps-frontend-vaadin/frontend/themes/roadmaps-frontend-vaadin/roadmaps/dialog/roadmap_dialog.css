@@ -12,6 +12,19 @@
     width: 100%;
 }
 
+.dialog_chapters_combo_box {
+    width: 100%;
+}
+
+.dialog_chapters_combo_box_del {
+    width: 100%;
+    margin-bottom: 10%;
+}
+
+.dialog_delete_button {
+    width: 100%;
+}
+
 .dialog_create_button {
     width: 100%;
 }
