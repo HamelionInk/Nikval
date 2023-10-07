@@ -140,6 +140,7 @@ public class RoadmapChapterDiv extends Div {
         primaryGrid.setClassName("roadmap_primary_grid");
         primaryGrid.addThemeVariants(GridVariant.LUMO_NO_BORDER);
         primaryGrid.setSelectionMode(Grid.SelectionMode.SINGLE);
+        primaryGrid.setMaxHeight("1000px");
 
         var primaryEditor = primaryGrid.getEditor();
         Binder<RoadmapTopicResponseDto> primaryBinder = new Binder<>(RoadmapTopicResponseDto.class);
@@ -177,8 +178,9 @@ public class RoadmapChapterDiv extends Div {
 
     private void configurationSecondaryGrid() {
         secondaryGrid.setClassName("roadmap_secondary_grid");
-        primaryGrid.addThemeVariants(GridVariant.LUMO_NO_BORDER);
+        secondaryGrid.addThemeVariants(GridVariant.LUMO_NO_BORDER);
         secondaryGrid.setSelectionMode(Grid.SelectionMode.SINGLE);
+        secondaryGrid.setMaxHeight("1000px");
 
         var secondaryEditor = secondaryGrid.getEditor();
         Binder<RoadmapQuestionResponseDto> secondaryBinder = new Binder<>(RoadmapQuestionResponseDto.class);
