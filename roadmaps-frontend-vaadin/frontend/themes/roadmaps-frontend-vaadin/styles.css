@@ -165,3 +165,43 @@ vaadin-dialog-overlay::part(header) {
 vaadin-dialog-overlay::part(content) {
     background: #222629
 }
+
+vaadin-text-area {
+
+}
+
+vaadin-text-area::part(input-field) {
+    background: white;
+}
+
+vaadin-text-area::part(label) {
+    color: white;
+}
+
+vaadin-checkbox > label {
+    color: white;
+}
+
+vaadin-checkbox::part(checkbox) {
+    background: #86C232;
+}
+
+vaadin-checkbox::part(checkbox)::after {
+    color: black;
+}
+
+vaadin-upload::part(drop-label) {
+    color: white;
+}
+
+vaadin-upload > [slot="drop-label-icon"]::before {
+    color: #86C232;
+}
+
+vaadin-upload {
+    display: flex;
+    width: 100%;
+    border-style: solid;
+    border-color: #86C232;
+    border-width: 1px;
+}

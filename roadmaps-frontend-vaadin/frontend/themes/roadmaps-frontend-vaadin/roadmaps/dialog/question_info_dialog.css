@@ -7,14 +7,8 @@
     margin-right: 60%;
 }
 
-.question_close_button {
-}
-
-.question_info_dialog {
-}
-
 .question_save_button {
-    margin-left: 79.5%;
+    width: 100%;
 }
 
 .question_text {

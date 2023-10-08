@@ -27,7 +27,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Locale;
 import java.util.stream.Stream;
-
 @Slf4j
 @Getter
 @Setter

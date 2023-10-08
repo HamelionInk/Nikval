@@ -1,18 +1,13 @@
 package com.nikitin.roadmaps.views.roadmaps.dialog;
 
-import com.nikitin.roadmaps.client.RoadmapClient;
 import com.nikitin.roadmaps.client.RoadmapQuestionClient;
+import com.nikitin.roadmaps.component.CustomDialog;
 import com.nikitin.roadmaps.dto.request.RoadmapQuestionRequestDto;
 import com.nikitin.roadmaps.dto.response.RoadmapQuestionResponseDto;
-import com.nikitin.roadmaps.views.roadmaps.RoadmapView;
 import com.nikitin.roadmaps.views.roadmaps.div.RoadmapChapterDiv;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.checkbox.Checkbox;
-import com.vaadin.flow.component.dialog.Dialog;
-import com.vaadin.flow.component.html.Div;
-import com.vaadin.flow.component.html.Paragraph;
-import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextArea;
 import lombok.Getter;
@@ -22,10 +17,8 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Getter
 @Setter
-public class QuestionInfoDialog extends Dialog {
+public class QuestionInfoDialog extends CustomDialog {
 
-    private Paragraph dialogName = new Paragraph();
-    private Button closeButton = new Button();
     private Button saveButton = new Button();
     private TextArea questionText = new TextArea();
     private TextArea answerText = new TextArea();
@@ -42,28 +35,10 @@ public class QuestionInfoDialog extends Dialog {
         this.roadmapQuestionClient = roadmapQuestionClient;
         this.roadmapChapterDiv = roadmapChapterDiv;
 
-        configurationHeader();
-        configurationBody();
-        configurationQuestionInfoDialog();
+        configurationComponents();
     }
 
-    private void configurationHeader() {
-        dialogName.addClassName("question_dialog_name");
-        dialogName.setText("Информация по вопросу");
-
-        closeButton.addClassName("question_close_button");
-        closeButton.setIcon(VaadinIcon.CLOSE.create());
-        closeButton.addThemeVariants(ButtonVariant.LUMO_SMALL);
-        closeButton.addClickListener(event -> close());
-
-        var headerDiv = new Div();
-        headerDiv.setClassName("question_header_div");
-        headerDiv.add(dialogName, closeButton);
-
-        getHeader().add(headerDiv);
-    }
-
-    private void configurationBody() {
+    private void configurationComponents() {
         isExplored.addClassName("question_is_explored");
         isExplored.setLabel("Изученный");
         isExplored.setValue(getRoadmapQuestionResponseDto().getIsExplored());
@@ -96,11 +71,9 @@ public class QuestionInfoDialog extends Dialog {
             }
         });
 
-        var verticalLayout = new VerticalLayout();
-        verticalLayout.addClassName("question_vertical_layout");
-        verticalLayout.add(isExplored, questionText, answerText, saveButton);
-
-        add(verticalLayout);
+        setHeaderNameText("Question info");
+        getContentLayout().add(isExplored, questionText, answerText, saveButton);
+        setWidth("600px");
     }
 
     public void setEditedStatus() {
@@ -108,11 +81,5 @@ public class QuestionInfoDialog extends Dialog {
         questionText.setReadOnly(false);
         answerText.setReadOnly(false);
         saveButton.setVisible(true);
-    }
-
-    private void configurationQuestionInfoDialog() {
-        addClassName("question_info_dialog");
-        setWidth("600px");
-        setDraggable(true);
     }
 }
