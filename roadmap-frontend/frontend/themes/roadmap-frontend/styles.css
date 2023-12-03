@@ -1,0 +1,31 @@
+@import url('view/main-view.css');
+@import url('view/home-view.css');
+@import url('view/news-view.css');
+@import url('view/profile-view.css');
+@import url('component/side-navigation-menu-item.css');
+@import url('component/side-navigation-bar.css');
+@import url('component/news-card.css');
+@import url('component/view-header.css');
+@import url('component/image-upload.css');
+@import url('dialog/main-dialog.css');
+@import url('dialog/news-card-dialog.css');
+
+vaadin-app-layout::part(drawer) {
+    background-color: #383838;
+    width: auto;
+    height: 100%;
+    overflow-x: hidden;
+}
+
+a:where(:any-link) {
+    color: unset;
+}
+
+vaadin-menu-bar-button {
+    background-color: unset;
+}
+
+vaadin-menu-bar-button:hover {
+    border-radius: 15px;
+    background-color: #6e6e6d;
+}
