@@ -20,4 +20,4 @@ services:
       - "traefik.http.routers.keycloak.tls=true"
       - "traefik.http.routers.keycloak.tls.certresolver=letsEncrypt"
       - "traefik.http.routers.keycloak.service=keycloak@docker"
-      - "traefik.htpp.services.keycloak.loadbalancer.server.port=8080"
+      - "traefik.http.services.keycloak.loadbalancer.server.port=8080"

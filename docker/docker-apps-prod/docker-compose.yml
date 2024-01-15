@@ -13,7 +13,7 @@ services:
       - "traefik.http.routers.backend_prod.tls=true"
       - "traefik.http.routers.backend_prod.tls.certresolver=letsEncrypt"
       - "traefik.http.routers.backend_prod.service=backend_prod@docker"
-      - "traefik.htpp.services.backend_prod.loadbalancer.server.port=8083"
+      - "traefik.http.services.backend_prod.loadbalancer.server.port=8083"
 
   frontendvaadin:
     image: roadmaps/roadmaps-frontend-vaadin:0.0.1-SNAPSHOT

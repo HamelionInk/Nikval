@@ -27,5 +27,5 @@ services:
       - "traefik.http.routers.frontend_dev.tls=true"
       - "traefik.http.routers.frontend_dev.tls.certresolver=letsEncrypt"
       - "traefik.http.routers.frontend_dev.service=frontend_dev@docker"
-      - "traefik.htpp.services.frontend_dev.loadbalancer.server.port=8082"
+      - "traefik.http.services.frontend_dev.loadbalancer.server.port=8082"
 
