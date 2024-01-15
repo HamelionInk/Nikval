@@ -17,5 +17,6 @@ public class RoadmapTopicResponseDto {
     private String name;
     private Integer numberOfQuestion;
     private Integer numberExploredQuestion;
+    private Long position;
     private Long roadmapChapterId;
 }

@@ -24,80 +24,79 @@ import java.time.LocalDate;
 @Setter
 public class NewsCard<T extends View> extends VerticalLayout {
 
-    private T view;
-    private NewsCardResponseDto newsCardResponseDto;
+	private T view;
+	private NewsCardResponseDto newsCardResponseDto;
 
-    private HorizontalLayout newsCardHeader = new HorizontalLayout();
-    private Paragraph cardName = new Paragraph();
-    private Image cardImage = new Image();
+	private HorizontalLayout newsCardHeader = new HorizontalLayout();
+	private Paragraph cardName = new Paragraph();
+	private Image cardImage = new Image();
 
-    public NewsCard(NewsCardResponseDto newsCardResponseDto, T view) {
-        this.view = view;
-        this.newsCardResponseDto = newsCardResponseDto;
+	public NewsCard(NewsCardResponseDto newsCardResponseDto, T view) {
+		this.view = view;
+		this.newsCardResponseDto = newsCardResponseDto;
 
-        build();
-        buildForRoles();
+		build();
+		buildForRoles();
 
-        addClassName("news-card");
-        addClickListener(event ->
-                UI.getCurrent().navigate("/news/" + newsCardResponseDto.getId()));
+		addClassName("news-card");
+		addClickListener(event -> UI.getCurrent().navigate("/news/" + newsCardResponseDto.getId()));
 
-        add(newsCardHeader, cardImage);
-    }
+		add(newsCardHeader, cardImage);
+	}
 
-    private void build() {
-        newsCardHeader.addClassName("news-card-header");
-        cardName.addClassName("card-name");
-        cardImage.addClassName("news-card-image");
+	private void build() {
+		newsCardHeader.addClassName("news-card-header");
+		cardName.addClassName("card-name");
+		cardImage.addClassName("news-card-image");
 
-        cardName.setText(LocalDate.now() + " - " + newsCardResponseDto.getTitle());
-        cardImage.setSrc(newsCardResponseDto.getImage());
+		cardName.setText(LocalDate.now() + " - " + newsCardResponseDto.getTitle());
+		cardImage.setSrc(newsCardResponseDto.getImage());
 
-        newsCardHeader.add(cardName);
-    }
+		newsCardHeader.add(cardName);
+	}
 
-    private void buildForRoles() {
-        if (SecurityService.getAuthorities().contains("ROLE_ADMIN")) {
-            var newsCardDeleteButton = new Button("Удалить");
-            newsCardDeleteButton.addClassName("news_card_delete");
-            newsCardDeleteButton.addClickListener(event -> {
-                view.getClient(NewsCardClient.class).deleteById(newsCardResponseDto.getId());
-                view.refreshView();
-            });
+	private void buildForRoles() {
+		if (SecurityService.getAuthorities().contains("ROLE_ADMIN")) {
+			var newsCardDeleteButton = new Button("Удалить");
+			newsCardDeleteButton.addClassName("news_card_delete");
+			newsCardDeleteButton.addClickListener(event -> {
+				view.getClient(NewsCardClient.class).deleteById(newsCardResponseDto.getId());
+				view.refreshView();
+			});
 
-            var newsCardEditButton = new Button("Редактировать");
-            newsCardEditButton.addClassName("news_card_delete");
-            newsCardEditButton.addClickListener(event -> {
-                var editNewsCardDialog = new NewsCardDialog<>(view);
+			var newsCardEditButton = new Button("Редактировать");
+			newsCardEditButton.addClassName("news_card_delete");
+			newsCardEditButton.addClickListener(event -> {
+				var editNewsCardDialog = new NewsCardDialog<>(view);
 
-                editNewsCardDialog.setTitleInputValue(newsCardResponseDto.getTitle());
-                editNewsCardDialog.setDescriptionInputValue(newsCardResponseDto.getDescription());
-                editNewsCardDialog.setNewsCardImageSrc(newsCardResponseDto.getImage());
-                editNewsCardDialog.setDateTime(newsCardResponseDto.getCreatedAt());
+				editNewsCardDialog.setTitleInputValue(newsCardResponseDto.getTitle());
+				editNewsCardDialog.setDescriptionInputValue(newsCardResponseDto.getDescription());
+				editNewsCardDialog.setNewsCardImageSrc(newsCardResponseDto.getImage());
+				editNewsCardDialog.setDateTime(newsCardResponseDto.getCreatedAt());
 
-                editNewsCardDialog.setHeaderName("Редактировать новость");
-                editNewsCardDialog.setActionButtonName("Сохранить");
-                editNewsCardDialog.addActionButtonClickListener(action -> {
-                    view.getClient(NewsCardClient.class).patch(newsCardResponseDto.getId(), NewsCardRequestDto.builder()
-                            .title(editNewsCardDialog.getTitleInputValue())
-                            .description(editNewsCardDialog.getDescriptionInputValue())
-                            .image(editNewsCardDialog.getNewsCardImageSrc())
-                            .createdAt(editNewsCardDialog.getDateTimeValue())
-                            .build());
+				editNewsCardDialog.setHeaderName("Редактировать новость");
+				editNewsCardDialog.setActionButtonName("Сохранить");
+				editNewsCardDialog.addActionButtonClickListener(action -> {
+					view.getClient(NewsCardClient.class).patch(newsCardResponseDto.getId(), NewsCardRequestDto.builder()
+							.title(editNewsCardDialog.getTitleInputValue())
+							.description(editNewsCardDialog.getDescriptionInputValue())
+							.image(editNewsCardDialog.getNewsCardImageSrc())
+							.createdAt(editNewsCardDialog.getDateTimeValue())
+							.build());
 
-                    view.refreshView();
-                    editNewsCardDialog.close();
-                });
+					view.refreshView();
+					editNewsCardDialog.close();
+				});
 
-                editNewsCardDialog.open();
-            });
+				editNewsCardDialog.open();
+			});
 
-            var dropDownMenu = new DropDownMenu(RoadmapIcon.DROP_DOWN_VERTICAL, newsCardEditButton, newsCardDeleteButton);
-            dropDownMenu.addClassName("news-card-drop-down-menu");
-            dropDownMenu.getMenuBarIcon().addClassName("news-card-menu-bar-icon");
-            dropDownMenu.getMenuItem().addClassName("news-card-menu-item");
+			var dropDownMenu = new DropDownMenu(RoadmapIcon.DROP_DOWN_VERTICAL, newsCardEditButton, newsCardDeleteButton);
+			dropDownMenu.addClassName("news-card-drop-down-menu");
+			dropDownMenu.getMenuBarIcon().addClassName("news-card-menu-bar-icon");
+			dropDownMenu.getMenuItem().addClassName("news-card-menu-item");
 
-            newsCardHeader.add(dropDownMenu);
-        }
-    }
+			newsCardHeader.add(dropDownMenu);
+		}
+	}
 }

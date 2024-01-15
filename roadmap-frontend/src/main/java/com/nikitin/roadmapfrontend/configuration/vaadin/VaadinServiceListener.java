@@ -1,7 +1,7 @@
 package com.nikitin.roadmapfrontend.configuration.vaadin;
 
 import com.nikitin.roadmapfrontend.client.ProfileClient;
-import com.nikitin.roadmapfrontend.dto.enums.VaadinSessionAttribute;
+import com.nikitin.roadmapfrontend.utils.enums.VaadinSessionAttribute;
 import com.nikitin.roadmapfrontend.dto.request.ProfileRequestDto;
 import com.vaadin.flow.server.ServiceInitEvent;
 import com.vaadin.flow.server.VaadinServiceInitListener;
@@ -58,7 +58,7 @@ public class VaadinServiceListener implements VaadinServiceInitListener {
             profileClient.patch(response.getId(), ProfileRequestDto.builder()
                     .lastDateLogin(userInfo.getAuthenticatedAt())
                     .build());
-            VaadinSession.getCurrent().setAttribute("profileId", response.getId());
+            VaadinSession.getCurrent().setAttribute(VaadinSessionAttribute.PROFILE_ID.getValue(), response.getId());
         } else {
             var response2 = profileClient.create(ProfileRequestDto.builder()
                     .name(userInfo.getGivenName())
@@ -68,7 +68,7 @@ public class VaadinServiceListener implements VaadinServiceInitListener {
                     .build());
 
             if (Objects.nonNull(response2)) {
-                VaadinSession.getCurrent().setAttribute("profileId", response2.getId());
+                VaadinSession.getCurrent().setAttribute(VaadinSessionAttribute.PROFILE_ID.getValue(), response2.getId());
             }
         }
     }

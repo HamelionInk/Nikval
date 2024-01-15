@@ -20,6 +20,8 @@ public class ImageUpload extends VerticalLayout {
     private final Upload imageUpload = new Upload(fileBuffer);
 
     public ImageUpload() {
+        addClassName("image-upload");
+
         String[] acceptedFileTypes = {".png", ".jpg"};
 
         configureFileTypes(acceptedFileTypes);

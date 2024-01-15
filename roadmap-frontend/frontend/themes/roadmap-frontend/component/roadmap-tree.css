@@ -1,0 +1,81 @@
+.roadmap-tree {
+    display: block;
+    border-style: groove;
+    border-width: 1px;
+    width: 300px;
+    height: 100%;
+}
+
+.possible-drop-zone {
+    background-color: rgba(225,225,225,0.16);
+}
+
+.roadmap-tree-item {
+}
+
+.v-drag-over-target {
+    border-bottom-style: double;
+}
+
+.roadmap-tree-item-top-drop {
+}
+
+.roadmap-tree-item-bot-drop {
+}
+
+.roadmap-tree-item-layout {
+    padding-left: 15px;
+    align-items: center;
+}
+
+.roadmap-tree-item-layout:hover {
+    background-color: rgba(54,54,54,0.16);
+}
+
+.roadmap-tree-item-drop-icon {
+    width: 15px;
+    height: 15px;
+}
+
+.roadmap-tree-item-drop-icon-open {
+    animation-name: rotation-open;
+    animation-duration: 500ms;
+    animation-fill-mode: both;
+}
+
+.roadmap-tree-item-drop-icon-close {
+    animation-name: rotation-close;
+    animation-duration: 500ms;
+    animation-fill-mode: both;
+}
+
+.roadmap-tree-item-data-layout {
+    padding-left: 60px;
+    animation-name: opacity;
+    animation-duration: 500ms;
+    animation-fill-mode: both;
+}
+
+@keyframes rotation-open {
+    100% {
+        transform:rotateZ(90deg);
+    }
+}
+
+@keyframes rotation-close {
+    0% {
+        transform:rotateZ(90deg);
+    }
+    100% {
+        transform:rotateZ(0deg);
+    }
+}
+
+@keyframes opacity {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 100%;
+    }
+}

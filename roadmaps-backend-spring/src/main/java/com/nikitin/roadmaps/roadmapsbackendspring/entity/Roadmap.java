@@ -39,4 +39,7 @@ public class Roadmap {
 
     @Column(name = "custom", nullable = false, columnDefinition = "boolean")
     private Boolean custom;
+
+    @Column(name = "favorite", nullable = false, columnDefinition = "boolean")
+    private Boolean favorite;
 }

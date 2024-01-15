@@ -2,7 +2,7 @@ package com.nikitin.roadmapfrontend.view;
 
 import com.nikitin.roadmapfrontend.client.NewsCardClient;
 import com.nikitin.roadmapfrontend.component.ViewHeader;
-import com.nikitin.roadmapfrontend.dto.enums.VaadinSessionAttribute;
+import com.nikitin.roadmapfrontend.utils.enums.VaadinSessionAttribute;
 import com.nikitin.roadmapfrontend.dto.response.NewsCardResponseDto;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;

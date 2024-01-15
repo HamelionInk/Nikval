@@ -19,4 +19,5 @@ public class RoadmapFilter {
     private String startWithName;
     private List<Long> profileIds;
     private Boolean custom;
+    private Boolean favorite;
 }

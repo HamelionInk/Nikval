@@ -15,5 +15,6 @@ public class RoadmapChapterResponseDto {
 
     private Long id;
     private String name;
+    private Long position;
     private Long roadmapId;
 }

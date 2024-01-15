@@ -1,0 +1,13 @@
+.chapter-card-layout {
+    min-width: 500px;
+}
+
+.chapter-name {
+    width: 100%
+}
+
+.chapter-action-button {
+    width: 100%;
+    background-color: #383838;
+    color: white;
+}

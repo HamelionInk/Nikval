@@ -28,6 +28,9 @@ public class RoadmapChapterRequestDto {
     @NotBlank(message = "Поле <name> должно содержать значение", allowNull = true, groups = { Create.class, Patch.class })
     private String name;
 
+    @Schema(description = "Позиция раздела", example = "4")
+    private Long position;
+
     @Schema(description = "Идентификатор карты развития", example = "1")
     @NotNull(message = "Поле <roadmapId> не может быть null", groups = Create.class)
     @Positive(message = "Идентификатор не может быть отрицательным значением", groups = { Create.class, Patch.class })

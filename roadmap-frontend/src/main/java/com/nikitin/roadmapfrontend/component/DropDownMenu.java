@@ -19,11 +19,12 @@ public class DropDownMenu extends MenuBar {
 
     public DropDownMenu(RoadmapIcon menuBarIcon, Component... components) {
         addClassName("drop-down-menu");
-
         this.menuBarIcon = menuBarIcon.create();
         menuItem = addItem(this.menuBarIcon);
 
-        Arrays.stream(components).forEach(item ->
-                menuItem.getSubMenu().addItem(item));
+        Arrays.stream(components).forEach(item -> {
+            item.addClassName("drop-down-component");
+            menuItem.getSubMenu().addItem(item);
+        });
     }
 }

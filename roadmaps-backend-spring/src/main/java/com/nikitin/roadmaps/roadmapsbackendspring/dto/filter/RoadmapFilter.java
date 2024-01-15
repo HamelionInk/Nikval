@@ -25,6 +25,9 @@ public class RoadmapFilter {
     @Schema(description = "Фильтр по идентификатор кому пренадлежит карта развития", example = "5")
     private List<Long> profileIds;
 
-    @Schema(description = "Фильтр по флагу стандартной карты или созданной пользователем")
+    @Schema(description = "Фильтр по флагу стандартной карты или созданной пользователем", example = "true")
     private Boolean custom;
+
+    @Schema(description = "Фильтр по флагу избранности карты", example = "true")
+    private Boolean favorite;
 }

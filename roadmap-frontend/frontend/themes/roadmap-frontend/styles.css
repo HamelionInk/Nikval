@@ -1,16 +1,26 @@
-@import url('view/main-view.css');
-@import url('view/home-view.css');
-@import url('view/news-view.css');
-@import url('view/profile-view.css');
 @import url('component/side-navigation-menu-item.css');
 @import url('component/side-navigation-bar.css');
 @import url('component/news-card.css');
 @import url('component/view-header.css');
 @import url('component/image-upload.css');
+@import url('component/roadmap-card.css');
+@import url('component/drop-down-menu.css');
+@import url('component/chapter-card.css');
+@import url('component/roadmap-tree.css');
+@import url('dialog/chapter-card-dialog.css');
 @import url('dialog/main-dialog.css');
 @import url('dialog/news-card-dialog.css');
+@import url('dialog/profile-avatar-dialog.css');
+@import url('dialog/roadmap-card-dialog.css');
+@import url('view/main-view.css');
+@import url('view/home-view.css');
+@import url('view/news-view.css');
+@import url('view/profile-view.css');
+@import url('view/roadmaps-view.css');
+@import url('view/roadmap-view.css');
 
 vaadin-app-layout::part(drawer) {
+    z-index: 1;
     background-color: #383838;
     width: auto;
     height: 100%;
@@ -28,4 +38,8 @@ vaadin-menu-bar-button {
 vaadin-menu-bar-button:hover {
     border-radius: 15px;
     background-color: #6e6e6d;
+}
+
+vaadin-upload {
+    width: 100%;
 }

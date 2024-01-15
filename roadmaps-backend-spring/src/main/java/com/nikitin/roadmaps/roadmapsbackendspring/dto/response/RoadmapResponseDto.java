@@ -6,8 +6,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.List;
-
 @Getter
 @Setter
 @AllArgsConstructor
@@ -26,4 +24,7 @@ public class RoadmapResponseDto {
 
     @Schema(description = "Флаг стандартной карты или созданной пользователем")
     private Boolean custom;
+
+    @Schema(description = "Флаг показывающий избранность карты развития", example = "false")
+    private Boolean favorite;
 }

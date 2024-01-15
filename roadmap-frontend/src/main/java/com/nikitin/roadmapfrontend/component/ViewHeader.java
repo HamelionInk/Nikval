@@ -1,5 +1,6 @@
 package com.nikitin.roadmapfrontend.component;
 
+import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.Paragraph;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -11,6 +12,8 @@ import java.util.Arrays;
 @Getter
 @Setter
 public class ViewHeader extends HorizontalLayout {
+
+    private final Paragraph viewName = new Paragraph();
 
     public ViewHeader(Button... buttons) {
         addClassName("view-header");
@@ -24,14 +27,12 @@ public class ViewHeader extends HorizontalLayout {
     }
 
     public void addViewName(String viewNameText) {
-        var viewName = new Paragraph();
-
         viewName.addClassName("view-name");
         viewName.setText(viewNameText);
         add(viewName);
     }
 
-    public void addButton(Button... buttons) {
+    public void addButton(Component... buttons) {
         Arrays.stream(buttons).forEach(button -> {
             button.addClassName("view-button");
             add(button);

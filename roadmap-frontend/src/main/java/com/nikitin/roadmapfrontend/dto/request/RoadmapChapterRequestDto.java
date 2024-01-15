@@ -14,5 +14,6 @@ import lombok.Setter;
 public class RoadmapChapterRequestDto {
 
     private String name;
+    private Long position;
     private Long roadmapId;
 }

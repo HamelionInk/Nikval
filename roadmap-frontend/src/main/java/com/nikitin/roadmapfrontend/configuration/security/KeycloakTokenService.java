@@ -1,6 +1,6 @@
 package com.nikitin.roadmapfrontend.configuration.security;
 
-import com.nikitin.roadmapfrontend.dto.enums.VaadinSessionAttribute;
+import com.nikitin.roadmapfrontend.utils.enums.VaadinSessionAttribute;
 import com.vaadin.flow.server.VaadinSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

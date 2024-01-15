@@ -1,4 +1,4 @@
-package com.nikitin.roadmapfrontend.dto.enums;
+package com.nikitin.roadmapfrontend.utils.enums;
 
 import lombok.Getter;
 

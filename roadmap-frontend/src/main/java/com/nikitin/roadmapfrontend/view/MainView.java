@@ -4,8 +4,9 @@ import com.nikitin.roadmapfrontend.client.ProfileClient;
 import com.nikitin.roadmapfrontend.component.SideNavigationBar;
 import com.nikitin.roadmapfrontend.component.SideNavigationMenuItem;
 import com.nikitin.roadmapfrontend.configuration.security.SecurityService;
-import com.nikitin.roadmapfrontend.dto.enums.VaadinSessionAttribute;
+import com.nikitin.roadmapfrontend.utils.enums.VaadinSessionAttribute;
 import com.nikitin.roadmapfrontend.icon.RoadmapIcon;
+import com.nikitin.roadmapfrontend.utils.SessionHelper;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.router.BeforeLeaveEvent;
@@ -25,7 +26,7 @@ public class MainView extends AppLayout implements BeforeLeaveObserver {
         var sideNavigationMenuItems = new ArrayList<>(List.of(
                 new SideNavigationMenuItem(RoadmapIcon.HOME, "Главная страница", HomeView.class),
                 new SideNavigationMenuItem(RoadmapIcon.PROFILE, "Профиль", ProfileView.class),
-                new SideNavigationMenuItem(RoadmapIcon.ROADMAP, "Карта развития", RoadmapView.class),
+                new SideNavigationMenuItem(RoadmapIcon.ROADMAP, "Карта развития", RoadmapsView.class),
                 new SideNavigationMenuItem(RoadmapIcon.SETTING, "Настройки", SettingView.class)
         ));
 
@@ -33,7 +34,7 @@ public class MainView extends AppLayout implements BeforeLeaveObserver {
             sideNavigationMenuItems.add(new SideNavigationMenuItem(RoadmapIcon.ADMIN, "Панель администратора", AdminView.class));
         }
 
-        var profileResponseDto = profileClient.getById((Long) UI.getCurrent().getSession().getAttribute("profileId"));
+        var profileResponseDto = profileClient.getById((Long) SessionHelper.getSessionAttribute(VaadinSessionAttribute.PROFILE_ID));
 
         var sideNavigationBar = new SideNavigationBar(profileResponseDto, RoadmapIcon.TOGGLE_MENU, sideNavigationMenuItems);
 
