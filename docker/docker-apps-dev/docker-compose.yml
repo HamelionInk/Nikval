@@ -31,7 +31,7 @@ services:
       SPRING_PROFILES_ACTIVE: "dev"
       KC_ISSUER_URI: "http://sso.roadmaps-nikval.ru/realms/roadmaps"
       KC_REFRESH_TOKEN: "http://sso.roadmaps-nikval.ru/realms/roadmaps/protocol/openid-connect/token"
-      KC_CLIENT_SECRET: "IMD6I1A955fNxfJt5LXdOHWnI7x0PJBG"
+      KC_CLIENT_SECRET: "Wj48LNV7VN3b17eKnPqnsSzP35xkVmZ8"
       KC_CLIENT_ID: "dev-roadmaps"
       KC_SCOPE: "profile,openid,email,roles"
       BACKEND_URL: "http://dev-api.roadmaps-nikval.ru/api/v1/roadmaps"
