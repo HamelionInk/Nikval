@@ -1,0 +1,4 @@
+tls:
+  certificates:
+    - certFile: cert.crt
+      keyFile: cert.key

@@ -16,11 +16,9 @@ services:
       - "--providers.docker.exposedbydefault"
       - "--entrypoints.web.address=:80"
       - "--entrypoints.websecure.address=:443"
-      - "--certificatesresolvers.letsEncrypt.acme.httpchallenge=true"
-      - "--certificatesresolvers.letsEncrypt.acme.httpchallenge.entrypoint=web"
-      - "--certificatesresolvers.letsEncrypt.acme.storage=acme.json"
-      - "--tls.certificates.certFile=cert.crt"
-      - "--tls.certificates.keyFile=cert.key"
+#      - "--certificatesresolvers.letsEncrypt.acme.httpchallenge=true"
+#      - "--certificatesresolvers.letsEncrypt.acme.httpchallenge.entrypoint=web"
+#      - "--certificatesresolvers.letsEncrypt.acme.storage=acme.json"
       - "--api.dashboard=true"
     labels:
       - "traefik.http.routers.http-catchall.rule=HostRegexp(`{any:.+}`)"
@@ -32,7 +30,7 @@ services:
       - "traefik.http.routers.traefik.entrypoints=websecure"
       - "traefik.http.routers.traefik.rule=Host(`traefik.roadmaps-nikval.ru`) && (PathPrefix(`/api`) || PathPrefix(`/dashboard`))"
       - "traefik.http.routers.traefik.tls=true"
-      - "traefik.http.routers.traefik.tls.certresolver=letsEncrypt"
+#      - "traefik.http.routers.traefik.tls.certresolver=letsEncrypt"
       - "traefik.http.routers.traefik.service=api@internal"
       - "traefik.http.middlewares.traefik-auth.basicauth.users=develop:$$apr1$$.VKjCxsv$$GU7.yXW4PGfrjxRb35sxM."
       - "traefik.http.routers.traefik.middlewares=traefik-auth"
@@ -40,4 +38,5 @@ services:
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./data/traefik.yml:/traefik.yml:ro
       - ./data/acme.json:/acme.json
