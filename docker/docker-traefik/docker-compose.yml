@@ -42,4 +42,5 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - ./data/certificates.yml:/config/certificates.yml:ro
       - ./data/cert.pem:/config/cert.pem
+      - ./data/certkey.pem:/config/certkey.pem
       - ./data/acme.json:/acme.json

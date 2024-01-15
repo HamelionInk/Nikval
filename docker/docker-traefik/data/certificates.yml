@@ -1,14 +1,14 @@
 tls:
   certificates:
     - certFile: /config/cert.pem
-      keyFile: /config/privkey.pem
+      keyFile: /config/certkey.pem
       stores:
         - default
   stores:
     default:
       defaultCertificate:
         certFile: /config/cert.pem
-        keyFile: /config/privkey.pem
+        keyFile: /config/certkey.pem
   options:
     default:
       sniStrict: true
