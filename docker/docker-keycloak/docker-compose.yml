@@ -16,6 +16,7 @@ services:
       KC_HOSTNAME: "sso.roadmaps-nikval.ru"
     labels:
       - "traefik.enable=true"
+      - "traefik.http.routers.keycloak.entrypoints=websecure"
       - "traefik.http.routers.keycloak.rule=Host(`sso.roadmaps-nikval.ru`)"
       - "traefik.http.routers.keycloak.tls=true"
       - "traefik.http.routers.keycloak.tls.certresolver=letsEncrypt"
