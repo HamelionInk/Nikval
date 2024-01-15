@@ -57,10 +57,10 @@ jobs:
           cache: maven
 
       - name: package
-        run: sudo mvn clean package -Pproduction
+        run: mvn clean package -Pproduction
 
       - name: build image
-        run: sudo mvn dockerfile:build
+        run: mvn dockerfile:build
 
       - name: update Apps
         working-directory: ${{env.dev-apps-dir}}
