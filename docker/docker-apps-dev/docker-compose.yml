@@ -16,7 +16,7 @@ services:
       - "traefik.htpp.services.backend_dev.loadbalancer.server.port=8083"
 
   frontendvaadin:
-    image: roadmaps/roadmaps-frontend:0.0.1-SNAPSHOT
+    image: roadmaps/roadmap-frontend:0.0.1-SNAPSHOT
     ports:
       - "8082:8082"
     environment:
