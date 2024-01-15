@@ -11,14 +11,16 @@ jobs:
     steps:
       - name: cd into repository
         uses: actions/checkout@v3
+
       - name: setting Java and Maven
         uses: actions/setup-java@v3
         with:
           java-version: '17'
           distribution: 'temurin'
           cache: maven
+
       - name: run test
-        uses: mvn test
+        run: mvn test
 
   deploy:
     runs-on: self-hosted
