@@ -4,3 +4,11 @@ tls:
       keyFile: cert.key
       stores:
         - default
+  stores:
+    default:
+      defaultCertificate:
+        certFile: cert.crt
+        keyFile: cert.key
+  options:
+    default:
+      sniStrict: true
