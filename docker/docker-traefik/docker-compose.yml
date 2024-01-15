@@ -19,6 +19,8 @@ services:
       - "--certificatesresolvers.letsEncrypt.acme.httpchallenge=true"
       - "--certificatesresolvers.letsEncrypt.acme.httpchallenge.entrypoint=web"
       - "--certificatesresolvers.letsEncrypt.acme.storage=acme.json"
+      - "--tls.certificates.certFile=cert.crt"
+      - "--tls.certificates.keyFile=cert.key"
       - "--api.dashboard=true"
     labels:
       - "traefik.http.routers.http-catchall.rule=HostRegexp(`{any:.+}`)"
