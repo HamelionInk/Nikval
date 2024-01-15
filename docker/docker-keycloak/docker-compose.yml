@@ -19,6 +19,6 @@ services:
       - "traefik.http.routers.keycloak.entrypoints=websecure"
       - "traefik.http.routers.keycloak.rule=Host(`sso.roadmaps-nikval.ru`)"
       - "traefik.http.routers.keycloak.tls=true"
-#      - "traefik.http.routers.keycloak.tls.certresolver=letsEncrypt"
+      - "traefik.http.routers.keycloak.tls.certresolver=letsEncrypt"
       - "traefik.http.routers.keycloak.service=keycloak@docker"
       - "traefik.http.services.keycloak.loadbalancer.server.port=8080"

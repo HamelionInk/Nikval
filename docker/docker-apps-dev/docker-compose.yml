@@ -17,7 +17,7 @@ services:
       - "traefik.http.routers.backend_dev.entrypoints=websecure"
       - "traefik.http.routers.backend_dev.rule=Host(`dev-api.roadmaps-nikval.ru`)"
       - "traefik.http.routers.backend_dev.tls=true"
-#      - "traefik.http.routers.backend_dev.tls.certresolver=letsEncrypt"
+      - "traefik.http.routers.backend_dev.tls.certresolver=letsEncrypt"
       - "traefik.http.routers.backend_dev.service=backend_dev@docker"
       - "traefik.htpp.services.backend_dev.loadbalancer.server.port=8083"
 
@@ -40,7 +40,7 @@ services:
       - "traefik.http.routers.frontend_dev.entrypoints=websecure"
       - "traefik.http.routers.frontend_dev.rule=Host(`dev.roadmaps-nikval.ru`)"
       - "traefik.http.routers.frontend_dev.tls=true"
-#      - "traefik.http.routers.frontend_dev.tls.certresolver=letsEncrypt"
+      - "traefik.http.routers.frontend_dev.tls.certresolver=letsEncrypt"
       - "traefik.http.routers.frontend_dev.service=frontend_dev@docker"
       - "traefik.http.services.frontend_dev.loadbalancer.server.port=8082"
 
