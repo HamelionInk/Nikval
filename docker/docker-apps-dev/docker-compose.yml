@@ -1,0 +1,31 @@
+version: '3.9'
+
+services:
+  backendspring:
+    image: roadmaps/roadmaps-backend-spring:0.0.1-SNAPSHOT
+    ports:
+      - "8083:8083"
+    environment:
+      SPRING_PROFILES_ACTIVE: dev
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.backend_dev.rule=Host(`dev-api.roadmaps-nikval.ru`)"
+      - "traefik.http.routers.backend_dev.tls=true"
+      - "traefik.http.routers.backend_dev.tls.certresolver=letsEncrypt"
+      - "traefik.http.routers.backend_dev.service=backend_dev@docker"
+      - "traefik.htpp.services.backend_dev.loadbalancer.server.port=8083"
+
+  frontendvaadin:
+    image: roadmaps/roadmaps-frontend-vaadin:0.0.1-SNAPSHOT
+    ports:
+      - "8082:8082"
+    environment:
+      SPRING_PROFILES_ACTIVE: dev
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.frontend_dev.rule=Host(`dev.roadmaps-nikval.ru`)"
+      - "traefik.http.routers.frontend_dev.tls=true"
+      - "traefik.http.routers.frontend_dev.tls.certresolver=letsEncrypt"
+      - "traefik.http.routers.frontend_dev.service=frontend_dev@docker"
+      - "traefik.htpp.services.frontend_dev.loadbalancer.server.port=8082"
+

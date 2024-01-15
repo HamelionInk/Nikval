@@ -42,4 +42,10 @@ public class ProfileResponseDto {
 
     @Schema(description = "Дата последнего входа в аккаунт пользователя", example = "2023-08-28T09:18:55.766Z")
     private Instant lastDateLogin;
+
+    @Schema(description = "Дата рождения пользователя", example = "1996-08-28T09:18:55.766Z")
+    private Instant birthDate;
+
+    @Schema(description = "Место проживания пользователя", example = "г.Пенза, Московская 21, кв 5")
+    private String residentialAddress;
 }

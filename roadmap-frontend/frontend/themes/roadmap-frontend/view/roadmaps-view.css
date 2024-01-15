@@ -1,0 +1,29 @@
+.roadmap-layout {
+    width: 100%;
+    height: 100%;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-column-gap: 2em;
+    grid-row-gap: 2em;
+}
+
+.roadmap-change-type {
+    align-items: center;
+    justify-content: center;
+    height: 35px;
+    width: auto;
+    color: white;
+    margin-right: auto;
+}
+
+.roadmap-change-type::part(toggle-button) {
+    color: white;
+}
+
+.roadmap-change-type[opened] {
+    background-color: #383838;
+}
+
+.roadmap-view-name {
+    margin-right: unset;
+}

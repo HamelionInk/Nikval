@@ -1,0 +1,39 @@
+.side-navigation-menu-item {
+    margin-top: -10px;
+    width: 200px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+}
+
+.navigation-item-selected {
+    .menu-item-icon {
+        color: white;
+    }
+    .menu-item-name {
+        color: white;
+    }
+}
+
+.side-navigation-menu-item:hover {
+    .menu-item-icon {
+        color: white;
+    }
+    .menu-item-name {
+        color: white;
+    }
+}
+
+.menu-item-icon {
+    width: 60px;
+    background-color: unset;
+    color: #6e6e6d;
+}
+
+.menu-item-name {
+    width: 70%;
+    font-size: 14px;
+    color: #6e6e6d;
+}
+
+

@@ -1,0 +1,22 @@
+.view-header {
+    justify-content: end;
+    margin-top: -1.5%;
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+.view-name {
+    margin-right: auto;
+    margin-top: 1.5%;
+    font-size: 2em;
+}
+
+.view-button {
+    margin-top: 0.5%;
+    border-radius: 10px;
+    width: 10%;
+    height: 40px;
+    color: aliceblue;
+    background-color: #383838;
+}

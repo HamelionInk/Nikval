@@ -1,0 +1,27 @@
+.profile-view {
+    width: 100%;
+}
+
+.profile-layout {
+    width: 100%;
+}
+
+.profile-header-layout {
+    display: flex;
+    width: 100%;
+}
+
+.profile-from-layout {
+    margin-top: -1.5%;
+    width: 100%;
+}
+
+.profile-avatar {
+    border-radius: 10px;
+    width: 200px;
+    height: 200px;
+}
+
+.profile_field {
+    width: 100%;
+}

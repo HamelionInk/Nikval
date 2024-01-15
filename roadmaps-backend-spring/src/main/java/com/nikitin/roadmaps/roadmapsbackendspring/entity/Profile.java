@@ -9,7 +9,6 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -55,5 +54,11 @@ public class Profile {
 
     @Column(name = "last_date_login", columnDefinition = "timestamptz")
     private Instant lastDateLogin;
+
+    @Column(name = "birht_date", columnDefinition = "timestamptz")
+    private Instant birthDate;
+
+    @Column(name = "residential_address", columnDefinition = "varchar(100)")
+    private String residentialAddress;
 
 }

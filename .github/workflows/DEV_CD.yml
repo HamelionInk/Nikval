@@ -1,0 +1,44 @@
+name: DEV_CD
+
+on:
+  push:
+    branches:
+      - develop
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: cd into repository
+        uses: actions/checkout@v3
+      - name: setting Java and Maven
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: maven
+      - name: run test
+        uses: mvn test
+
+  deploy:
+    runs-on: self-hosted
+    needs: test
+    steps:
+      - name: cd into docker-traefik
+        run: cd docker/docker-traefik
+      - name: restart traefik
+        run: sudo docker-compose down $$ sudo docker-compose up -d
+      - name: cd into docker-keycloak
+        run: cd docker/docker-keycloak
+      - name: restart keycloak
+        run: sudo docker-compose down $$ sudo docker-compose up -d
+      - name: cd into docker-apps-dev
+        run: cd docker/docker-apps-dev
+      - name: stop apps
+        run: sudo docker-compose down
+      - name: remove apps
+        run: sudo docker system prune -a -f
+      - name: checkout repo
+        uses: actions/checkout@v3
+      - name: start apps
+        run: docker-compose up -d

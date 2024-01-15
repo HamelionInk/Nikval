@@ -24,7 +24,8 @@ import java.time.Instant;
 @Component
 public class KeycloakTokenService {
 
-    private static final String URL_REFRESH_TOKEN = "https://keycloak.roadmaps-nikval.ru/realms/roadmaps/protocol/openid-connect/token";
+    @Value("${spring.security.oauth2.resourceserver.jwt.refresh_token_uri}")
+    private String REFRESH_TOKEN_URI;
     private static final String GRANT_TYPE = "refresh_token";
 
     @Value("${spring.security.oauth2.client.registration.keycloak.client-id}")
@@ -61,7 +62,7 @@ public class KeycloakTokenService {
     public void refreshToken(String refreshToken) {
         try {
             var response = restTemplate.exchange(
-                    URL_REFRESH_TOKEN,
+                    REFRESH_TOKEN_URI,
                     HttpMethod.POST,
                     buildHttpEntityForRefreshToken(refreshToken),
                     String.class);

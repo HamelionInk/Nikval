@@ -37,6 +37,11 @@ public class RoadmapSpecification {
                     .orElse(specification);
         }
 
+        if (Objects.nonNull(filter.getFavorite())) {
+            specification = Optional.of(specification.and(equalsFavorite(filter.getFavorite())))
+                    .orElse(specification);
+        }
+
         return specification;
     }
 
@@ -62,5 +67,10 @@ public class RoadmapSpecification {
     private static Specification<Roadmap> equalsCustom(Boolean custom) {
         return (root, query, criteriaBuilder) ->
                 criteriaBuilder.equal(root.get(Roadmap_.custom), custom);
+    }
+
+    private static Specification<Roadmap> equalsFavorite(Boolean favorite) {
+        return (root, query, criteriaBuilder) ->
+                criteriaBuilder.equal(root.get(Roadmap_.favorite), favorite);
     }
 }
