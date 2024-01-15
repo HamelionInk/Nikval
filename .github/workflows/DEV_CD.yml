@@ -30,10 +30,10 @@ jobs:
     needs: test
     steps:
       - uses: actions/checkout@v3
-      - name: cd into repo
+      - name: update traefik
         working-directory: ${{env.traefik-dir}}
         run: sudo docker-compose down && sudo docker-compose up -d
-      - name: chmode
+      - name: chmode acme
         working-directory: ${{env.acme-dir}}
         run: sudo chmod 600 acme.json
 #      - name: cd into docker-apps-dev
