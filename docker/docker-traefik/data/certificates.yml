@@ -11,4 +11,4 @@ tls:
         keyFile: /config/certkey.key
   options:
     default:
-      sniStrict: true
+      sniStrict: false
