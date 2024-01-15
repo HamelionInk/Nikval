@@ -75,9 +75,6 @@ public class RoadmapView extends VerticalLayout implements HasUrlParameter<Long>
 		var viewBody = new HorizontalLayout();
 		viewBody.addClassName("roadmap-view-body");
 
-		var roadmapTree = new RoadmapTree<>(this, roadmapResponseDto.getId());
-
-		viewBody.add(roadmapTree);
 		return viewBody;
 	}
 
