@@ -1,8 +1,10 @@
 version: '3.9'
 
 services:
-  backendspring:
+  backend:
     image: roadmaps/roadmaps-backend-spring:0.0.1-SNAPSHOT
+    container_name: backend-dev
+    restart: unless-stopped
     ports:
       - "8083:8083"
     environment:
@@ -18,8 +20,10 @@ services:
       - "traefik.http.routers.backend_dev.service=backend_dev@docker"
       - "traefik.htpp.services.backend_dev.loadbalancer.server.port=8083"
 
-  frontendvaadin:
+  frontend:
     image: roadmaps/roadmap-frontend:0.0.1-SNAPSHOT
+    container_name: frontend-dev
+    restart: unless-stopped
     ports:
       - "8082:8082"
     environment:
