@@ -174,7 +174,6 @@ vaadin-text-area::part(input-field) {
     border-style: none;
     border-width: 0px;
     border-color: white;
-    background: white;
 }
 
 vaadin-text-area::part(label) {
