@@ -1,9 +1,0 @@
-backend:
-  url: "https://api.roadmaps-nikval.ru/api/v1/roadmaps"
-
-spring:
-  security:
-    oauth2:
-      resourceserver:
-        jwt:
-          issuer-uri: https://keycloak.roadmaps-nikval.ru/realms/roadmaps

@@ -25,7 +25,6 @@
 
     <modules>
         <module>roadmaps-backend-spring</module>
-        <module>roadmaps-frontend-vaadin</module>
         <module>roadmap-frontend</module>
     </modules>
 
