@@ -24,10 +24,13 @@ jobs:
 
   deploy:
     runs-on: self-hosted
+    env:
+      traefik-dir: ./docker/docker-traefik
     needs: test
     steps:
+      - uses: actions/checkout@develop
       - name: cd into repo
-        working-directory: docker/docker-traefik
+        working-directory: ${{env.traefik-dir}}
         run: sudo docker-compose down $$ sudo docker-compose up -d
 #      - name: cd into docker-apps-dev
 #        run: cd docker/docker-apps-dev
