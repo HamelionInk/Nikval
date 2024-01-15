@@ -1,4 +1,4 @@
 tls:
   certificates:
-    - vcertFile: cert.crt
+    - certFile: cert.crt
       keyFile: cert.key
