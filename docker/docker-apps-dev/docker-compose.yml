@@ -11,7 +11,7 @@ services:
       SPRING_PROFILES_ACTIVE: "dev"
       DB_USERNAME: ""
       DB_PASSWORD: ""
-      KC_ISSUER_URL: "http://sso.roadmaps-nikval.ru/realms/roadmaps"
+      KC_ISSUER_URL: "https://sso.roadmaps-nikval.ru/realms/roadmaps"
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.backend_dev.entrypoints=websecure"
@@ -29,12 +29,12 @@ services:
       - "8082:8082"
     environment:
       SPRING_PROFILES_ACTIVE: "dev"
-      KC_ISSUER_URI: "http://sso.roadmaps-nikval.ru/realms/roadmaps"
-      KC_REFRESH_TOKEN: "http://sso.roadmaps-nikval.ru/realms/roadmaps/protocol/openid-connect/token"
+      KC_ISSUER_URI: "https://sso.roadmaps-nikval.ru/realms/roadmaps"
+      KC_REFRESH_TOKEN: "https://sso.roadmaps-nikval.ru/realms/roadmaps/protocol/openid-connect/token"
       KC_CLIENT_SECRET: "ROyqT5l276v9ZkgBrXysJJnvIQUzUpyz"
       KC_CLIENT_ID: "dev-roadmaps"
       KC_SCOPE: "profile,openid,email,roles"
-      BACKEND_URL: "http://dev-api.roadmaps-nikval.ru/api/v1/roadmaps"
+      BACKEND_URL: "https://dev-api.roadmaps-nikval.ru/api/v1/roadmaps"
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.frontend_dev.entrypoints=websecure"
