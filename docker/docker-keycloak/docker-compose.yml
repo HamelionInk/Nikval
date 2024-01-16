@@ -12,6 +12,7 @@ services:
     environment:
       KEYCLOAK_ADMIN: "develop"
       KEYCLOAK_ADMIN_PASSWORD: "develop"
+      KC_HTTP_ENABLE: "true"
       KC_PROXY: "edge"
       KC_HOSTNAME: "sso.roadmaps-nikval.ru"
     labels:
