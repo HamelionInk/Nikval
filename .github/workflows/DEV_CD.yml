@@ -36,10 +36,6 @@ jobs:
         working-directory: ${{env.traefik-dir}}
         run: sudo docker-compose down && sudo docker-compose up -d
 
-      - name: chmode acme
-        working-directory: ${{env.acme-dir}}
-        run: sudo chmod 600 acme.json
-
       - name: update keycloak
         working-directory: ${{env.keycloak-dir}}
         run: sudo docker-compose stop && sudo docker-compose up -d
