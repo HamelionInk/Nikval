@@ -20,6 +20,7 @@ services:
       - "--entrypoints.websecure.address=:443"
       - "--certificatesresolvers.letsEncrypt.acme.httpchallenge=true"
       - "--certificatesresolvers.letsEncrypt.acme.httpchallenge.entrypoint=web"
+      - "--certificatesresolvers.letsEncrypt.acme.email=term11term@gmail.com"
       - "--certificatesresolvers.letsEncrypt.acme.storage=/config/acme.json"
       - "--api.dashboard=true"
     labels:
