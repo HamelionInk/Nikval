@@ -26,7 +26,7 @@ services:
     container_name: frontend-dev
     restart: unless-stopped
     ports:
-      - "8444:8444"
+      - "8082:8082"
     environment:
       SPRING_PROFILES_ACTIVE: "dev"
       KC_ISSUER_URI: "https://www.roadmaps-nikval.ru/realms/roadmaps"
