@@ -12,7 +12,7 @@ services:
       BACKEND_PORT: "8083"
       DB_USERNAME: "develop"
       DB_PASSWORD: "develop"
-      DB_URL: "jdbc:postgresql://postgres/develop"
+      DB_URL: "jdbc:postgresql://0.0.0.0:5443/develop"
       KC_ISSUER_URL: "https://www.roadmaps-nikval.ru/realms/roadmaps"
     labels:
       - "traefik.enable=true"
