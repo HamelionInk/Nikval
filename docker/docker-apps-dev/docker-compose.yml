@@ -6,7 +6,7 @@ services:
     container_name: backend-dev
     restart: unless-stopped
     ports:
-      - "8083:443"
+      - "8083:8083"
     environment:
       SPRING_PROFILES_ACTIVE: "dev"
       DB_USERNAME: ""
@@ -26,7 +26,7 @@ services:
     container_name: frontend-dev
     restart: unless-stopped
     ports:
-      - "8082:443"
+      - "8082:8082"
     environment:
       SPRING_PROFILES_ACTIVE: "dev"
       KC_ISSUER_URI: "https://www.roadmaps-nikval.ru/realms/roadmaps"
