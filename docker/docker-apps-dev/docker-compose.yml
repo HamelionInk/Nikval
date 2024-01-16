@@ -6,7 +6,7 @@ services:
     container_name: backend-dev
     restart: unless-stopped
     ports:
-      - "8083:8083"
+      - "8083:443"
     environment:
       SPRING_PROFILES_ACTIVE: "dev"
       DB_USERNAME: ""
@@ -19,14 +19,14 @@ services:
       - "traefik.http.routers.backend_dev.tls=true"
       - "traefik.http.routers.backend_dev.tls.certresolver=letsEncrypt"
       - "traefik.http.routers.backend_dev.service=backend_dev@docker"
-      - "traefik.http.services.backend_dev.loadbalancer.server.port=9999"
+      - "traefik.http.services.backend_dev.loadbalancer.server.port=8083"
 
   frontend:
     image: roadmaps/roadmap-frontend:0.0.1-SNAPSHOT
     container_name: frontend-dev
     restart: unless-stopped
     ports:
-      - "8082:8082"
+      - "8082:443"
     environment:
       SPRING_PROFILES_ACTIVE: "dev"
       KC_ISSUER_URI: "https://www.roadmaps-nikval.ru/realms/roadmaps"
@@ -42,5 +42,5 @@ services:
       - "traefik.http.routers.frontend_dev.tls=true"
       - "traefik.http.routers.frontend_dev.tls.certresolver=letsEncrypt"
       - "traefik.http.routers.frontend_dev.service=frontend_dev@docker"
-      - "traefik.http.services.frontend_dev.loadbalancer.server.port=9999"
+      - "traefik.http.services.frontend_dev.loadbalancer.server.port=8082"
 
