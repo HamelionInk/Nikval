@@ -26,7 +26,6 @@ jobs:
     runs-on: self-hosted
     env:
       traefik-dir: ./docker/docker-traefik
-      acme-dir: ./docker/docker-traefik/data
       keycloak-dir: ./docker/docker-keycloak
       dev-apps-dir: ./docker/docker-apps-dev
     needs: test
