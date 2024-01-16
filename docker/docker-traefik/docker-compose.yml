@@ -41,6 +41,6 @@ services:
       - /etc/localtime:/etc/localtime:ro
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - /home/develop/acme/cert.pem:/config/cert.pem
-      - /home/develop/certkey.key:/config/certkey.key
-      - /home/develop/acme.json:/config/acme.json
+      - /home/develop/acme/certkey.key:/config/certkey.key
+      - /home/develop/acme/acme.json:/config/acme.json
       - ./data/certificates.yml:/config/certificates.yml:ro
