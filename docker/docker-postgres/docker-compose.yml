@@ -2,5 +2,12 @@ version: '3'
 
 services:
   postgres:
-    image:
+    image: postgres
     container_name: postgres
+    restart: unless-stopped
+    ports:
+      - "5443:5443"
+    environment:
+      POSTGRES_PASSWORD: "develop"
+      POSTGRES_USER: "develop"
+      POSTGRES_DB: "develop"
