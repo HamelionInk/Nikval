@@ -7,10 +7,9 @@ services:
     restart: unless-stopped
     ports:
       - "8083:8083"
-      - "8083:80"
-      - "8083:443"
     environment:
       SPRING_PROFILES_ACTIVE: "dev"
+      BACKEND_PORT: "8083"
       DB_USERNAME: ""
       DB_PASSWORD: ""
       KC_ISSUER_URL: "https://www.roadmaps-nikval.ru/realms/roadmaps"
@@ -29,10 +28,9 @@ services:
     restart: unless-stopped
     ports:
       - "8082:8082"
-      - "8082:80"
-      - "8082:443"
     environment:
       SPRING_PROFILES_ACTIVE: "dev"
+      FRONTEND_PORT: "8082"
       KC_ISSUER_URI: "https://www.roadmaps-nikval.ru/realms/roadmaps"
       KC_REFRESH_TOKEN: "https://www.roadmaps-nikval.ru/realms/roadmaps/protocol/openid-connect/token"
       KC_CLIENT_SECRET: "ol4qNtBOPzZDMskHD6c8hKGYUqaeZuKM"
