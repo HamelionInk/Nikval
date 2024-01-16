@@ -11,3 +11,11 @@ services:
       POSTGRES_PASSWORD: "develop"
       POSTGRES_USER: "develop"
       POSTGRES_DB: "develop"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.postgres.entrypoints=websecure"
+      - "traefik.http.routers.postgres.rule=Host(`dev-api.roadmaps-nikval.ru`)"
+      - "traefik.http.routers.postgres.tls=true"
+      - "traefik.http.routers.postgres.tls.certresolver=letsEncrypt"
+      - "traefik.http.routers.postgres.service=postgres@docker"
+      - "traefik.http.services.postgres.loadbalancer.server.port=5432"
