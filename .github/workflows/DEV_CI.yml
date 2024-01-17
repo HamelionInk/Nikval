@@ -1,4 +1,4 @@
-name: DEV_CII
+name: DEV_CI
 
 on:
   pull_request:
