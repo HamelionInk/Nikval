@@ -14,7 +14,7 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.postgres.entrypoints=websecure"
-      - "traefik.http.routers.postgres.rule=Host(`dev-api.roadmaps-nikval.ru`)"
+      - "traefik.http.routers.postgres.rule=Host(`postgres.roadmaps-nikval.ru`)"
       - "traefik.http.routers.postgres.tls=true"
       - "traefik.http.routers.postgres.tls.certresolver=letsEncrypt"
       - "traefik.http.routers.postgres.service=postgres@docker"
