@@ -19,6 +19,25 @@
 @import url('view/roadmaps-view.css');
 @import url('view/roadmap-view.css');
 
+.full-width {
+    width: 100%;
+}
+
+.background-363636 {
+    color: white;
+    background-color: #363636;
+}
+
+.background-af180f {
+    color: white;
+    background-color: #af180f;
+}
+
+.background-3530af {
+    color: white;
+    background-color: #3530af;
+}
+
 vaadin-app-layout::part(drawer) {
     z-index: 1;
     background-color: #383838;

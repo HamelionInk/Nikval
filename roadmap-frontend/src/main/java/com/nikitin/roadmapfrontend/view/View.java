@@ -12,7 +12,6 @@ public interface View {
         if (StringUtils.hasText(value)) {
             return value;
         }
-
         return null;
     }
 }

@@ -35,6 +35,9 @@ public class RoadmapQuestionRequestDto {
     @NotNull(message = "Поле <isExplored> не может быть null", groups = Create.class)
     private Boolean isExplored;
 
+    @Schema(description = "Позиция вопроса", example = "4")
+    private Long position;
+
     @Schema(description = "Идентификатор темы", example = "43")
     @NotNull(message = "Поле <roadmapTopicId> не может быть null", groups = Create.class)
     @Positive(message = "Идентификатор не может быть отрицательным значением", groups = { Create.class, Patch.class })

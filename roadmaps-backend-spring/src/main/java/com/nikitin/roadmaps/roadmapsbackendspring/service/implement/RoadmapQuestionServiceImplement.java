@@ -8,6 +8,7 @@ import com.nikitin.roadmaps.roadmapsbackendspring.entity.RoadmapQuestion;
 import com.nikitin.roadmaps.roadmapsbackendspring.exception.NotFoundException;
 import com.nikitin.roadmaps.roadmapsbackendspring.mapper.RoadmapQuestionMapper;
 import com.nikitin.roadmaps.roadmapsbackendspring.repository.RoadmapQuestionRepository;
+import com.nikitin.roadmaps.roadmapsbackendspring.service.PositionEntityService;
 import com.nikitin.roadmaps.roadmapsbackendspring.service.RoadmapQuestionService;
 import com.nikitin.roadmaps.roadmapsbackendspring.service.RoadmapTopicService;
 import lombok.NonNull;
@@ -15,15 +16,19 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Optional;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class RoadmapQuestionServiceImplement implements RoadmapQuestionService {
+public class RoadmapQuestionServiceImplement implements RoadmapQuestionService, PositionEntityService<RoadmapQuestion> {
 
     private static final String QUESTION_WITH_ID_NOT_FOUND = "Вопрос с указанным идентификатором не найден - %s";
 
@@ -38,6 +43,8 @@ public class RoadmapQuestionServiceImplement implements RoadmapQuestionService {
                 .ifPresent(this::checkRoadmapTopicForAvailability);
 
         var roadmapQuestion = roadmapQuestionMapper.toEntity(roadmapQuestionRequestDto);
+        positionDefinition(roadmapQuestion);
+
         var roadmapQuestionAfterSave = roadmapQuestionRepository.save(roadmapQuestion);
 
         var roadmapTopicId = roadmapQuestionAfterSave.getRoadmapTopic().getId();
@@ -54,12 +61,12 @@ public class RoadmapQuestionServiceImplement implements RoadmapQuestionService {
 
         var roadmapQuestionForUpdate = getEntityById(id);
         var roadmapQuestion = roadmapQuestionMapper.toPatchEntity(roadmapQuestionRequestDto, roadmapQuestionForUpdate);
-        var roadmapQuestionAfterSave = roadmapQuestionRepository.save(roadmapQuestion);
+        recalculatePositions(roadmapQuestion);
 
-        var roadmapTopicId = roadmapQuestionAfterSave.getRoadmapTopic().getId();
+        var roadmapTopicId = roadmapQuestion.getRoadmapTopic().getId();
         updateInfoAboutQuestion(roadmapTopicId, getAllByTopicId(roadmapTopicId, Pageable.unpaged()));
 
-        return roadmapQuestionMapper.toResponseDto(roadmapQuestionAfterSave);
+        return roadmapQuestionMapper.toResponseDto(roadmapQuestion);
     }
 
     @Transactional(readOnly = true)
@@ -80,6 +87,12 @@ public class RoadmapQuestionServiceImplement implements RoadmapQuestionService {
     public Page<RoadmapQuestionResponseDto> getAll(@NonNull RoadmapQuestionFilter roadmapQuestionFilter, @NonNull Pageable pageable) {
         return roadmapQuestionRepository.findAll(RoadmapQuestionSpecification.filterBy(roadmapQuestionFilter), pageable)
                 .map(roadmapQuestionMapper::toResponseDto);
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public List<RoadmapQuestion> getAllEntity(@NonNull RoadmapQuestionFilter roadmapQuestionFilter, Sort sort) {
+        return roadmapQuestionRepository.findAll(RoadmapQuestionSpecification.filterBy(roadmapQuestionFilter), sort);
     }
 
     @Transactional(readOnly = true)
@@ -109,5 +122,37 @@ public class RoadmapQuestionServiceImplement implements RoadmapQuestionService {
         roadmapTopicService.updateNumberExploredQuestion(roadmapTopicId, questions.getContent().stream()
                 .filter(filter -> filter.getIsExplored().equals(Boolean.TRUE))
                 .count());
+    }
+
+    @Transactional
+    @Override
+    public void positionDefinition(RoadmapQuestion roadmapQuestion) {
+        Optional.ofNullable(roadmapQuestion.getPosition()).ifPresentOrElse(
+                roadmapQuestion::setPosition,
+                () -> {
+                    var roadmapQuestions = new LinkedList<>(getAllEntity(RoadmapQuestionFilter.builder()
+                            .roadmapTopicIds(List.of(roadmapQuestion.getRoadmapTopic().getId()))
+                            .build(), Sort.by(Sort.Direction.ASC, "position")));
+
+                    if (!CollectionUtils.isEmpty(roadmapQuestions)) {
+                        roadmapQuestion.setPosition(roadmapQuestions.getLast().getPosition() + 1);
+                    } else {
+                        roadmapQuestion.setPosition(1L);
+                    }
+                });
+    }
+
+    @Transactional
+    @Override
+    public void recalculatePositions(RoadmapQuestion roadmapQuestion) {
+        var roadmapQuestions = new LinkedList<>(getAllEntity(RoadmapQuestionFilter.builder()
+                .roadmapTopicIds(List.of(roadmapQuestion.getRoadmapTopic().getId()))
+                .build(), Sort.by(Sort.Direction.ASC, "position")));
+
+        for (int count = 0; count < roadmapQuestions.size(); count++) {
+            roadmapQuestions.get(count).setPosition((long) count);
+        }
+
+        roadmapQuestionRepository.saveAll(roadmapQuestions);
     }
 }

@@ -62,7 +62,7 @@ public class RoadmapTopicController {
     @PageableAsQueryParam
     @GetMapping
     public ResponseEntity<Page<RoadmapTopicResponseDto>> getAll(@ModelAttribute RoadmapTopicFilter roadmapTopicFilter,
-                                                                @ParameterObject @PageableDefault(sort = "id",
+                                                                @ParameterObject @PageableDefault(sort = "position",
                                                                         direction = Sort.Direction.ASC,
                                                                         size = Integer.MAX_VALUE) Pageable pageable) {
         var responseBody = roadmapTopicService.getAll(roadmapTopicFilter, pageable);
