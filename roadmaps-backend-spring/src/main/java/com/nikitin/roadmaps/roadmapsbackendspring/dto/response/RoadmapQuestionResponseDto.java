@@ -25,6 +25,9 @@ public class RoadmapQuestionResponseDto {
     @Schema(description = "Состояние, показывающее изучен вопрос или нет", example = "false")
     private Boolean isExplored;
 
+    @Schema(description = "Позиция вопроса", example = "4")
+    private Long position;
+
     @Schema(description = "Идентификатор отношения к теме", example = "29")
     private Long roadmapTopicId;
 }

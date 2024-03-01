@@ -56,8 +56,12 @@ public class RoadmapsView extends VerticalLayout implements View {
 		var roadmapLayout = new Div();
 		roadmapLayout.addClassName("roadmap-layout");
 
-		getClient(RoadmapClient.class).getAll(generateFilter(changeTypeRoadmap.getValue())).getRoadmapResponseDtos().forEach(roadmapResponseDto ->
-				roadmapLayout.add(new RoadmapCard<>(roadmapResponseDto, this)));
+		getClient(RoadmapClient.class)
+				.getAll(generateFilter(changeTypeRoadmap.getValue()))
+				.getRoadmapResponseDtos()
+				.forEach(roadmapResponseDto ->
+						roadmapLayout.add(new RoadmapCard<>(roadmapResponseDto, this))
+				);
 
 		return roadmapLayout;
 	}

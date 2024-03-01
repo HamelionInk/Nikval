@@ -55,6 +55,7 @@ public class RoadmapServiceImplement implements RoadmapService {
         return roadmapMapper.toResponseDto(roadmapRepository.save(roadmap));
     }
 
+    @Transactional(readOnly = true)
     @Override
     public Roadmap getEntityById(@NonNull Long id) {
         return roadmapRepository.findById(id)

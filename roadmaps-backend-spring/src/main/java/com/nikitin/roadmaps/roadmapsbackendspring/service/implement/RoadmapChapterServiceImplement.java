@@ -8,6 +8,7 @@ import com.nikitin.roadmaps.roadmapsbackendspring.entity.RoadmapChapter;
 import com.nikitin.roadmaps.roadmapsbackendspring.exception.NotFoundException;
 import com.nikitin.roadmaps.roadmapsbackendspring.mapper.RoadmapChapterMapper;
 import com.nikitin.roadmaps.roadmapsbackendspring.repository.RoadmapChapterRepository;
+import com.nikitin.roadmaps.roadmapsbackendspring.service.PositionEntityService;
 import com.nikitin.roadmaps.roadmapsbackendspring.service.RoadmapChapterService;
 import com.nikitin.roadmaps.roadmapsbackendspring.service.RoadmapService;
 import lombok.NonNull;
@@ -27,7 +28,7 @@ import java.util.Optional;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class RoadmapChapterServiceImplement implements RoadmapChapterService {
+public class RoadmapChapterServiceImplement implements RoadmapChapterService, PositionEntityService<RoadmapChapter> {
 
 	private static final String CHAPTER_WITH_ID_NOT_FOUND = "Раздел с указанным идентификатором не найден - %s";
 
@@ -43,19 +44,7 @@ public class RoadmapChapterServiceImplement implements RoadmapChapterService {
 
 		var roadmapChapter = roadmapChapterMapper.toEntity(roadmapChapterRequestDto);
 
-		Optional.ofNullable(roadmapChapter.getPosition()).ifPresentOrElse(
-				roadmapChapter::setPosition,
-				() -> {
-					var roadmapChapters = new LinkedList<>(getAllEntity(RoadmapChapterFilter.builder()
-							.roadmapIds(List.of(roadmapChapter.getRoadmap().getId()))
-							.build(), Sort.by(Sort.Direction.ASC, "position")));
-
-					if (!CollectionUtils.isEmpty(roadmapChapters)) {
-						roadmapChapter.setPosition(roadmapChapters.getLast().getPosition() + 1);
-					} else {
-						roadmapChapter.setPosition(1L);
-					}
-				});
+		positionDefinition(roadmapChapter);
 
 		return roadmapChapterMapper.toResponseDto(roadmapChapterRepository.save(roadmapChapter));
 	}
@@ -119,6 +108,25 @@ public class RoadmapChapterServiceImplement implements RoadmapChapterService {
 	}
 
 	@Transactional
+	@Override
+	public void positionDefinition(RoadmapChapter roadmapChapter) {
+		Optional.ofNullable(roadmapChapter.getPosition()).ifPresentOrElse(
+				roadmapChapter::setPosition,
+				() -> {
+					var roadmapChapters = new LinkedList<>(getAllEntity(RoadmapChapterFilter.builder()
+							.roadmapIds(List.of(roadmapChapter.getRoadmap().getId()))
+							.build(), Sort.by(Sort.Direction.ASC, "position")));
+
+					if (!CollectionUtils.isEmpty(roadmapChapters)) {
+						roadmapChapter.setPosition(roadmapChapters.getLast().getPosition() + 1);
+					} else {
+						roadmapChapter.setPosition(1L);
+					}
+				});
+	}
+
+	@Transactional
+	@Override
 	public void recalculatePositions(RoadmapChapter roadmapChapter) {
 		var roadmapChapters = new LinkedList<>(getAllEntity(RoadmapChapterFilter.builder()
 				.roadmapIds(List.of(roadmapChapter.getRoadmap().getId()))

@@ -36,6 +36,9 @@ public class RoadmapQuestion {
     @Column(name = "is_explored", nullable = false, columnDefinition = "Boolean")
     private Boolean isExplored;
 
+    @Column(name = "position", nullable = false, columnDefinition = "int8")
+    private Long position;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "roadmap_topic_id", nullable = false, columnDefinition = "int8")

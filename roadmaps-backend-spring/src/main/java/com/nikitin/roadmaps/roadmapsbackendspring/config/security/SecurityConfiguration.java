@@ -20,38 +20,38 @@ import org.springframework.web.servlet.HandlerExceptionResolver;
 @RequiredArgsConstructor
 public class SecurityConfiguration {
 
-    private final JwtGrantedAuthoritiesConverter jwtAuthenticationConverter;
-    private final HandlerExceptionResolver handlerExceptionResolver;
+	private final JwtGrantedAuthoritiesConverter jwtAuthenticationConverter;
+	private final HandlerExceptionResolver handlerExceptionResolver;
 
-    @Value("${spring.security.oauth2.resourceserver.jwt.issuer-uri}")
-    private String OIDC_ISSUER_LOCATION;
+	@Value("${spring.security.oauth2.resourceserver.jwt.issuer-uri}")
+	private String OIDC_ISSUER_LOCATION;
 
-    @Bean
-    public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
-        httpSecurity
-                .csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests(httpRequest ->
-                        httpRequest
-                                .anyRequest().permitAll())
-                .oauth2ResourceServer(oauth2ResourceServer ->
-                        oauth2ResourceServer.jwt(jwt ->
-                                        jwt.decoder(jwtDecoder())
-                                                .jwtAuthenticationConverter(jwtAuthenticationConverter()))
-                                .authenticationEntryPoint(((request, response, authException) ->
-                                        handlerExceptionResolver.resolveException(request, response, null, authException))));
+	@Bean
+	public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
+		httpSecurity
+				.csrf(AbstractHttpConfigurer::disable)
+				.authorizeHttpRequests(httpRequest ->
+						httpRequest
+								.anyRequest().permitAll())
+				.oauth2ResourceServer(oauth2ResourceServer ->
+						oauth2ResourceServer.jwt(jwt ->
+										jwt.decoder(jwtDecoder())
+												.jwtAuthenticationConverter(jwtAuthenticationConverter()))
+								.authenticationEntryPoint(((request, response, authException) ->
+										handlerExceptionResolver.resolveException(request, response, null, authException))));
 
-        return httpSecurity.build();
-    }
+		return httpSecurity.build();
+	}
 
-    @Bean
-    public JwtDecoder jwtDecoder() {
-        return JwtDecoders.fromOidcIssuerLocation(OIDC_ISSUER_LOCATION);
-    }
+	@Bean
+	public JwtDecoder jwtDecoder() {
+		return JwtDecoders.fromOidcIssuerLocation(OIDC_ISSUER_LOCATION);
+	}
 
-    @Bean
-    public JwtAuthenticationConverter jwtAuthenticationConverter() {
-        JwtAuthenticationConverter converter = new JwtAuthenticationConverter();
-        converter.setJwtGrantedAuthoritiesConverter(jwtAuthenticationConverter);
-        return converter;
-    }
+	@Bean
+	public JwtAuthenticationConverter jwtAuthenticationConverter() {
+		JwtAuthenticationConverter converter = new JwtAuthenticationConverter();
+		converter.setJwtGrantedAuthoritiesConverter(jwtAuthenticationConverter);
+		return converter;
+	}
 }

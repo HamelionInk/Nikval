@@ -36,6 +36,9 @@ public class RoadmapTopic {
     @Column(name = "number_explored_question", columnDefinition = "int8")
     private Integer numberExploredQuestion = 0;
 
+    @Column(name = "position", nullable = false, columnDefinition = "int8")
+    private Long position;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "roadmap_chapter_id", nullable = false, columnDefinition = "int8")
