@@ -9,12 +9,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Component;
-import org.springframework.web.util.UriComponentsBuilder;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 
 @Slf4j
 @Component
@@ -27,7 +24,7 @@ public class RoadmapChapterClient {
 		return restTemplateService.request("/roadmap-chapters",
 				HttpMethod.POST,
 				restTemplateService.buildRequestBody(roadmapChapterRequestDto, null),
-				Collections.EMPTY_MAP,
+				null,
 				RoadmapChapterResponseDto.class
 		);
 	}
@@ -36,7 +33,7 @@ public class RoadmapChapterClient {
 		return restTemplateService.request("/roadmap-chapters/{id}",
 				HttpMethod.PATCH,
 				restTemplateService.buildRequestBody(roadmapChapterRequestDto, null),
-				Collections.singletonMap("id", id),
+				Map.ofEntries(Map.entry("id", id)),
 				RoadmapChapterResponseDto.class
 		);
 	}
@@ -45,21 +42,23 @@ public class RoadmapChapterClient {
 		return restTemplateService.request("/roadmap-chapters/{id}",
 				HttpMethod.GET,
 				restTemplateService.buildRequestBody(null, null),
-				Collections.singletonMap("id", id),
+				Map.ofEntries(Map.entry("id", id)),
 				RoadmapChapterResponseDto.class);
 	}
 
 	public PageableRoadmapChapterResponseDto getAll(RoadmapChapterFilter roadmapChapterFilter) {
-		var url = UriComponentsBuilder.fromUriString("/roadmap-chapters");
-		var params = new HashMap<String, Object>();
-
-		generateUriParams(params, url, roadmapChapterFilter);
+		var uriParams = new HashMap<String, Object>();
+		uriParams.put("ids", roadmapChapterFilter.getIds());
+		uriParams.put("roadmapIds", roadmapChapterFilter.getRoadmapIds());
+		uriParams.put("startWithName", roadmapChapterFilter.getStartWithName());
+		uriParams.put("page", roadmapChapterFilter.getPage());
+		uriParams.put("size", roadmapChapterFilter.getSize());
 
 		return restTemplateService.request(
-				url.encode().toUriString(),
+				"/roadmap-chapters",
 				HttpMethod.GET,
 				restTemplateService.buildRequestBody(null, null),
-				params,
+				uriParams,
 				PageableRoadmapChapterResponseDto.class);
 	}
 
@@ -67,39 +66,7 @@ public class RoadmapChapterClient {
 		restTemplateService.request("/roadmap-chapters/{id}",
 				HttpMethod.DELETE,
 				restTemplateService.buildRequestBody(null, null),
-				Collections.singletonMap("id", id),
+				Map.ofEntries(Map.entry("id", id)),
 				Void.class);
-	}
-
-	private void generateUriParams(Map<String, Object> params, UriComponentsBuilder uriComponentsBuilder, RoadmapChapterFilter roadmapChapterFilter) {
-		Optional.ofNullable(roadmapChapterFilter.getIds())
-				.ifPresent(ids -> ids.forEach(item -> {
-					uriComponentsBuilder.queryParam("ids", "{ids}");
-					params.put("ids", item);
-				}));
-
-		Optional.ofNullable(roadmapChapterFilter.getRoadmapIds())
-				.ifPresent(roadmapIds -> roadmapIds.forEach(item -> {
-					uriComponentsBuilder.queryParam("roadmapIds", "{roadmapIds}");
-					params.put("roadmapIds", item);
-				}));
-
-		Optional.ofNullable(roadmapChapterFilter.getStartWithName())
-				.ifPresent(startWithName -> {
-					uriComponentsBuilder.queryParam("startWithName", "{startWithName}");
-					params.put("startWithName", startWithName);
-				});
-
-		Optional.ofNullable(roadmapChapterFilter.getPage())
-				.ifPresent(page -> {
-					uriComponentsBuilder.queryParam("page", "{page}");
-					params.put("page", page);
-				});
-
-		Optional.ofNullable(roadmapChapterFilter.getSize())
-				.ifPresent(size -> {
-					uriComponentsBuilder.queryParam("size", "{size}");
-					params.put("size", size);
-				});
 	}
 }

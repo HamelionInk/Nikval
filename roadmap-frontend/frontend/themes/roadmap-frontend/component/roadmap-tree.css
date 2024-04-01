@@ -27,39 +27,44 @@
 .roadmap-tree-item-bot-drop {
 }
 
-.roadmap-tree-main-data-layout {
+.roadmap-tree-main-layout {
     display: flex;
     padding-left: 15px;
+    height: 100%;
     align-items: center;
 }
 
-.roadmap-tree-main-data-layout:hover {
+.roadmap-tree-main-layout:hover {
     background-color: rgba(54,54,54,0.16);
 }
 
-.roadmap-tree-drop-down-data-layout {
+.roadmap-tree-dropdown-layout {
     padding-left: 40px;
     align-items: center;
 }
 
-.roadmap-tree-drop-down-button {
+.roadmap-tree-dropdown-button {
     background-color: unset;
 }
 
-.roadmap-tree-drop-down-button > vaadin-icon {
-    width: 15px;
-    height: 15px;
+.roadmap-tree-dropdown-button > vaadin-icon {
+    width: 13px;
+    height: 13px;
+}
+
+.roadmap-tree-dropdown-button-open {
+    rotate: z 90deg;
 }
 
 .roadmap-tree-action-button-open > vaadin-icon {
     animation-name: rotation-open;
-    animation-duration: 500ms;
+    animation-duration: 250ms;
     animation-fill-mode: both;
 }
 
 .roadmap-tree-action-button-close > vaadin-icon {
     animation-name: rotation-close;
-    animation-duration: 500ms;
+    animation-duration: 250ms;
     animation-fill-mode: both;
 }
 
@@ -70,7 +75,7 @@
     animation-fill-mode: both;
 }
 
-.roadmap-tree-item-name {
+.roadmap-tree-item-name-component {
     width: 100%;
     height: 100%;
 }
@@ -98,16 +103,36 @@
     color: white;
 }
 
-.roadmap-tree-message-dialog {
-    margin-top: 5%;
-    text-align: center;
-}
-
 .roadmap-tree-item-selected {
     background-color: rgba(54,54,54,0.45);
 }
 
+.roadmap-tree-question-workspace {
+    display: block;
+}
+
+.roadmap-tree-explored-field {
+    margin-left: 2%;
+}
+
+.roadmap-tree-question-field {
+    width: 97%;
+    margin-left: 2%;
+}
+
+.roadmap-tree-answer-field {
+    width: 97%;
+    margin-left: 2%;
+}
+
+.roadmap-tree-checkbox-layout {
+    margin-top: 2%;
+}
+
 @keyframes rotation-open {
+    0% {
+        transform: rotateZ(0deg);
+    }
     100% {
         transform:rotateZ(90deg);
     }

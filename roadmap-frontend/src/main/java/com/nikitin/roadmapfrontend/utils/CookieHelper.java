@@ -9,13 +9,14 @@ import java.util.Objects;
 @UtilityClass
 public class CookieHelper {
 
-	public Cookie saveCookie(String name, Object value, Integer age) {
-		var isOpenedCookie = new Cookie(name, String.valueOf(value));
-		isOpenedCookie.setMaxAge(age);
-		isOpenedCookie.setPath(VaadinService.getCurrentRequest().getContextPath());
-		VaadinService.getCurrentResponse().addCookie(isOpenedCookie);
+	public static final Integer COOKIE_AGE = 30 * 60;
 
-		return isOpenedCookie;
+	public Cookie saveCookie(String name, Object value, Integer age) {
+		var cookie = new Cookie(name, String.valueOf(value));
+		cookie.setMaxAge(age);
+		cookie.setPath(VaadinService.getCurrentRequest().getContextPath());
+		VaadinService.getCurrentResponse().addCookie(cookie);
+		return cookie;
 	}
 
 	public Cookie getCookieByName(String name) {

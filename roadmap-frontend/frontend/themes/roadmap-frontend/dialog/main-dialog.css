@@ -16,6 +16,11 @@
     margin-left: auto;
 }
 
+.dialog_delete_message {
+    margin-top: 5%;
+    text-align: center;
+}
+
 vaadin-dialog-overlay::part(overlay) {
 }
 

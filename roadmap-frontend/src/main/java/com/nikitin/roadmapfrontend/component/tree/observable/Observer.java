@@ -1,6 +1,6 @@
 package com.nikitin.roadmapfrontend.component.tree.observable;
 
-public interface SelectedItemObserver {
+public interface Observer {
 
 	void changeSelectedState();
 }

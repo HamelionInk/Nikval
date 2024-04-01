@@ -9,12 +9,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Component;
-import org.springframework.web.util.UriComponentsBuilder;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 
 @Slf4j
 @Component
@@ -28,7 +25,7 @@ public class RoadmapClient {
                 "/roadmaps",
                 HttpMethod.POST,
                 restTemplateService.buildRequestBody(roadmapRequestDto, null),
-                Collections.emptyMap(),
+                null,
                 RoadmapResponseDto.class
         );
     }
@@ -38,7 +35,7 @@ public class RoadmapClient {
                 "/roadmaps/{id}",
                 HttpMethod.PATCH,
                 restTemplateService.buildRequestBody(roadmapRequestDto, null),
-                Collections.singletonMap("id", id),
+                Map.ofEntries(Map.entry("id", id)),
                 RoadmapResponseDto.class
         );
     }
@@ -48,22 +45,24 @@ public class RoadmapClient {
                 "/roadmaps/{id}",
                 HttpMethod.GET,
                 restTemplateService.buildRequestBody(null, null),
-                Collections.singletonMap("id", id),
+                Map.ofEntries(Map.entry("id", id)),
                 RoadmapResponseDto.class
         );
     }
 
     public PageableRoadmapResponseDto getAll(RoadmapFilter roadmapFilter) {
-        var url = UriComponentsBuilder.fromUriString("/roadmaps");
-        var params = new HashMap<String, Object>();
-
-        generateUriParams(params, url, roadmapFilter);
+        var uriParams = new HashMap<String, Object>();
+        uriParams.put("profileIds", roadmapFilter.getProfileIds());
+        uriParams.put("ids", roadmapFilter.getIds());
+        uriParams.put("startWithName", roadmapFilter.getStartWithName());
+        uriParams.put("custom", roadmapFilter.getCustom());
+        uriParams.put("favorite", roadmapFilter.getFavorite());
 
         return restTemplateService.request(
-                url.encode().toUriString(),
+                "/roadmaps",
                 HttpMethod.GET,
                 restTemplateService.buildRequestBody(null, null),
-                params,
+                uriParams,
                 PageableRoadmapResponseDto.class
         );
     }
@@ -73,40 +72,8 @@ public class RoadmapClient {
                 "/roadmaps/{id}",
                 HttpMethod.DELETE,
                 restTemplateService.buildRequestBody(null, null),
-                Collections.singletonMap("id", id),
+                Map.ofEntries(Map.entry("id", id)),
                 String.class
         );
-    }
-
-    private void generateUriParams(Map<String, Object> params, UriComponentsBuilder uriComponentsBuilder, RoadmapFilter roadmapFilter) {
-        Optional.ofNullable(roadmapFilter.getProfileIds())
-                .ifPresent(profileIds -> profileIds.forEach(item -> {
-                    uriComponentsBuilder.queryParam("profileIds", "{profileIds}");
-                    params.put("profileIds", item);
-                }));
-
-        Optional.ofNullable(roadmapFilter.getIds())
-                .ifPresent(ids -> ids.forEach(item -> {
-                    uriComponentsBuilder.queryParam("ids", "{ids}");
-                    params.put("ids", item);
-                }));
-
-        Optional.ofNullable(roadmapFilter.getStartWithName())
-                .ifPresent(startWithName -> {
-                    uriComponentsBuilder.queryParam("startWithName", "{startWithName}");
-                    params.put("startWithName", startWithName);
-                });
-
-        Optional.ofNullable(roadmapFilter.getCustom())
-                .ifPresent(custom -> {
-                    uriComponentsBuilder.queryParam("custom", "{custom}");
-                    params.put("custom", custom);
-                });
-
-        Optional.ofNullable(roadmapFilter.getFavorite())
-                .ifPresent(favorite -> {
-                    uriComponentsBuilder.queryParam("favorite", "{favorite}");
-                    params.put("favorite", favorite);
-                });
     }
 }
