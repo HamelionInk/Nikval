@@ -14,7 +14,7 @@ services:
       KEYCLOAK_ADMIN_PASSWORD: "develop"
       KC_HTTP_ENABLE: "true"
       KC_PROXY: "edge"
-      KC_HOSTNAME: "www.roadmaps-nikval.ru"
+      KC_HOSTNAME: "sso.roadmaps-nikval.ru"
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.keycloak.entrypoints=websecure"
