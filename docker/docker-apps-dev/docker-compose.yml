@@ -34,7 +34,7 @@ services:
       FRONTEND_PORT: "8082"
       KC_ISSUER_URI: "https://sso.roadmaps-nikval.ru/realms/roadmaps"
       KC_REFRESH_TOKEN: "https://sso.roadmaps-nikval.ru/realms/roadmaps/protocol/openid-connect/token"
-      KC_CLIENT_SECRET: "ol4qNtBOPzZDMskHD6c8hKGYUqaeZuKM"
+      KC_CLIENT_SECRET: "yXjhMT5sMyU92N4UBle7tOuHe2UqxDzT"
       KC_CLIENT_ID: "dev-roadmaps"
       KC_SCOPE: "profile,openid,email,roles"
       BACKEND_URL: "https://dev-api.roadmaps-nikval.ru/api/v1/roadmaps"

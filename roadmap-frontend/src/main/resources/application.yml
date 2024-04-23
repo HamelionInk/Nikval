@@ -13,15 +13,15 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          issuer-uri: ${KC_ISSUER_URI:https://www.roadmaps-nikval.ru/realms/roadmaps}
-          refresh_token_uri: ${KC_REFRESH_TOKEN:https://www.roadmaps-nikval.ru/realms/roadmaps/protocol/openid-connect/token}
+          issuer-uri: ${KC_ISSUER_URI:https://sso.roadmaps-nikval.ru/realms/roadmaps}
+          refresh_token_uri: ${KC_REFRESH_TOKEN:https://sso.roadmaps-nikval.ru/realms/roadmaps/protocol/openid-connect/token}
       client:
         provider:
           keycloak:
-            issuer-uri: ${KC_ISSUER_URI:https://www.roadmaps-nikval.ru/realms/roadmaps}
+            issuer-uri: ${KC_ISSUER_URI:https://sso.roadmaps-nikval.ru/realms/roadmaps}
         registration:
           keycloak:
-            client-secret: ${KC_CLIENT_SECRET:ol4qNtBOPzZDMskHD6c8hKGYUqaeZuKM}
+            client-secret: ${KC_CLIENT_SECRET:yXjhMT5sMyU92N4UBle7tOuHe2UqxDzT}
             client-id: ${KC_CLIENT_ID:dev-roadmaps}
             scope: ${KC_SCOPE:profile,openid,email,roles}
 
