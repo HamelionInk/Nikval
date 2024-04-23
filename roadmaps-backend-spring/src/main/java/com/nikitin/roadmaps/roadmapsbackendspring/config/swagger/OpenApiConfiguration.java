@@ -12,7 +12,7 @@ public class OpenApiConfiguration {
     @Bean
     public OpenAPI openAPI() {
         return new OpenAPI()
-                .addServersItem(new Server().url("http://localhost:8081/api/v1/roadmaps"))
+                .addServersItem(new Server().url("http://localhost:8083/api/v1/roadmaps"))
                 .info(new Info()
                         .title("Карта развития")
                         .version("0.0.1"));

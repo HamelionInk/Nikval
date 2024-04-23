@@ -8,14 +8,10 @@ import com.nikitin.roadmapfrontend.dto.response.pageable.PageableRoadmapTopicRes
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
-import org.springframework.web.util.UriComponentsBuilder;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 
 @Slf4j
 @Component
@@ -28,7 +24,7 @@ public class RoadmapTopicClient {
 		return restTemplateService.request("/roadmap-topics",
 				HttpMethod.POST,
 				restTemplateService.buildRequestBody(roadmapTopicRequestDto, null),
-				Collections.EMPTY_MAP,
+				null,
 				RoadmapTopicResponseDto.class);
 	}
 
@@ -36,7 +32,7 @@ public class RoadmapTopicClient {
 		return restTemplateService.request("/roadmap-topics/{id}",
 				HttpMethod.PATCH,
 				restTemplateService.buildRequestBody(roadmapTopicRequestDto, null),
-				Collections.singletonMap("id", id),
+				Map.ofEntries(Map.entry("id", id)),
 				RoadmapTopicResponseDto.class);
 	}
 
@@ -44,20 +40,20 @@ public class RoadmapTopicClient {
 		return restTemplateService.request("/roadmap-topics/{id}",
 				HttpMethod.GET,
 				restTemplateService.buildRequestBody(null, null),
-				Collections.singletonMap("id", id),
+				Map.ofEntries(Map.entry("id", id)),
 				RoadmapTopicResponseDto.class);
 	}
 
 	public PageableRoadmapTopicResponseDto getAll(RoadmapTopicFilter roadmapTopicFilter) {
-		var url = UriComponentsBuilder.fromUriString("/roadmap-topics");
-		var params = new HashMap<String, Object>();
+		var uriParams = new HashMap<String, Object>();
+		uriParams.put("roadmapChapterIds", roadmapTopicFilter.getRoadmapChapterIds());
+		uriParams.put("startWithName", roadmapTopicFilter.getStartWithName());
 
-		generateUriParams(params, url, roadmapTopicFilter);
-
-		return restTemplateService.request(url.encode().toUriString(),
+		return restTemplateService.request(
+				"/roadmap-topics",
 				HttpMethod.GET,
 				restTemplateService.buildRequestBody(roadmapTopicFilter, null),
-				params,
+				uriParams,
 				PageableRoadmapTopicResponseDto.class);
 	}
 
@@ -65,21 +61,7 @@ public class RoadmapTopicClient {
 		restTemplateService.request("/roadmap-topics/{id}",
 				HttpMethod.DELETE,
 				restTemplateService.buildRequestBody(null, null),
-				Collections.singletonMap("id", id),
+				Map.ofEntries(Map.entry("id", id)),
 				null);
-	}
-
-	private void generateUriParams(Map<String, Object> params, UriComponentsBuilder uriComponentsBuilder, RoadmapTopicFilter roadmapTopicFilter) {
-		Optional.ofNullable(roadmapTopicFilter.getRoadmapChapterIds())
-				.ifPresent(roadmapChapterIds -> roadmapChapterIds.forEach(item -> {
-					uriComponentsBuilder.queryParam("roadmapChapterIds", "{roadmapChapterIds}");
-					params.put("roadmapChapterIds", item);
-				}));
-
-		Optional.ofNullable(roadmapTopicFilter.getStartWithName())
-				.ifPresent(startWithName -> {
-					uriComponentsBuilder.queryParam("startWithName", "{startWithName}");
-					params.put("startWithName", startWithName);
-				});
 	}
 }

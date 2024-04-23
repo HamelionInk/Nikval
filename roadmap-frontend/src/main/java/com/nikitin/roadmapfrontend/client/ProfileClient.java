@@ -8,7 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Component;
 
-import java.util.Collections;
+import java.util.Map;
 
 @Slf4j
 @Component
@@ -21,7 +21,7 @@ public class ProfileClient {
         return restTemplateService.request("/profiles",
                 HttpMethod.POST,
                 restTemplateService.buildRequestBody(profileRequestDto, null),
-                Collections.EMPTY_MAP,
+                null,
                 ProfileResponseDto.class
         );
     }
@@ -44,7 +44,7 @@ public class ProfileClient {
         return restTemplateService.request("/profiles/{id}",
                 HttpMethod.PATCH,
                 restTemplateService.buildRequestBody(profileRequestDto, null),
-                Collections.singletonMap("id", id),
+                Map.ofEntries(Map.entry("id", id)),
                 ProfileResponseDto.class
         );
     }
@@ -53,7 +53,7 @@ public class ProfileClient {
         return restTemplateService.request("/profiles/{id}",
                 HttpMethod.GET,
                 restTemplateService.buildRequestBody(null, null),
-                Collections.singletonMap("id", id),
+                Map.ofEntries(Map.entry("id", id)),
                 ProfileResponseDto.class);
     }
 
@@ -61,7 +61,7 @@ public class ProfileClient {
         return restTemplateService.request("/profiles/email/{email}",
                 HttpMethod.GET,
                 restTemplateService.buildRequestBody(null, null),
-                Collections.singletonMap("email", email),
+                Map.ofEntries(Map.entry("email", email)),
                 ProfileResponseDto.class
         );
     }

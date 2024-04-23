@@ -6,8 +6,6 @@ import com.nikitin.roadmapfrontend.client.RoadmapQuestionClient;
 import com.nikitin.roadmapfrontend.client.RoadmapTopicClient;
 import com.nikitin.roadmapfrontend.component.ViewHeader;
 import com.nikitin.roadmapfrontend.component.tree.RoadmapTree;
-import com.nikitin.roadmapfrontend.dialog.ChapterCardDialog;
-import com.nikitin.roadmapfrontend.dto.request.RoadmapChapterRequestDto;
 import com.nikitin.roadmapfrontend.dto.response.RoadmapResponseDto;
 import com.nikitin.roadmapfrontend.utils.enums.VaadinSessionAttribute;
 import com.vaadin.flow.component.UI;
@@ -34,7 +32,6 @@ public class RoadmapView extends VerticalLayout implements HasUrlParameter<Long>
 	private final RoadmapTopicClient roadmapTopicClient;
 	private final RoadmapQuestionClient roadmapQuestionClient;
 
-	private Button createChapterButton;
 	private Button returnButton;
 
 	public RoadmapView(@Autowired RoadmapClient roadmapClient, @Autowired RoadmapChapterClient roadmapChapterClient,
@@ -50,28 +47,12 @@ public class RoadmapView extends VerticalLayout implements HasUrlParameter<Long>
 	private ViewHeader buildViewHeader() {
 		var viewHeader = new ViewHeader(roadmapResponseDto.getName());
 
-		createChapterButton = new Button("Создать");
-		createChapterButton.addClickListener(event -> {
-			var createChapterDialog = new ChapterCardDialog<>(this);
-			createChapterDialog.setHeaderName("Создать раздел");
-			createChapterDialog.setActionButtonName("Создать");
-			createChapterDialog.addActionButtonClickListener(action -> {
-				getClient(RoadmapChapterClient.class).create(RoadmapChapterRequestDto.builder()
-						.roadmapId(roadmapResponseDto.getId())
-						.name(createChapterDialog.getChapterName())
-						.build());
-
-				refreshView();
-				createChapterDialog.close();
-			});
-			createChapterDialog.open();
-		});
 		returnButton = new Button("Назад");
 		returnButton.addClickListener(event ->
 				UI.getCurrent().navigate((String) UI.getCurrent().getSession().getAttribute(VaadinSessionAttribute.PREVIOUS_URL.getValue()))
 		);
 
-		viewHeader.addButton(createChapterButton, returnButton);
+		viewHeader.addButton(returnButton);
 		return viewHeader;
 	}
 
@@ -79,7 +60,7 @@ public class RoadmapView extends VerticalLayout implements HasUrlParameter<Long>
 		var viewBody = new HorizontalLayout();
 		viewBody.addClassName("roadmap-view-body");
 
-		viewBody.add(new RoadmapTree<>(this, roadmapResponseDto.getId()));
+		viewBody.add(new RoadmapTree(this, roadmapResponseDto));
 
 		return viewBody;
 	}
