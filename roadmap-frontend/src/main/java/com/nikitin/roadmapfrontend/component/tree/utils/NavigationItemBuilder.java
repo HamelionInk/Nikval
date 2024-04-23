@@ -25,14 +25,6 @@ public class NavigationItemBuilder {
 				.collect(Collectors.toList());
 	}
 
-	public FirstNavigationItem buildFirstNavigationItem(RoadmapChapterResponseDto roadmapChapterResponseDto,
-														RoadmapTree roadmapTree) {
-		return new FirstNavigationItem(
-				roadmapChapterResponseDto,
-				roadmapTree
-		);
-	}
-
 	public List<SecondNavigationItem> buildSecondNavigationItems(List<RoadmapTopicResponseDto> roadmapTopicResponseDtos,
 																 List<FirstNavigationItem> firstNavigationItems,
 																 RoadmapTree roadmapTree) {

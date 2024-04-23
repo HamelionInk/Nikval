@@ -5,14 +5,19 @@ import com.nikitin.roadmapfrontend.component.tree.item.SecondNavigationItem;
 import com.nikitin.roadmapfrontend.component.tree.item.ThirdNavigationItem;
 import com.nikitin.roadmapfrontend.dto.response.RoadmapQuestionResponseDto;
 import com.nikitin.roadmapfrontend.utils.ScrollHelper;
+import com.vaadin.flow.component.grid.ColumnTextAlign;
 import com.vaadin.flow.component.grid.Grid;
-import com.vaadin.flow.component.grid.GridVariant;
+import com.vaadin.flow.component.icon.Icon;
+import com.vaadin.flow.component.icon.VaadinIcon;
 
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class SecondNavigationWorkspace extends Grid<RoadmapQuestionResponseDto> implements CustomComponent {
+
+	private static final String QUESTION_HEADER = "Название вопроса";
+	private static final String IS_EXPLORED_HEADER = "Изученный";
 
 	private final SecondNavigationItem secondNavigationItem;
 	private final List<ThirdNavigationItem> thirdNavigationItems;
@@ -27,7 +32,26 @@ public class SecondNavigationWorkspace extends Grid<RoadmapQuestionResponseDto> 
 
 	@Override
 	public void buildComponent() {
-		addColumn(RoadmapQuestionResponseDto::getQuestion).setHeader("Вопрос");
+		addColumn(RoadmapQuestionResponseDto::getQuestion).setHeader(QUESTION_HEADER);
+		addComponentColumn(roadmapQuestionResponseDto -> {
+					Icon exploredIcon;
+					if (roadmapQuestionResponseDto.getIsExplored()) {
+						exploredIcon = VaadinIcon.CHECK.create();
+						exploredIcon.getElement().getThemeList().add("badge success");
+					} else {
+						exploredIcon = VaadinIcon.CLOSE_SMALL.create();
+						exploredIcon.getElement().getThemeList().add("badge error");
+					}
+
+					exploredIcon.getStyle().set("padding", "var(--lumo-space-xs");
+					return exploredIcon;
+				}
+		)
+				.setHeader(IS_EXPLORED_HEADER)
+				.setFrozen(true)
+				.setAutoWidth(true)
+				.setFlexGrow(0)
+				.setTextAlign(ColumnTextAlign.CENTER);
 
 		addItemDoubleClickListener(event -> {
 			thirdNavigationItems.stream()
@@ -49,7 +73,6 @@ public class SecondNavigationWorkspace extends Grid<RoadmapQuestionResponseDto> 
 										false
 								));
 
-						thirdNavigationItem.setIsSelected(true);;
 						thirdNavigationItem.openWorkspace();
 						thirdNavigationItem.selected();
 
@@ -57,7 +80,6 @@ public class SecondNavigationWorkspace extends Grid<RoadmapQuestionResponseDto> 
 					});
 		});
 
-		addThemeVariants(GridVariant.LUMO_ROW_STRIPES);
 		addClassName("chapter-item-workspace");
 
 		generateData(thirdNavigationItems);

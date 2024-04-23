@@ -23,6 +23,10 @@
     width: 100%;
 }
 
+.margin-left-auto {
+    margin-left: auto;
+}
+
 .background-363636 {
     color: white;
     background-color: #363636;

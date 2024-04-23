@@ -16,6 +16,10 @@ import java.util.stream.Collectors;
 @Getter
 public class FirstNavigationWorkspace extends Grid<RoadmapTopicResponseDto> implements CustomComponent {
 
+	private static final String NAME_HEADER = "Название темы";
+	private static final String NUMBER_OF_QUESTION_HEADER = "Вопросов в теме";
+	private static final String NUMBER_EXPLORED_QUESTION_HEADER = "Изученные вопросы";
+
 	private final FirstNavigationItem firstNavigationItem;
 	private final List<SecondNavigationItem> secondNavigationItems;
 
@@ -29,8 +33,9 @@ public class FirstNavigationWorkspace extends Grid<RoadmapTopicResponseDto> impl
 
 	@Override
 	public void buildComponent() {
-		addColumn(RoadmapTopicResponseDto::getName).setHeader("Название");
-		addColumn(RoadmapTopicResponseDto::getNumberOfQuestion).setHeader("Вопросы");
+		addColumn(RoadmapTopicResponseDto::getName).setHeader(NAME_HEADER);
+		addColumn(RoadmapTopicResponseDto::getNumberOfQuestion).setHeader(NUMBER_OF_QUESTION_HEADER);
+		addColumn(RoadmapTopicResponseDto::getNumberExploredQuestion).setHeader(NUMBER_EXPLORED_QUESTION_HEADER);
 
 		addItemDoubleClickListener(event ->
 				secondNavigationItems.stream()
@@ -46,19 +51,15 @@ public class FirstNavigationWorkspace extends Grid<RoadmapTopicResponseDto> impl
 											false
 									));
 
-							secondNavigationItem.setIsSelected(true);
 							secondNavigationItem.openWorkspace();
 							secondNavigationItem.selected();
 
 							ScrollHelper.scrollIntoComponent(secondNavigationItem);
-						}));
+						})
+		);
 
 		addThemeVariants(GridVariant.LUMO_ROW_STRIPES);
 		addClassName("chapter-item-workspace");
-
-		getDataProvider().addDataProviderListener(dataChangeEvent ->
-				getDataProvider().refreshAll()
-		);
 
 		generateData(secondNavigationItems);
 	}

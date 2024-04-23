@@ -69,7 +69,7 @@
     "@vaadin/virtual-list": "24.2.3",
     "construct-style-sheets-polyfill": "3.1.0",
     "date-fns": "2.29.3",
-    "lit": "2.8.0"
+    "lit": "^2.6.1"
   },
   "devDependencies": {
     "@rollup/plugin-replace": "5.0.2",
@@ -156,7 +156,7 @@
       "@vaadin/virtual-list": "24.2.3",
       "construct-style-sheets-polyfill": "3.1.0",
       "date-fns": "2.29.3",
-      "lit": "2.8.0"
+      "lit": "^2.6.1"
     },
     "devDependencies": {
       "@rollup/plugin-replace": "5.0.2",
@@ -175,7 +175,7 @@
       "workbox-core": "7.0.0",
       "workbox-precaching": "7.0.0"
     },
-    "hash": "a50d8dfb5e84867e684ea8a81c99919f29abac2569faba37f4a68f8094d70e73"
+    "hash": "c1ac4cb2abe6fd4cdc8baa5aeb4c613672f39735dfbfe7edd92c58711a1fa74c"
   },
   "overrides": {
     "@vaadin/bundles": "$@vaadin/bundles",

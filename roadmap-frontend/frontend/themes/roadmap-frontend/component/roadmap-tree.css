@@ -129,6 +129,22 @@
     margin-top: 2%;
 }
 
+.roadmap-tree-question-name {
+    margin-top: -4%;
+}
+
+.roadmap-tree-question-edit-button {
+    margin-top: -2%;
+}
+
+vaadin-grid::part(green) {
+    background-color: rgba(107, 232, 107, 0.21);
+}
+
+vaadin-grid::part(red) {
+    background-color: rgba(255, 0, 38, 0.21);
+}
+
 @keyframes rotation-open {
     0% {
         transform: rotateZ(0deg);

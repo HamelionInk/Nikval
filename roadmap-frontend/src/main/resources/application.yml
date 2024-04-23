@@ -27,7 +27,7 @@ spring:
 
 vaadin:
   launch-browser: true
-  allowed-packages: com.wontlost,com.vaadin,org.vaadin,dev.hilla,com.nikitin.roadmaps,org.bwajtr.ssokitdemo
+  whitelisted-packages: com.wontlost,com.vaadin,org.vaadin,dev.hilla,com.nikitin.roadmaps,org.bwajtr.ssokitdemo
   sso:
     login-route: /oauth2/authorization/keycloak
     back-channel-logout: true
