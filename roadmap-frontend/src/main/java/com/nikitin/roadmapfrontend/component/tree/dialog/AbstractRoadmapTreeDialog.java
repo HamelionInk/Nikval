@@ -1,33 +1,24 @@
 package com.nikitin.roadmapfrontend.component.tree.dialog;
 
-import com.nikitin.roadmapfrontend.utils.enums.RoadmapTreeDialogType;
+import com.nikitin.roadmapfrontend.component.dialog.AbstractDialog;
+import com.nikitin.roadmapfrontend.component.tree.RoadmapTree;
+import com.nikitin.roadmapfrontend.dto.response.RoadmapResponseDto;
 import com.nikitin.roadmapfrontend.view.View;
-import com.vaadin.flow.component.Component;
-import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.dialog.Dialog;
 
-public abstract class AbstractRoadmapTreeDialog<T, V extends View> extends Dialog {
+public class AbstractRoadmapTreeDialog extends AbstractDialog {
 
-	protected Button closeButton;
-	protected Button actionButton;
+	protected final RoadmapTree roadmapTree;
+	protected final RoadmapResponseDto roadmapResponseDto;
+	protected final View view;
 
-	public AbstractRoadmapTreeDialog(RoadmapTreeDialogType type, T data, V view, Component mainComponent) {
-
-		buildComponent(type, data, view, mainComponent);
+	public AbstractRoadmapTreeDialog(RoadmapTree roadmapTree) {
+		this.roadmapTree = roadmapTree;
+		this.roadmapResponseDto = roadmapTree.getRoadmapResponseDto();
+		this.view = roadmapTree.getView();
 	}
 
-	private void buildComponent(RoadmapTreeDialogType type, T data, V view, Component mainComponent) {
-		closeButton = new Button("Закрыть");
-		closeButton.addClickListener(event -> close());
-		closeButton.addClassName("background-363636");
-
-		actionButton = new Button("Кнопка");
-		actionButton.addClassName("background-363636");
-
-		getFooter().add(actionButton, closeButton);
-		addClassName("roadmap-tree-dialog");
-		add(buildDialogLayout(type, data, view, mainComponent));
+	@Override
+	public void buildComponent() {
+		super.buildComponent();
 	}
-
-	abstract Component buildDialogLayout(RoadmapTreeDialogType type, T data, V view, Component mainComponent);
 }

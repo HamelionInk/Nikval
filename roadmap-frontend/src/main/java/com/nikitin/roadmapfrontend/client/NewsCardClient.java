@@ -9,7 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Component;
 
-import java.util.Collections;
+import java.util.Map;
 
 @Slf4j
 @Component
@@ -22,16 +22,16 @@ public class NewsCardClient {
         return restTemplateService.request("/news-card",
                 HttpMethod.POST,
                 restTemplateService.buildRequestBody(newsCardRequestDto, null),
-                Collections.EMPTY_MAP,
+                null,
                 NewsCardResponseDto.class
         );
     }
 
     public NewsCardResponseDto patch(Long id, NewsCardRequestDto newsCardRequestDto) {
-        return restTemplateService.request("/news-card/" + id,
+        return restTemplateService.request("/news-card/{id}",
                 HttpMethod.PATCH,
                 restTemplateService.buildRequestBody(newsCardRequestDto, null),
-                Collections.EMPTY_MAP,
+                Map.ofEntries(Map.entry("id", id)),
                 NewsCardResponseDto.class
         );
     }
@@ -40,25 +40,25 @@ public class NewsCardClient {
         return restTemplateService.request("/news-card",
                 HttpMethod.GET,
                 restTemplateService.buildRequestBody(null, null),
-                Collections.EMPTY_MAP,
+                null,
                 PageableNewsCardResponseDto.class
         );
     }
 
     public NewsCardResponseDto getById(Long id) {
-        return restTemplateService.request("/news-card/" + id,
+        return restTemplateService.request("/news-card/{id}",
                 HttpMethod.GET,
                 restTemplateService.buildRequestBody(null, null),
-                Collections.EMPTY_MAP,
+                Map.ofEntries(Map.entry("id", id)),
                 NewsCardResponseDto.class
         );
     }
 
     public void deleteById(Long id) {
-        restTemplateService.request("/news-card/" + id,
+        restTemplateService.request("/news-card/{id}",
                 HttpMethod.DELETE,
                 restTemplateService.buildRequestBody(null, null),
-                Collections.EMPTY_MAP,
+                Map.ofEntries(Map.entry("id", id)),
                 String.class
         );
     }

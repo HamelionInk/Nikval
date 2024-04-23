@@ -1,6 +1,7 @@
 server:
   port: ${FRONTEND_PORT:8082}
-
+  tomcat:
+    max-http-response-header-size: '1024KB'
 spring:
   profiles:
     active: ${SPRING_PROFILES_ACTIVE:default}
@@ -26,7 +27,7 @@ spring:
 
 vaadin:
   launch-browser: true
-  whitelisted-packages: com.vaadin,org.vaadin,dev.hilla,com.nikitin.roadmaps,org.bwajtr.ssokitdemo
+  whitelisted-packages: com.wontlost,com.vaadin,org.vaadin,dev.hilla,com.nikitin.roadmaps,org.bwajtr.ssokitdemo
   sso:
     login-route: /oauth2/authorization/keycloak
     back-channel-logout: true
