@@ -129,19 +129,21 @@
     margin-top: 2%;
 }
 
+.roadmap-tree-button-layout {
+    margin-left: auto;
+}
+
 .roadmap-tree-question-name {
     margin-top: -4%;
 }
 
-.roadmap-tree-question-edit-button {
-    margin-top: -2%;
-}
-
-vaadin-grid::part(green) {
+.roadmap-tree-button-change-explored {
+    color: black;
     background-color: rgba(107, 232, 107, 0.21);
 }
 
-vaadin-grid::part(red) {
+.roadmap-tree-button-change-no-explored {
+    color: black;
     background-color: rgba(255, 0, 38, 0.21);
 }
 
