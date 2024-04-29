@@ -7,14 +7,13 @@ import com.nikitin.roadmapfrontend.component.tree.item.ThirdNavigationItem;
 import com.nikitin.roadmapfrontend.dto.request.RoadmapQuestionRequestDto;
 import com.nikitin.roadmapfrontend.dto.response.RoadmapQuestionResponseDto;
 import com.nikitin.roadmapfrontend.utils.constants.StyleClassConstant;
+import com.nikitin.roadmapfrontend.utils.editor.TextEditorBuilder;
 import com.nikitin.roadmapfrontend.view.View;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextArea;
-import com.wontlost.ckeditor.Constants;
 import com.wontlost.ckeditor.VaadinCKEditor;
-import com.wontlost.ckeditor.VaadinCKEditorBuilder;
 
 public class ThirdNavigationWorkspace extends VerticalLayout implements CustomComponent {
 
@@ -22,19 +21,19 @@ public class ThirdNavigationWorkspace extends VerticalLayout implements CustomCo
 	private final RoadmapQuestionResponseDto roadmapQuestionResponseDto;
 	private final View view;
 	private final RoadmapTree roadmapTree;
+	private final VaadinCKEditor classicEditor;
 	private final Button hideAnswer = new Button("Скрыть ответ");
 	private final Button changeExplored = new Button();
 	private final TextArea questionName = new TextArea("Название вопроса");
-	private final VaadinCKEditor classicEditor = new VaadinCKEditorBuilder().with(builder -> {
-		builder.editorType = Constants.EditorType.CLASSIC;
-		builder.theme = Constants.ThemeType.LIGHT;
-	}).createVaadinCKEditor();
 
 	public ThirdNavigationWorkspace(ThirdNavigationItem thirdNavigationItem) {
 		this.thirdNavigationItem = thirdNavigationItem;
 		this.roadmapQuestionResponseDto = thirdNavigationItem.getRoadmapQuestionResponseDto();
 		this.view = thirdNavigationItem.getRoadmapTree().getView();
 		this.roadmapTree = thirdNavigationItem.getRoadmapTree();
+		this.classicEditor = TextEditorBuilder.getClassicCKEditor(
+				roadmapQuestionResponseDto.getAnswer()
+		);
 
 		buildComponent();
 	}
@@ -76,10 +75,6 @@ public class ThirdNavigationWorkspace extends VerticalLayout implements CustomCo
 			roadmapTree.updatePrimaryLayout();
 		});
 
-		classicEditor.setLabel("Ответ");
-		classicEditor.getStyle().clear();
-		classicEditor.setHeight("300px");
-		classicEditor.setValue(roadmapQuestionResponseDto.getAnswer());
 		classicEditor.addValueChangeListener(event -> {
 			var response = view.getClient(RoadmapQuestionClient.class)
 					.patch(roadmapQuestionResponseDto.getId(), RoadmapQuestionRequestDto.builder()
@@ -89,6 +84,19 @@ public class ThirdNavigationWorkspace extends VerticalLayout implements CustomCo
 
 			thirdNavigationItem.setRoadmapQuestionResponseDto(response);
 		});
+
+		classicEditor.getElement().addEventListener(
+				"focusin",
+				event -> classicEditor.setReadOnlyWithToolbarAction(false)
+		);
+
+		classicEditor.getElement().addEventListener(
+				"focusout",
+				event -> {
+					classicEditor.setReadOnlyWithToolbarAction(true);
+					classicEditor.setReadOnly(false);
+				}
+		);
 
 		buttonLayout.add(hideAnswer, changeExplored);
 		add(buttonLayout, questionName, classicEditor);
