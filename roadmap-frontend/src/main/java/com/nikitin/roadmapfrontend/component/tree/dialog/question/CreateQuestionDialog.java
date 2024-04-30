@@ -1,15 +1,14 @@
 package com.nikitin.roadmapfrontend.component.tree.dialog.question;
 
 import com.nikitin.roadmapfrontend.client.RoadmapQuestionClient;
-import com.nikitin.roadmapfrontend.utils.constants.DialogNameConstant;
 import com.nikitin.roadmapfrontend.component.tree.RoadmapTree;
 import com.nikitin.roadmapfrontend.component.tree.dialog.AbstractRoadmapTreeDialog;
 import com.nikitin.roadmapfrontend.dto.request.RoadmapQuestionRequestDto;
+import com.nikitin.roadmapfrontend.utils.constants.DialogNameConstant;
 import com.nikitin.roadmapfrontend.utils.constants.StyleClassConstant;
 import com.nikitin.roadmapfrontend.utils.enums.ExploredStatus;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.textfield.TextArea;
-import com.vaadin.flow.component.textfield.TextField;
 
 public class CreateQuestionDialog extends AbstractRoadmapTreeDialog {
 
@@ -29,18 +28,14 @@ public class CreateQuestionDialog extends AbstractRoadmapTreeDialog {
 		setHeaderTitle(DialogNameConstant.QUESTION_CREATE_HEADER_NAME);
 
 		var componentLayout = new Div();
-		var questionNameComponent = new TextField(DialogNameConstant.QUESTION_NAME_COMPONENT);
+		var questionNameComponent = new TextArea(DialogNameConstant.QUESTION_NAME_COMPONENT);
 		questionNameComponent.addClassName(StyleClassConstant.FULL_WIDTH);
-
-		var answerNameComponent = new TextArea(DialogNameConstant.ANSWER_NAME_COMPONENT);
-		answerNameComponent.addClassName(StyleClassConstant.FULL_WIDTH);
 
 		actionButton.setText(DialogNameConstant.ACTION_BUTTON_CREATE);
 		actionButton.addClickListener(event -> {
 			view.getClient(RoadmapQuestionClient.class)
 					.create(RoadmapQuestionRequestDto.builder()
 							.question(questionNameComponent.getValue())
-							.answer(answerNameComponent.getValue())
 							.roadmapTopicId(topicId)
 							.exploredStatus(ExploredStatus.NOT_EXPLORED)
 							.build()
@@ -52,7 +47,7 @@ public class CreateQuestionDialog extends AbstractRoadmapTreeDialog {
 		});
 		actionButton.addClassName(StyleClassConstant.DIALOG_BLUE_BUTTON);
 
-		componentLayout.add(questionNameComponent, answerNameComponent);
+		componentLayout.add(questionNameComponent);
 		add(componentLayout);
 	}
 }
