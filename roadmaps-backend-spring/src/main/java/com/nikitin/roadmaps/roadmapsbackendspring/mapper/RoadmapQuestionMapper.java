@@ -6,6 +6,7 @@ import com.nikitin.roadmaps.roadmapsbackendspring.entity.RoadmapChapter;
 import com.nikitin.roadmaps.roadmapsbackendspring.entity.RoadmapQuestion;
 import com.nikitin.roadmaps.roadmapsbackendspring.entity.RoadmapTopic;
 import com.nikitin.roadmaps.roadmapsbackendspring.service.RoadmapTopicService;
+import com.nikitin.roadmaps.roadmapsbackendspring.utils.enums.ExploredStatus;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
@@ -26,6 +27,7 @@ public abstract class RoadmapQuestionMapper {
     public abstract RoadmapQuestion toPatchEntity(RoadmapQuestionRequestDto dto, @MappingTarget RoadmapQuestion entityForUpdate);
 
     @Mapping(source = "entity.roadmapTopic", target = "roadmapTopicId", qualifiedByName = "converterToResponseDtoRoadmapTopicId")
+    @Mapping(source = "entity.exploredStatus", target = "exploredStatus", qualifiedByName = "converterToExploredStatus")
     public abstract RoadmapQuestionResponseDto toResponseDto(RoadmapQuestion entity);
 
     @Named("converterToEntityRoadmapTopic")
@@ -36,5 +38,10 @@ public abstract class RoadmapQuestionMapper {
     @Named("converterToResponseDtoRoadmapTopicId")
     protected Long converterToResponseDtoRoadmapTopicId(RoadmapTopic roadmapTopic) {
         return roadmapTopic.getId();
+    }
+
+    @Named("converterToExploredStatus")
+    protected String converterToExploredStatus(ExploredStatus exploredStatus) {
+        return exploredStatus.getValue();
     }
 }

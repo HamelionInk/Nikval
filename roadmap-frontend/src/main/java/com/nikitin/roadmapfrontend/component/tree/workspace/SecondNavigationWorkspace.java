@@ -7,8 +7,6 @@ import com.nikitin.roadmapfrontend.dto.response.RoadmapQuestionResponseDto;
 import com.nikitin.roadmapfrontend.utils.ScrollHelper;
 import com.vaadin.flow.component.grid.ColumnTextAlign;
 import com.vaadin.flow.component.grid.Grid;
-import com.vaadin.flow.component.icon.Icon;
-import com.vaadin.flow.component.icon.VaadinIcon;
 
 import java.util.List;
 import java.util.Objects;
@@ -33,52 +31,37 @@ public class SecondNavigationWorkspace extends Grid<RoadmapQuestionResponseDto> 
 	@Override
 	public void buildComponent() {
 		addColumn(RoadmapQuestionResponseDto::getQuestion).setHeader(QUESTION_HEADER);
-		addComponentColumn(roadmapQuestionResponseDto -> {
-					Icon exploredIcon;
-					if (roadmapQuestionResponseDto.getIsExplored()) {
-						exploredIcon = VaadinIcon.CHECK.create();
-						exploredIcon.getElement().getThemeList().add("badge success");
-					} else {
-						exploredIcon = VaadinIcon.CLOSE_SMALL.create();
-						exploredIcon.getElement().getThemeList().add("badge error");
-					}
-
-					exploredIcon.getStyle().set("padding", "var(--lumo-space-xs");
-					return exploredIcon;
-				}
-		)
+		addColumn(RoadmapQuestionResponseDto::getExploredStatus)
 				.setHeader(IS_EXPLORED_HEADER)
-				.setFrozen(true)
 				.setAutoWidth(true)
 				.setFlexGrow(0)
 				.setTextAlign(ColumnTextAlign.CENTER);
 
-		addItemDoubleClickListener(event -> {
-			thirdNavigationItems.stream()
-					.filter(thirdNavigationItem -> Objects.equals(
-							thirdNavigationItem.getItemId(), event.getItem().getId())
-					)
-					.findFirst()
-					.ifPresent(thirdNavigationItem -> {
-						var secondNavigationItem = thirdNavigationItem.getSecondNavigationItem();
-						var firstNavigationItem = secondNavigationItem.getFirstNavigationItem();
+		addItemDoubleClickListener(event ->
+				thirdNavigationItems.stream()
+						.filter(thirdNavigationItem -> Objects.equals(
+								thirdNavigationItem.getItemId(), event.getItem().getId())
+						)
+						.findFirst()
+						.ifPresent(thirdNavigationItem -> {
+							var secondNavigationItem = thirdNavigationItem.getSecondNavigationItem();
+							var firstNavigationItem = secondNavigationItem.getFirstNavigationItem();
 
-						firstNavigationItem.getDropDownLayout()
-								.setVisible(firstNavigationItem.openOrCloseDropDownLayout(
-										false
-								));
+							firstNavigationItem.getDropDownLayout()
+									.setVisible(firstNavigationItem.openOrCloseDropDownLayout(
+											false
+									));
 
-						secondNavigationItem.getDropDownLayout()
-								.setVisible(secondNavigationItem.openOrCloseDropDownLayout(
-										false
-								));
+							secondNavigationItem.getDropDownLayout()
+									.setVisible(secondNavigationItem.openOrCloseDropDownLayout(
+											false
+									));
 
-						thirdNavigationItem.openWorkspace();
-						thirdNavigationItem.selected();
+							thirdNavigationItem.openWorkspace();
+							thirdNavigationItem.selected();
 
-						ScrollHelper.scrollIntoComponent(thirdNavigationItem);
-					});
-		});
+							ScrollHelper.scrollIntoComponent(thirdNavigationItem);
+						}));
 
 		addClassName("chapter-item-workspace");
 

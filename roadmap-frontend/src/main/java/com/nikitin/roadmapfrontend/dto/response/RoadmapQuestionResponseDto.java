@@ -16,7 +16,7 @@ public class RoadmapQuestionResponseDto {
     private Long id;
     private String question;
     private String answer;
-    private Boolean isExplored;
+    private String exploredStatus;
     private Long roadmapTopicId;
     private Long position;
 }

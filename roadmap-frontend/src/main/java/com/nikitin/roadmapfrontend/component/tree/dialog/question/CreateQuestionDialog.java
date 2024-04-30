@@ -6,6 +6,7 @@ import com.nikitin.roadmapfrontend.component.tree.RoadmapTree;
 import com.nikitin.roadmapfrontend.component.tree.dialog.AbstractRoadmapTreeDialog;
 import com.nikitin.roadmapfrontend.dto.request.RoadmapQuestionRequestDto;
 import com.nikitin.roadmapfrontend.utils.constants.StyleClassConstant;
+import com.nikitin.roadmapfrontend.utils.enums.ExploredStatus;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
@@ -41,7 +42,7 @@ public class CreateQuestionDialog extends AbstractRoadmapTreeDialog {
 							.question(questionNameComponent.getValue())
 							.answer(answerNameComponent.getValue())
 							.roadmapTopicId(topicId)
-							.isExplored(false)
+							.exploredStatus(ExploredStatus.NOT_EXPLORED)
 							.build()
 					);
 

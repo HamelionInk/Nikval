@@ -65,18 +65,7 @@ public class RoadmapTopicController {
                                                                 @ParameterObject @PageableDefault(sort = "position",
                                                                         direction = Sort.Direction.ASC,
                                                                         size = Integer.MAX_VALUE) Pageable pageable) {
-        var responseBody = roadmapTopicService.getAll(roadmapTopicFilter, pageable);
-
-        return ResponseEntity.status(HttpStatus.ACCEPTED).body(responseBody);
-    }
-
-    @PageableAsQueryParam
-    @GetMapping("/roadmap-chapter/{id}")
-    public ResponseEntity<Page<RoadmapTopicResponseDto>> getAllByChapterId(@PathVariable(name = "id") Long id,
-                                                                           @ParameterObject @PageableDefault(sort = "id",
-                                                                                   direction = Sort.Direction.ASC,
-                                                                                   size = Integer.MAX_VALUE) Pageable pageable) {
-        var responseBody = roadmapTopicService.getAllByChapterId(id, pageable);
+        var responseBody = roadmapTopicService.getAllResponse(roadmapTopicFilter, pageable);
 
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(responseBody);
     }

@@ -22,8 +22,8 @@ public class RoadmapQuestionResponseDto {
     @Schema(description = "Ответ на вопрос", example = "Для прогрессивной работы с коллекциями")
     private String answer;
 
-    @Schema(description = "Состояние, показывающее изучен вопрос или нет", example = "false")
-    private Boolean isExplored;
+    @Schema(description = "Статус изучения вопроса", example = "IN_PROGRESS_EXPLORED")
+    private String exploredStatus;
 
     @Schema(description = "Позиция вопроса", example = "4")
     private Long position;

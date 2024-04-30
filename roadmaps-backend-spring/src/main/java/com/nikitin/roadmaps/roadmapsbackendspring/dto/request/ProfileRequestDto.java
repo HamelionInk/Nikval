@@ -1,12 +1,11 @@
 package com.nikitin.roadmaps.roadmapsbackendspring.dto.request;
 
-import com.nikitin.roadmaps.roadmapsbackendspring.dto.enums.CompetenceType;
+import com.nikitin.roadmaps.roadmapsbackendspring.utils.enums.CompetenceType;
 import com.nikitin.roadmaps.roadmapsbackendspring.validation.Create;
 import com.nikitin.roadmaps.roadmapsbackendspring.validation.Patch;
 import com.nikitin.roadmaps.roadmapsbackendspring.validation.annotation.NotBlank;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PastOrPresent;
 import lombok.AllArgsConstructor;
