@@ -19,11 +19,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity(name = "news_card")
-public class NewsCard {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class NewsCard extends BaseEntity {
 
     @Column(name = "title", nullable = false, columnDefinition = "varchar(50)")
     private String title;

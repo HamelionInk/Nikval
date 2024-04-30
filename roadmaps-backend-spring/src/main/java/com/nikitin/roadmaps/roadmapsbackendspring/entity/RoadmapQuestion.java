@@ -24,11 +24,7 @@ import org.hibernate.annotations.OnDeleteAction;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity(name = "roadmap_question")
-public class RoadmapQuestion {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class RoadmapQuestion extends BaseEntity {
 
     @Column(name = "question", nullable = false, columnDefinition = "text")
     private String question;

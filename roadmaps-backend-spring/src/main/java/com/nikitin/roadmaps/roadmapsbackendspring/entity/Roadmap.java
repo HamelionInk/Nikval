@@ -24,11 +24,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity(name = "roadmap")
-public class Roadmap {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class Roadmap extends BaseEntity{
 
     @Column(name = "name", nullable = false, columnDefinition = "varchar(50)")
     private String name;

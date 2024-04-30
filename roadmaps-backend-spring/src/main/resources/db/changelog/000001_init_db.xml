@@ -143,5 +143,9 @@
             </column>
         </createTable>
     </changeSet>
+
+    <changeSet id="init_pk_sequence" author="msnikitin">
+        <createSequence sequenceName="pk_sequence" startValue="1" incrementBy="1"/>
+    </changeSet>
     
 </databaseChangeLog>
