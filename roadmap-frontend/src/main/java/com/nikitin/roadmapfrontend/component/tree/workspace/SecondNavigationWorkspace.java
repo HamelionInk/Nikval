@@ -5,8 +5,10 @@ import com.nikitin.roadmapfrontend.component.tree.item.SecondNavigationItem;
 import com.nikitin.roadmapfrontend.component.tree.item.ThirdNavigationItem;
 import com.nikitin.roadmapfrontend.dto.response.RoadmapQuestionResponseDto;
 import com.nikitin.roadmapfrontend.utils.ScrollHelper;
+import com.nikitin.roadmapfrontend.utils.enums.ExploredStatus;
 import com.vaadin.flow.component.grid.ColumnTextAlign;
 import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.html.Span;
 
 import java.util.List;
 import java.util.Objects;
@@ -14,8 +16,8 @@ import java.util.stream.Collectors;
 
 public class SecondNavigationWorkspace extends Grid<RoadmapQuestionResponseDto> implements CustomComponent {
 
-	private static final String QUESTION_HEADER = "Название вопроса";
-	private static final String IS_EXPLORED_HEADER = "Изученный";
+	private static final String QUESTION_HEADER = "Вопрос";
+	private static final String EXPLORED_STATUS_HEADER = "Статус";
 
 	private final SecondNavigationItem secondNavigationItem;
 	private final List<ThirdNavigationItem> thirdNavigationItems;
@@ -31,8 +33,28 @@ public class SecondNavigationWorkspace extends Grid<RoadmapQuestionResponseDto> 
 	@Override
 	public void buildComponent() {
 		addColumn(RoadmapQuestionResponseDto::getQuestion).setHeader(QUESTION_HEADER);
-		addColumn(RoadmapQuestionResponseDto::getExploredStatus)
-				.setHeader(IS_EXPLORED_HEADER)
+		addComponentColumn(roadmapQuestionResponseDto -> {
+			var exploredStatusColumn = new Span();
+
+			if (ExploredStatus.EXPLORED.equals(roadmapQuestionResponseDto.getExploredStatus())) {
+				exploredStatusColumn.setClassName("roadmap-tree-column-explored-status-explored");
+			}
+
+			if (ExploredStatus.IN_PROGRESS_EXPLORED.equals(roadmapQuestionResponseDto.getExploredStatus())) {
+				exploredStatusColumn.setClassName("roadmap-tree-column-explored-status-in-progress-explored");
+			}
+
+			if (ExploredStatus.NOT_EXPLORED.equals(roadmapQuestionResponseDto.getExploredStatus())) {
+				exploredStatusColumn.setClassName("roadmap-tree-column-explored-status-no-explored");
+			}
+
+			exploredStatusColumn.setText(
+					roadmapQuestionResponseDto.getExploredStatus().getValue()
+			);
+
+			return exploredStatusColumn;
+		})
+				.setHeader(EXPLORED_STATUS_HEADER)
 				.setAutoWidth(true)
 				.setFlexGrow(0)
 				.setTextAlign(ColumnTextAlign.CENTER);

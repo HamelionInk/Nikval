@@ -47,7 +47,7 @@ public class ThirdNavigationWorkspace extends VerticalLayout implements CustomCo
 
 		changeExplored.setItems(ExploredStatus.values());
 		changeExplored.setItemLabelGenerator(ExploredStatus::getValue);
-		changeExplored.setValue(ExploredStatus.getByValue(roadmapQuestionResponseDto.getExploredStatus()));
+		changeExplored.setValue(roadmapQuestionResponseDto.getExploredStatus());
 		changeExplored.addValueChangeListener(event -> {
 			var response = view.getClient(RoadmapQuestionClient.class)
 					.patch(roadmapQuestionResponseDto.getId(), RoadmapQuestionRequestDto.builder()
@@ -55,8 +55,12 @@ public class ThirdNavigationWorkspace extends VerticalLayout implements CustomCo
 							.build()
 					);
 
+			changeExploredColorByExploredStatus(response.getExploredStatus());
+
+			roadmapTree.updatePrimaryLayout();
 			thirdNavigationItem.setRoadmapQuestionResponseDto(response);
 		});
+		changeExploredColorByExploredStatus(roadmapQuestionResponseDto.getExploredStatus());
 
 		hideAnswer.addClassName(StyleClassConstant.DIALOG_CUSTOM_BUTTON);
 		hideAnswer.addClickListener(event ->
@@ -103,6 +107,20 @@ public class ThirdNavigationWorkspace extends VerticalLayout implements CustomCo
 
 		buttonLayout.add(hideAnswer, changeExplored);
 		add(buttonLayout, questionName, classicEditor);
+	}
+
+	private void changeExploredColorByExploredStatus(ExploredStatus exploredStatus) {
+		if (ExploredStatus.EXPLORED.equals(exploredStatus)) {
+			changeExplored.setClassName("roadmap-tree-combo-box-change-explored");
+		}
+
+		if (ExploredStatus.IN_PROGRESS_EXPLORED.equals(exploredStatus)) {
+			changeExplored.setClassName("roadmap-tree-combo-box-change-in-progress-explored");
+		}
+
+		if (ExploredStatus.NOT_EXPLORED.equals(exploredStatus)) {
+			changeExplored.setClassName("roadmap-tree-combo-box-change-no-explored");
+		}
 	}
 
 	public Long getWorkspaceId() {

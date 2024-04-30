@@ -1,5 +1,6 @@
 package com.nikitin.roadmaps.roadmapsbackendspring.dto.response;
 
+import com.nikitin.roadmaps.roadmapsbackendspring.utils.enums.ExploredStatus;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -23,7 +24,7 @@ public class RoadmapQuestionResponseDto {
     private String answer;
 
     @Schema(description = "Статус изучения вопроса", example = "IN_PROGRESS_EXPLORED")
-    private String exploredStatus;
+    private ExploredStatus exploredStatus;
 
     @Schema(description = "Позиция вопроса", example = "4")
     private Long position;
