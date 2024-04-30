@@ -91,6 +91,36 @@
     width: 500px;
 }
 
+.roadmap-tree-column-explored-status-explored {
+    padding: 4px;
+    border-radius: 8px;
+    background-color: rgba(71, 255, 8, 0.12);
+}
+
+.roadmap-tree-combo-box-change-explored::part(input-field) {
+    background-color: rgba(71, 255, 8, 0.12);
+}
+
+.roadmap-tree-combo-box-change-in-progress-explored::part(input-field) {
+    background-color: rgba(255, 222, 8, 0.12);
+}
+
+.roadmap-tree-combo-box-change-no-explored::part(input-field) {
+    background-color: rgba(255, 8, 8, 0.12);
+}
+
+.roadmap-tree-column-explored-status-in-progress-explored {
+    padding: 4px;
+    border-radius: 8px;
+    background-color: rgba(255, 222, 8, 0.12);
+}
+
+.roadmap-tree-column-explored-status-no-explored {
+    padding: 4px;
+    border-radius: 8px;
+    background-color: rgba(255, 8, 8, 0.12);
+}
+
 .roadmap-tree-dialog-question::part(content) {
     width: 700px;
 }
@@ -135,16 +165,6 @@
 
 .roadmap-tree-question-name {
     margin-top: -4%;
-}
-
-.roadmap-tree-button-change-explored {
-    color: black;
-    background-color: rgba(107, 232, 107, 0.21);
-}
-
-.roadmap-tree-button-change-no-explored {
-    color: black;
-    background-color: rgba(255, 0, 38, 0.21);
 }
 
 @keyframes rotation-open {

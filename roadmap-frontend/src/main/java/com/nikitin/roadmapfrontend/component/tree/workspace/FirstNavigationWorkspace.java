@@ -16,8 +16,8 @@ import java.util.stream.Collectors;
 @Getter
 public class FirstNavigationWorkspace extends Grid<RoadmapTopicResponseDto> implements CustomComponent {
 
-	private static final String NAME_HEADER = "Название темы";
-	private static final String NUMBER_OF_QUESTION_HEADER = "Вопросов в теме";
+	private static final String NAME_HEADER = "Тема";
+	private static final String NUMBER_OF_QUESTION_HEADER = "Вопросы";
 	private static final String NUMBER_EXPLORED_QUESTION_HEADER = "Изученные вопросы";
 
 	private final FirstNavigationItem firstNavigationItem;
