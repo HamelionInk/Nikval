@@ -1,0 +1,29 @@
+.main-dialog {
+
+}
+
+.header-layout-dialog {
+    display: flex;
+    width: 100%;
+}
+
+.header-name-dialog {
+    color: white;
+}
+
+.close-button-dialog {
+    color: white;
+    margin-left: auto;
+}
+
+.dialog_delete_message {
+    margin-top: 5%;
+    text-align: center;
+}
+
+vaadin-dialog-overlay::part(overlay) {
+}
+
+vaadin-dialog-overlay::part(header) {
+    background-color: #383838;
+}

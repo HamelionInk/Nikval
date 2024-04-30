@@ -1,7 +1,10 @@
 package com.nikitin.roadmaps.roadmapsbackendspring.entity;
 
+import com.nikitin.roadmaps.roadmapsbackendspring.utils.enums.ExploredStatus;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -21,11 +24,7 @@ import org.hibernate.annotations.OnDeleteAction;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity(name = "roadmap_question")
-public class RoadmapQuestion {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class RoadmapQuestion extends BaseEntity {
 
     @Column(name = "question", nullable = false, columnDefinition = "text")
     private String question;
@@ -33,8 +32,12 @@ public class RoadmapQuestion {
     @Column(name = "answer", nullable = false, columnDefinition = "text")
     private String answer;
 
-    @Column(name = "is_explored", nullable = false, columnDefinition = "Boolean")
-    private Boolean isExplored;
+    @Column(name = "explored_status", nullable = false, columnDefinition = "varchar(25)")
+    @Enumerated(value = EnumType.STRING)
+    private ExploredStatus exploredStatus;
+
+    @Column(name = "position", nullable = false, columnDefinition = "int8")
+    private Long position;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @OnDelete(action = OnDeleteAction.CASCADE)

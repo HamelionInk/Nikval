@@ -24,11 +24,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity(name = "roadmap")
-public class Roadmap {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class Roadmap extends BaseEntity{
 
     @Column(name = "name", nullable = false, columnDefinition = "varchar(50)")
     private String name;
@@ -36,4 +32,10 @@ public class Roadmap {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "profile_id", nullable = false, columnDefinition = "int8")
     private Profile profile;
+
+    @Column(name = "custom", nullable = false, columnDefinition = "boolean")
+    private Boolean custom;
+
+    @Column(name = "favorite", nullable = false, columnDefinition = "boolean")
+    private Boolean favorite;
 }

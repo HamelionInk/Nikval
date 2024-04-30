@@ -1,0 +1,50 @@
+.roadmap-card {
+    display: flex;
+    width: 100%;
+    height: 300px;
+    border-radius: 15px;
+    draggable: true;
+}
+
+.custom-true {
+    background-image: linear-gradient(#363636, rgba(110, 110, 109, 0.0001)), url("../image/roadmap-card-2.jpg");
+}
+
+.custom-false {
+    background-image: linear-gradient(#363636, rgba(110, 110, 109, 0.0001)), url("../image/roadmap-card-1.jpeg");
+}
+
+.custom-true:hover {
+    background-image: url("../image/roadmap-card-2.jpg");
+}
+
+.custom-false:hover {
+    background-image: url("../image/roadmap-card-1.jpeg");
+}
+
+.roadmap-header-layout {
+    width: 100%;
+    display: flex;
+}
+
+.roadmap-name {
+    font-size: 20px;
+    margin-top: 0.2%;
+    color: white;
+}
+
+.roadmap-dropdown-card-menu {
+    margin-left: auto;
+}
+
+.roadmap-dropdown-card-menu-icon {
+    color: white;
+}
+
+.edit-favorite-button {
+    margin-top: -0.1%;
+    background-color: unset;
+}
+
+.favorite-icon-card {
+}

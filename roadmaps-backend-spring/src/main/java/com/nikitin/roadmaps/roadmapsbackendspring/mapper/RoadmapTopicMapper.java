@@ -2,7 +2,6 @@ package com.nikitin.roadmaps.roadmapsbackendspring.mapper;
 
 import com.nikitin.roadmaps.roadmapsbackendspring.dto.request.RoadmapTopicRequestDto;
 import com.nikitin.roadmaps.roadmapsbackendspring.dto.response.RoadmapTopicResponseDto;
-import com.nikitin.roadmaps.roadmapsbackendspring.entity.Roadmap;
 import com.nikitin.roadmaps.roadmapsbackendspring.entity.RoadmapChapter;
 import com.nikitin.roadmaps.roadmapsbackendspring.entity.RoadmapTopic;
 import com.nikitin.roadmaps.roadmapsbackendspring.service.RoadmapChapterService;

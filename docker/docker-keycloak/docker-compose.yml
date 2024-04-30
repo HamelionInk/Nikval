@@ -1,0 +1,25 @@
+version: '3'
+
+services:
+  keycloak:
+    image: quay.io/keycloak/keycloak:22.0.3
+    container_name: keycloak
+    restart: unless-stopped
+    ports:
+      - 8080:8080
+    command:
+      - start-dev
+    environment:
+      KEYCLOAK_ADMIN: "develop"
+      KEYCLOAK_ADMIN_PASSWORD: "develop"
+      KC_HTTP_ENABLE: "true"
+      KC_PROXY: "edge"
+      KC_HOSTNAME: "sso.roadmaps-nikval.ru"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.keycloak.entrypoints=websecure"
+      - "traefik.http.routers.keycloak.rule=Host(`sso.roadmaps-nikval.ru`)"
+      - "traefik.http.routers.keycloak.tls=true"
+      - "traefik.http.routers.keycloak.tls.certresolver=letsEncrypt"
+      - "traefik.http.routers.keycloak.service=keycloak@docker"
+      - "traefik.http.services.keycloak.loadbalancer.server.port=8080"

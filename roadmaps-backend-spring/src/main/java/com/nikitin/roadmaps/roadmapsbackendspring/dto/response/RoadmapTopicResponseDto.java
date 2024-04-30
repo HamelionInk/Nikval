@@ -21,6 +21,9 @@ public class RoadmapTopicResponseDto {
     @Schema(description = "Название темы", example = "Stream API")
     private String name;
 
+    @Schema(description = "Позиция темы", example = "4")
+    private Long position;
+
     @Schema(description = "Количество вопросов в теме", example = "43")
     private Integer numberOfQuestion;
 

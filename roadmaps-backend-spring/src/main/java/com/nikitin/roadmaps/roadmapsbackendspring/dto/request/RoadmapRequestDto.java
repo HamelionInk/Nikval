@@ -4,7 +4,6 @@ import com.nikitin.roadmaps.roadmapsbackendspring.validation.Create;
 import com.nikitin.roadmaps.roadmapsbackendspring.validation.Patch;
 import com.nikitin.roadmaps.roadmapsbackendspring.validation.annotation.NotBlank;
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
@@ -12,8 +11,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.util.List;
 
 @Getter
 @Setter
@@ -32,4 +29,12 @@ public class RoadmapRequestDto {
     @NotNull(message = "Поле <profileId> не может быть null", groups = Create.class)
     @Positive(message = "Идентификатор не может быть отрицательным значением", groups = { Create.class, Patch.class })
     private Long profileId;
+
+    @Schema(description = "Флаг показывающий создание пользовательской карты развития", example = "true")
+    @NotNull(message = "Поле <custom> не может быть null", groups = Create.class)
+    private Boolean custom;
+
+    @Schema(description = "Флаг показывающий избранность карты развития", example = "false")
+    @NotNull(message = "Поле <favorite> не может быть null")
+    private Boolean favorite;
 }

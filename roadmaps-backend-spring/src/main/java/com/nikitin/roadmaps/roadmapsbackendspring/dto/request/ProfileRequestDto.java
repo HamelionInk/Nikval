@@ -1,13 +1,13 @@
 package com.nikitin.roadmaps.roadmapsbackendspring.dto.request;
 
-import com.nikitin.roadmaps.roadmapsbackendspring.dto.enums.CompetenceType;
+import com.nikitin.roadmaps.roadmapsbackendspring.utils.enums.CompetenceType;
 import com.nikitin.roadmaps.roadmapsbackendspring.validation.Create;
 import com.nikitin.roadmaps.roadmapsbackendspring.validation.Patch;
 import com.nikitin.roadmaps.roadmapsbackendspring.validation.annotation.NotBlank;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PastOrPresent;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -52,4 +52,12 @@ public class ProfileRequestDto {
     @Schema(description = "Дата последнего входа в аккаунт пользователя", example = "2023-08-28T09:18:55.766Z")
     @NotNull(message = "Поле <lastDateLogin> не может быть null", groups = Create.class)
     private Instant lastDateLogin;
+
+    @Schema(description = "Дата рождения пользователя", example = "1996-08-28T09:18:55.766Z")
+    @PastOrPresent(message = "Поле <birthDate> не может быть больше настоящего времени")
+    private Instant birthDate;
+
+    @Schema(description = "Место проживания пользователя", example = "г.Пенза, Московская 21, кв 5")
+    @NotBlank(message = "Поле <residentialAddress> должно содержать значение", allowNull = true, groups = {Create.class, Patch.class})
+    private String residentialAddress;
 }

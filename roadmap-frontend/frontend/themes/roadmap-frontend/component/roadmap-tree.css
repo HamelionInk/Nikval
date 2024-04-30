@@ -1,0 +1,195 @@
+.roadmap-tree-split-layout {
+    width: 100%;
+    height: 100%;
+}
+
+.roadmap-tree-layout {
+    display: block;
+    border-style: groove;
+    border-width: 1px;
+    height: 100%;
+}
+
+.possible-drop-zone {
+    background-color: rgba(225,225,225,0.16);
+}
+
+.roadmap-tree-item {
+}
+
+.v-drag-over-target {
+    border-bottom-style: double;
+}
+
+.roadmap-tree-item-top-drop {
+}
+
+.roadmap-tree-item-bot-drop {
+}
+
+.roadmap-tree-main-layout {
+    display: flex;
+    padding-left: 15px;
+    height: 100%;
+    align-items: center;
+}
+
+.roadmap-tree-main-layout:hover {
+    background-color: rgba(54,54,54,0.16);
+}
+
+.roadmap-tree-dropdown-layout {
+    padding-left: 40px;
+    align-items: center;
+}
+
+.roadmap-tree-dropdown-button {
+    background-color: unset;
+}
+
+.roadmap-tree-dropdown-button > vaadin-icon {
+    width: 13px;
+    height: 13px;
+}
+
+.roadmap-tree-dropdown-button-open {
+    rotate: z 90deg;
+}
+
+.roadmap-tree-action-button-open > vaadin-icon {
+    animation-name: rotation-open;
+    animation-duration: 250ms;
+    animation-fill-mode: both;
+}
+
+.roadmap-tree-action-button-close > vaadin-icon {
+    animation-name: rotation-close;
+    animation-duration: 250ms;
+    animation-fill-mode: both;
+}
+
+.roadmap-tree-meta-layout {
+    padding-left: 10px;
+    animation-name: opacity;
+    animation-duration: 500ms;
+    animation-fill-mode: both;
+}
+
+.roadmap-tree-item-name-component {
+    width: 100%;
+    height: 100%;
+}
+
+.chapter-item-workspace {
+    height: 100%;
+    width: 100%;
+}
+
+.roadmap-tree-dialog::part(content) {
+    justify-content: center;
+    align-items: center;
+    width: 500px;
+}
+
+.roadmap-tree-column-explored-status-explored {
+    padding: 4px;
+    border-radius: 8px;
+    background-color: rgba(71, 255, 8, 0.12);
+}
+
+.roadmap-tree-combo-box-change-explored::part(input-field) {
+    background-color: rgba(71, 255, 8, 0.12);
+}
+
+.roadmap-tree-combo-box-change-in-progress-explored::part(input-field) {
+    background-color: rgba(255, 222, 8, 0.12);
+}
+
+.roadmap-tree-combo-box-change-no-explored::part(input-field) {
+    background-color: rgba(255, 8, 8, 0.12);
+}
+
+.roadmap-tree-column-explored-status-in-progress-explored {
+    padding: 4px;
+    border-radius: 8px;
+    background-color: rgba(255, 222, 8, 0.12);
+}
+
+.roadmap-tree-column-explored-status-no-explored {
+    padding: 4px;
+    border-radius: 8px;
+    background-color: rgba(255, 8, 8, 0.12);
+}
+
+.roadmap-tree-dialog-question::part(content) {
+    width: 700px;
+}
+
+.roadmap-tree-dialog::part(footer) {
+    justify-content: space-between;
+}
+
+.roadmap-tree-dialog > [slot="title"] {
+    color: white;
+}
+
+.roadmap-tree-item-selected {
+    background-color: rgba(54,54,54,0.45);
+}
+
+.roadmap-tree-question-workspace {
+    display: block;
+}
+
+.roadmap-tree-explored-field {
+    margin-left: 2%;
+}
+
+.roadmap-tree-question-field {
+    width: 97%;
+    margin-left: 2%;
+}
+
+.roadmap-tree-answer-field {
+    width: 97%;
+    margin-left: 2%;
+}
+
+.roadmap-tree-checkbox-layout {
+    margin-top: 2%;
+}
+
+.roadmap-tree-button-layout {
+    margin-left: auto;
+}
+
+.roadmap-tree-question-name {
+    margin-top: -4%;
+}
+
+@keyframes rotation-open {
+    0% {
+        transform: rotateZ(0deg);
+    }
+    100% {
+        transform:rotateZ(90deg);
+    }
+}
+
+@keyframes rotation-close {
+    0% {
+        transform:rotateZ(90deg);
+    }
+    100% {
+        transform:rotateZ(0deg);
+    }
+}
+
+@keyframes opacity {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 100%;
+    }
+}

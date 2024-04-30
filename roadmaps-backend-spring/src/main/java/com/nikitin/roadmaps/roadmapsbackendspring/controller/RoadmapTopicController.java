@@ -1,5 +1,6 @@
 package com.nikitin.roadmaps.roadmapsbackendspring.controller;
 
+import com.nikitin.roadmaps.roadmapsbackendspring.dto.filter.RoadmapTopicFilter;
 import com.nikitin.roadmaps.roadmapsbackendspring.dto.request.RoadmapTopicRequestDto;
 import com.nikitin.roadmaps.roadmapsbackendspring.dto.response.RoadmapTopicResponseDto;
 import com.nikitin.roadmaps.roadmapsbackendspring.service.RoadmapTopicService;
@@ -19,6 +20,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -59,18 +61,11 @@ public class RoadmapTopicController {
 
     @PageableAsQueryParam
     @GetMapping
-    public ResponseEntity<Page<RoadmapTopicResponseDto>> getAll(@ParameterObject @PageableDefault(sort = "id",
-            direction = Sort.Direction.ASC, size = Integer.MAX_VALUE) Pageable pageable) {
-        var responseBody = roadmapTopicService.getAll(pageable);
-
-        return ResponseEntity.status(HttpStatus.ACCEPTED).body(responseBody);
-    }
-
-    @PageableAsQueryParam
-    @GetMapping("/roadmap-chapter/{id}")
-    public ResponseEntity<Page<RoadmapTopicResponseDto>> getAllByChapterId(@PathVariable(name = "id") Long id, @ParameterObject @PageableDefault(sort = "id",
-            direction = Sort.Direction.ASC, size = Integer.MAX_VALUE) Pageable pageable) {
-        var responseBody = roadmapTopicService.getAllByChapterId(id, pageable);
+    public ResponseEntity<Page<RoadmapTopicResponseDto>> getAll(@ModelAttribute RoadmapTopicFilter roadmapTopicFilter,
+                                                                @ParameterObject @PageableDefault(sort = "position",
+                                                                        direction = Sort.Direction.ASC,
+                                                                        size = Integer.MAX_VALUE) Pageable pageable) {
+        var responseBody = roadmapTopicService.getAllResponse(roadmapTopicFilter, pageable);
 
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(responseBody);
     }

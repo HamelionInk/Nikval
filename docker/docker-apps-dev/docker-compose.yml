@@ -1,0 +1,49 @@
+version: '3.9'
+
+services:
+  backend:
+    image: roadmaps/roadmaps-backend-spring:0.0.1-SNAPSHOT
+    container_name: backend-dev
+    restart: unless-stopped
+    ports:
+      - "8083:8083"
+    environment:
+      SPRING_PROFILES_ACTIVE: "dev"
+      BACKEND_PORT: "8083"
+      DB_USERNAME: "develop"
+      DB_PASSWORD: "develop"
+      DB_URL: "jdbc:postgresql://postgres.roadmaps-nikval.ru:5432/develop"
+      KC_ISSUER_URL: "https://sso.roadmaps-nikval.ru/realms/roadmaps"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.backend_dev.entrypoints=websecure"
+      - "traefik.http.routers.backend_dev.rule=Host(`dev-api.roadmaps-nikval.ru`)"
+      - "traefik.http.routers.backend_dev.tls=true"
+      - "traefik.http.routers.backend_dev.tls.certresolver=letsEncrypt"
+      - "traefik.http.routers.backend_dev.service=backend_dev@docker"
+      - "traefik.http.services.backend_dev.loadbalancer.server.port=8083"
+
+  frontend:
+    image: roadmaps/roadmap-frontend:0.0.1-SNAPSHOT
+    container_name: frontend-dev
+    restart: unless-stopped
+    ports:
+      - "8082:8082"
+    environment:
+      SPRING_PROFILES_ACTIVE: "dev"
+      FRONTEND_PORT: "8082"
+      KC_ISSUER_URI: "https://sso.roadmaps-nikval.ru/realms/roadmaps"
+      KC_REFRESH_TOKEN: "https://sso.roadmaps-nikval.ru/realms/roadmaps/protocol/openid-connect/token"
+      KC_CLIENT_SECRET: "yXjhMT5sMyU92N4UBle7tOuHe2UqxDzT"
+      KC_CLIENT_ID: "dev-roadmaps"
+      KC_SCOPE: "profile,openid,email,roles"
+      BACKEND_URL: "https://dev-api.roadmaps-nikval.ru/api/v1/roadmaps"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.frontend_dev.entrypoints=websecure"
+      - "traefik.http.routers.frontend_dev.rule=Host(`dev.roadmaps-nikval.ru`)"
+      - "traefik.http.routers.frontend_dev.tls=true"
+      - "traefik.http.routers.frontend_dev.tls.certresolver=letsEncrypt"
+      - "traefik.http.routers.frontend_dev.service=frontend_dev@docker"
+      - "traefik.http.services.frontend_dev.loadbalancer.server.port=8082"
+

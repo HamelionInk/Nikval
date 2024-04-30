@@ -6,6 +6,7 @@ import com.nikitin.roadmaps.roadmapsbackendspring.entity.RoadmapChapter;
 import com.nikitin.roadmaps.roadmapsbackendspring.entity.RoadmapQuestion;
 import com.nikitin.roadmaps.roadmapsbackendspring.entity.RoadmapTopic;
 import com.nikitin.roadmaps.roadmapsbackendspring.service.RoadmapTopicService;
+import com.nikitin.roadmaps.roadmapsbackendspring.utils.enums.ExploredStatus;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;

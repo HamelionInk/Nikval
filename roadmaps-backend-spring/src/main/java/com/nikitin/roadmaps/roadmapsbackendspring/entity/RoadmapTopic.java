@@ -21,11 +21,7 @@ import org.hibernate.annotations.OnDeleteAction;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity(name = "roadmap_topic")
-public class RoadmapTopic {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class RoadmapTopic extends BaseEntity {
 
     @Column(name = "name", nullable = false, columnDefinition = "varchar(50)")
     private String name;
@@ -35,6 +31,9 @@ public class RoadmapTopic {
 
     @Column(name = "number_explored_question", columnDefinition = "int8")
     private Integer numberExploredQuestion = 0;
+
+    @Column(name = "position", nullable = false, columnDefinition = "int8")
+    private Long position;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @OnDelete(action = OnDeleteAction.CASCADE)

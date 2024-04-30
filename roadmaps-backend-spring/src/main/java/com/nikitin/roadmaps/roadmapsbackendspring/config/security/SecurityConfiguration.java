@@ -2,6 +2,7 @@ package com.nikitin.roadmaps.roadmapsbackendspring.config.security;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -19,35 +20,38 @@ import org.springframework.web.servlet.HandlerExceptionResolver;
 @RequiredArgsConstructor
 public class SecurityConfiguration {
 
-    private final JwtGrantedAuthoritiesConverter jwtAuthenticationConverter;
-    private final HandlerExceptionResolver handlerExceptionResolver;
+	private final JwtGrantedAuthoritiesConverter jwtAuthenticationConverter;
+	private final HandlerExceptionResolver handlerExceptionResolver;
 
-    @Bean
-    public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
-        httpSecurity
-                .csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests(httpRequest ->
-                        httpRequest
-                                .anyRequest().permitAll())
-                .oauth2ResourceServer(oauth2ResourceServer ->
-                        oauth2ResourceServer.jwt(jwt ->
-                                        jwt.decoder(jwtDecoder())
-                                                .jwtAuthenticationConverter(jwtAuthenticationConverter()))
-                                .authenticationEntryPoint(((request, response, authException) ->
-                                        handlerExceptionResolver.resolveException(request, response, null, authException))));
+	@Value("${spring.security.oauth2.resourceserver.jwt.issuer-uri}")
+	private String OIDC_ISSUER_LOCATION;
 
-        return httpSecurity.build();
-    }
+	@Bean
+	public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
+		httpSecurity
+				.csrf(AbstractHttpConfigurer::disable)
+				.authorizeHttpRequests(httpRequest ->
+						httpRequest
+								.anyRequest().permitAll())
+				.oauth2ResourceServer(oauth2ResourceServer ->
+						oauth2ResourceServer.jwt(jwt ->
+										jwt.decoder(jwtDecoder())
+												.jwtAuthenticationConverter(jwtAuthenticationConverter()))
+								.authenticationEntryPoint(((request, response, authException) ->
+										handlerExceptionResolver.resolveException(request, response, null, authException))));
 
-    @Bean
-    public JwtDecoder jwtDecoder() {
-        return JwtDecoders.fromOidcIssuerLocation("https://keycloak.roadmaps-nikval.ru/realms/roadmaps");
-    }
+		return httpSecurity.build();
+	}
 
-    @Bean
-    public JwtAuthenticationConverter jwtAuthenticationConverter() {
-        JwtAuthenticationConverter converter = new JwtAuthenticationConverter();
-        converter.setJwtGrantedAuthoritiesConverter(jwtAuthenticationConverter);
-        return converter;
-    }
+	@Bean
+	public JwtDecoder jwtDecoder() {
+		return JwtDecoders.fromOidcIssuerLocation(OIDC_ISSUER_LOCATION);
+	}
+
+	@Bean
+	public JwtAuthenticationConverter jwtAuthenticationConverter() {
+		JwtAuthenticationConverter converter = new JwtAuthenticationConverter();
+		converter.setJwtGrantedAuthoritiesConverter(jwtAuthenticationConverter);
+		return converter;
+	}
 }

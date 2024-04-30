@@ -1,0 +1,21 @@
+version: '3'
+
+services:
+  postgres:
+    image: postgres
+    container_name: postgres
+    restart: unless-stopped
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_PASSWORD: "develop"
+      POSTGRES_USER: "develop"
+      POSTGRES_DB: "develop"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.postgres.entrypoints=websecure"
+      - "traefik.http.routers.postgres.rule=Host(`postgres.roadmaps-nikval.ru`)"
+      - "traefik.http.routers.postgres.tls=true"
+      - "traefik.http.routers.postgres.tls.certresolver=letsEncrypt"
+      - "traefik.http.routers.postgres.service=postgres@docker"
+      - "traefik.http.services.postgres.loadbalancer.server.port=5432"

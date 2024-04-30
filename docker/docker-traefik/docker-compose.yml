@@ -1,0 +1,47 @@
+version: '3'
+
+services:
+  traefik:
+    image: traefik:2.10
+    container_name: traefik
+    restart: unless-stopped
+    network_mode: "host"
+    security_opt:
+      - no-new-privileges:true
+#    ports:
+#      - 80:80
+#      - 433:443
+    command:
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault"
+      - "--providers.file.directory=/config"
+      - "--providers.file.watch=true"
+      - "--entrypoints.web.address=:80"
+      - "--entrypoints.websecure.address=:443"
+      - "--certificatesresolvers.letsEncrypt.acme.httpchallenge=true"
+      - "--certificatesresolvers.letsEncrypt.acme.httpchallenge.entrypoint=web"
+      - "--certificatesresolvers.letsEncrypt.acme.email=term11term@gmail.com"
+      - "--certificatesresolvers.letsEncrypt.acme.storage=/config/acme.json"
+      - "--api.dashboard=true"
+    labels:
+      - "traefik.http.routers.http-catchall.rule=HostRegexp(`{any:.+}`)"
+      - "traefik.http.routers.http-catchall.entrypoints=web"
+      - "traefik.http.routers.http-catchall.middlewares=https-redirect"
+      - "traefik.http.middlewares.https-redirect.redirectscheme.scheme=https"
+      - "traefik.http.middlewares.https-redirect.redirectscheme.permanent=false"
+      - "traefik.enable=true"
+      - "traefik.http.routers.traefik.entrypoints=websecure"
+      - "traefik.http.routers.traefik.rule=Host(`traefik.roadmaps-nikval.ru`) && (PathPrefix(`/api`) || PathPrefix(`/dashboard`))"
+      - "traefik.http.routers.traefik.tls=true"
+      - "traefik.http.routers.traefik.tls.certresolver=letsEncrypt"
+      - "traefik.http.routers.traefik.service=api@internal"
+      - "traefik.http.middlewares.traefik-auth.basicauth.users=develop:$$apr1$$.VKjCxsv$$GU7.yXW4PGfrjxRb35sxM."
+      - "traefik.http.routers.traefik.middlewares=traefik-auth"
+      - "traefik.http.services.traefik-traefik.loadbalancer.server.port=9999"
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+#     - /home/develop/acme/cert.pem:/config/cert.pem
+#     - /home/develop/acme/certkey.key:/config/certkey.key
+      - /home/develop/acme/acme.json:/config/acme.json
+#     - ./data/certificates.yml:/config/certificates.yml:ro

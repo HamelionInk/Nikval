@@ -1,0 +1,17 @@
+.roadmap-card-layout {
+    min-width: 500px;
+}
+
+.roadmap-card-name {
+    width: 100%;
+}
+
+.favorite-check-box {
+    width: 100%;
+}
+
+.create-card-button {
+    width: 100%;
+    background-color: #383838;
+    color: white;
+}

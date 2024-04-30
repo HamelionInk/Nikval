@@ -1,5 +1,6 @@
 package com.nikitin.roadmaps.roadmapsbackendspring.controller;
 
+import com.nikitin.roadmaps.roadmapsbackendspring.dto.filter.RoadmapFilter;
 import com.nikitin.roadmaps.roadmapsbackendspring.dto.request.RoadmapRequestDto;
 import com.nikitin.roadmaps.roadmapsbackendspring.dto.response.RoadmapResponseDto;
 import com.nikitin.roadmaps.roadmapsbackendspring.service.RoadmapService;
@@ -19,6 +20,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -59,9 +61,11 @@ public class RoadmapController {
 
     @PageableAsQueryParam
     @GetMapping
-    public ResponseEntity<Page<RoadmapResponseDto>> getAll(@ParameterObject @PageableDefault(sort = "id",
-            direction = Sort.Direction.ASC, size = Integer.MAX_VALUE) Pageable pageable) {
-        var responseBody = roadmapService.getAll(pageable);
+    public ResponseEntity<Page<RoadmapResponseDto>> getAll(@ModelAttribute RoadmapFilter roadmapFilter,
+                                                           @ParameterObject @PageableDefault(sort = "favorite",
+                                                                   direction = Sort.Direction.DESC,
+                                                                   size = Integer.MAX_VALUE) Pageable pageable) {
+        var responseBody = roadmapService.getAll(roadmapFilter, pageable);
 
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(responseBody);
     }

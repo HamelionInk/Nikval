@@ -1,0 +1,67 @@
+name: DEV_CD
+
+on:
+  push:
+    branches:
+      - develop
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: cd into repository
+        uses: actions/checkout@v3
+
+      - name: setting Java and Maven
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: maven
+
+      - name: run test
+        run: mvn test
+
+  deploy:
+    runs-on: self-hosted
+    env:
+      traefik-dir: ./docker/docker-traefik
+      keycloak-dir: ./docker/docker-keycloak
+      dev-apps-dir: ./docker/docker-apps-dev
+      postgres-dir: ./docker/docker-postgres
+    needs: test
+    steps:
+      - uses: actions/checkout@v3
+      - name: update traefik
+        working-directory: ${{env.traefik-dir}}
+        run: sudo docker-compose down && sudo docker-compose up -d
+
+      - name: update keycloak
+        working-directory: ${{env.keycloak-dir}}
+        run: sudo docker-compose stop && sudo docker-compose up -d
+
+      - name: update postgres
+        working-directory: ${{env.postgres-dir}}
+        run: sudo docker-compose stop && sudo docker-compose up -d
+
+      - name: update Maven
+        uses: stCarolas/setup-maven@v4.5
+        with:
+          maven-version: 3.9.4
+
+      - name: setting Java and Maven
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: maven
+
+      - name: package
+        run: mvn clean package -Pproduction
+
+      - name: build image
+        run: mvn dockerfile:build
+
+      - name: update Apps
+        working-directory: ${{env.dev-apps-dir}}
+        run: sudo docker-compose down && docker image prune -a && sudo docker-compose up -d
