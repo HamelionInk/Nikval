@@ -20,11 +20,7 @@ import org.hibernate.annotations.OnDeleteAction;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity(name = "roadmap_chapter")
-public class RoadmapChapter {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class RoadmapChapter extends BaseEntity {
 
     @Column(name = "name", nullable = false, columnDefinition = "varchar(50)")
     private String name;
