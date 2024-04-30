@@ -4,6 +4,7 @@ import com.nikitin.roadmaps.roadmapsbackendspring.dto.filter.RoadmapQuestionFilt
 import com.nikitin.roadmaps.roadmapsbackendspring.entity.RoadmapQuestion;
 import com.nikitin.roadmaps.roadmapsbackendspring.entity.RoadmapQuestion_;
 import com.nikitin.roadmaps.roadmapsbackendspring.entity.RoadmapTopic_;
+import com.nikitin.roadmaps.roadmapsbackendspring.utils.enums.ExploredStatus;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.util.CollectionUtils;
 
@@ -37,8 +38,8 @@ public class RoadmapQuestionSpecification {
                     .orElse(specification);
         }
 
-        if (Objects.nonNull(filter.getIsExplored())) {
-            specification = Optional.of(specification.and(equalsIsExplored(filter.getIsExplored())))
+        if (Objects.nonNull(filter.getExploredStatuses())) {
+            specification = Optional.of(specification.and(inExploredStatus(filter.getExploredStatuses())))
                     .orElse(specification);
         }
 
@@ -49,28 +50,39 @@ public class RoadmapQuestionSpecification {
         return (root, query, criteriaBuilder) ->
                 root.get(RoadmapQuestion_.id).in(ids.stream()
                         .filter(Objects::nonNull)
-                        .collect(Collectors.toList()));
+                        .collect(Collectors.toList())
+                );
     }
 
     private static Specification<RoadmapQuestion> inRoadmapTopicIds(List<Long> roadmapTopicIds) {
         return (root, query, criteriaBuilder) ->
                 root.get(RoadmapQuestion_.roadmapTopic).get(RoadmapTopic_.id).in(roadmapTopicIds.stream()
                         .filter(Objects::nonNull)
-                        .collect(Collectors.toList()));
+                        .collect(Collectors.toList())
+                );
+    }
+
+    private static Specification<RoadmapQuestion> inExploredStatus(List<ExploredStatus> exploredStatuses) {
+        return (root, query, criteriaBuilder) ->
+                root.get(RoadmapQuestion_.EXPLORED_STATUS).in(exploredStatuses.stream()
+                        .filter(Objects::nonNull)
+                        .collect(Collectors.toList())
+                );
     }
 
     private static Specification<RoadmapQuestion> likeQuestion(String startWithQuestion) {
         return (root, query, criteriaBuilder) ->
-                criteriaBuilder.like(criteriaBuilder.upper(root.get(RoadmapQuestion_.question)), "%" + startWithQuestion.toUpperCase() + "%");
+                criteriaBuilder.like(
+                        criteriaBuilder.upper(root.get(RoadmapQuestion_.question)),
+                        "%" + startWithQuestion.toUpperCase() + "%"
+                );
     }
 
     private static Specification<RoadmapQuestion> likeAnswer(String startWithAnswer) {
         return (root, query, criteriaBuilder) ->
-                criteriaBuilder.like(criteriaBuilder.upper(root.get(RoadmapQuestion_.answer)), "%" + startWithAnswer.toUpperCase() + "%");
-    }
-
-    private static Specification<RoadmapQuestion> equalsIsExplored(Boolean isExplored) {
-        return (root, query, criteriaBuilder) ->
-                criteriaBuilder.equal(root.get(RoadmapQuestion_.isExplored), isExplored);
+                criteriaBuilder.like(criteriaBuilder.upper(
+                        root.get(RoadmapQuestion_.answer)),
+                        "%" + startWithAnswer.toUpperCase() + "%"
+                );
     }
 }

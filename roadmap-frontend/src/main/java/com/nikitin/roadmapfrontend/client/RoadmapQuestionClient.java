@@ -46,7 +46,7 @@ public class RoadmapQuestionClient {
 		uriParams.put("ids", roadmapFilter.getIds());
 		uriParams.put("startWithQuestion", roadmapFilter.getStartWithQuestion());
 		uriParams.put("startWithAnswer", roadmapFilter.getStartWithAnswer());
-		uriParams.put("isExplored", roadmapFilter.getIsExplored());
+		uriParams.put("exploredStatuses", roadmapFilter.getExploredStatuses());
 
 		return restTemplateService.request(
 				"/roadmap-questions",

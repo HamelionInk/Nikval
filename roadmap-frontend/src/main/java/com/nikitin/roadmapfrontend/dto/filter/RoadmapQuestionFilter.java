@@ -1,5 +1,6 @@
 package com.nikitin.roadmapfrontend.dto.filter;
 
+import com.nikitin.roadmapfrontend.utils.enums.ExploredStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -19,5 +20,5 @@ public class RoadmapQuestionFilter {
     private List<Long> roadmapTopicIds;
     private String startWithQuestion;
     private String startWithAnswer;
-    private Boolean isExplored;
+    private List<ExploredStatus> exploredStatuses;
 }

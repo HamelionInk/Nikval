@@ -1,10 +1,10 @@
 package com.nikitin.roadmaps.roadmapsbackendspring.dto.request;
 
+import com.nikitin.roadmaps.roadmapsbackendspring.utils.enums.ExploredStatus;
 import com.nikitin.roadmaps.roadmapsbackendspring.validation.Create;
 import com.nikitin.roadmaps.roadmapsbackendspring.validation.Patch;
 import com.nikitin.roadmaps.roadmapsbackendspring.validation.annotation.NotBlank;
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
@@ -31,9 +31,9 @@ public class RoadmapQuestionRequestDto {
     @NotBlank(message = "Поле <answer> должно иметь значение", allowNull = true, groups = { Create.class, Patch.class })
     private String answer;
 
-    @Schema(description = "Состояние, показывающее изучен вопрос или нет", example = "false")
+    @Schema(description = "Статус изучения вопроса", example = "IN_PROGRESS_EXPLORED")
     @NotNull(message = "Поле <isExplored> не может быть null", groups = Create.class)
-    private Boolean isExplored;
+    private ExploredStatus exploredStatus;
 
     @Schema(description = "Позиция вопроса", example = "4")
     private Long position;

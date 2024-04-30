@@ -79,7 +79,7 @@ public class RoadmapTopicServiceImplement implements RoadmapTopicService, Positi
 
     @Transactional(readOnly = true)
     @Override
-    public Page<RoadmapTopicResponseDto> getAll(@NonNull RoadmapTopicFilter roadmapTopicFilter, @NonNull Pageable pageable) {
+    public Page<RoadmapTopicResponseDto> getAllResponse(@NonNull RoadmapTopicFilter roadmapTopicFilter, @NonNull Pageable pageable) {
         return roadmapTopicRepository.findAll(RoadmapTopicSpecification.filterBy(roadmapTopicFilter), pageable)
                 .map(roadmapTopicMapper::toResponseDto);
     }
@@ -90,35 +90,12 @@ public class RoadmapTopicServiceImplement implements RoadmapTopicService, Positi
         return roadmapTopicRepository.findAll(RoadmapTopicSpecification.filterBy(roadmapTopicFilter), sort);
     }
 
-    @Transactional(readOnly = true)
-    @Override
-    public Page<RoadmapTopicResponseDto> getAllByChapterId(@NonNull Long id, @NonNull Pageable pageable) {
-        return roadmapTopicRepository.findAllByRoadmapChapterId(id, pageable)
-                .map(roadmapTopicMapper::toResponseDto);
-    }
-
     @Transactional
     @Override
     public void deleteById(@NonNull Long id) {
         var roadmapTopic = getEntityById(id);
 
         roadmapTopicRepository.delete(roadmapTopic);
-    }
-
-    @Override
-    public void updateNumberOfQuestion(@NonNull Long id, @NonNull Integer numberOfQuestions) {
-        var roadmapTopic = getEntityById(id);
-        roadmapTopic.setNumberOfQuestion(numberOfQuestions);
-
-        roadmapTopicRepository.save(roadmapTopic);
-    }
-
-    @Override
-    public void updateNumberExploredQuestion(@NonNull Long id, @NonNull Long numberOfExploredQuestions) {
-        var roadmapTopic = getEntityById(id);
-        roadmapTopic.setNumberExploredQuestion(numberOfExploredQuestions.intValue());
-
-        roadmapTopicRepository.save(roadmapTopic);
     }
 
     @Transactional

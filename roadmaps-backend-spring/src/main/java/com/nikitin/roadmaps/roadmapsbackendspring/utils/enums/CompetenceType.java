@@ -1,4 +1,4 @@
-package com.nikitin.roadmaps.roadmapsbackendspring.dto.enums;
+package com.nikitin.roadmaps.roadmapsbackendspring.utils.enums;
 
 public enum CompetenceType {
 

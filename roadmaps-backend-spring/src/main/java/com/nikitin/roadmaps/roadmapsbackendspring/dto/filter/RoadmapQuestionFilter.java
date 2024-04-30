@@ -1,5 +1,6 @@
 package com.nikitin.roadmaps.roadmapsbackendspring.dto.filter;
 
+import com.nikitin.roadmaps.roadmapsbackendspring.utils.enums.ExploredStatus;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -28,6 +29,6 @@ public class RoadmapQuestionFilter {
     @Schema(description = "Фильтр по названию ответа на вопрос", example = "Для прогрессивной работы с коллекциями")
     private String startWithAnswer;
 
-    @Schema(description = "Фильтр по Состоянию, показывающее изучен вопрос или нет", example = "false")
-    private Boolean isExplored;
+    @Schema(description = "Фильтр по cтатусу изучения вопроса", example = "[\"IN_PROGRESS_EXPLORED\", \"NOT_EXPLORED\"]")
+    private List<ExploredStatus> exploredStatuses;
 }

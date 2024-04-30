@@ -1,7 +1,7 @@
 package com.nikitin.roadmaps.roadmapsbackendspring.entity;
 
 
-import com.nikitin.roadmaps.roadmapsbackendspring.dto.enums.CompetenceType;
+import com.nikitin.roadmaps.roadmapsbackendspring.utils.enums.CompetenceType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;

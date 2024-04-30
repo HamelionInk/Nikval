@@ -1,6 +1,6 @@
 package com.nikitin.roadmaps.roadmapsbackendspring.dto.response;
 
-import com.nikitin.roadmaps.roadmapsbackendspring.dto.enums.CompetenceType;
+import com.nikitin.roadmaps.roadmapsbackendspring.utils.enums.CompetenceType;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

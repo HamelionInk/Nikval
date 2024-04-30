@@ -1,0 +1,147 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.3.xsd"
+                   logicalFilePath="db/changelog/000001_init_db.xml">
+
+    <changeSet id="init_db" author="msnikitin">
+        <createTable tableName="profile">
+            <column name="id" type="int8">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+
+            <column name="picture" type="text"/>
+
+            <column name="name" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="last_name" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="email" type="varchar(50)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+
+            <column name="competence" type="varchar(50)"/>
+
+            <column name="speciality" type="varchar(50)"/>
+
+            <column name="last_date_login" type="timestamptz"/>
+
+            <column name="birht_date" type="timestamptz"/>
+
+            <column name="residential_address" type="varchar(100)"/>
+        </createTable>
+        
+        <createTable tableName="news_card">
+            <column name="id" type="int8">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+
+            <column name="title" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="image" type="text"/>
+
+            <column name="description" type="text">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="created_at" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        
+        <createTable tableName="roadmap">
+            <column name="id" type="int8">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+
+            <column name="name" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="profile_id" type="int8">
+                <constraints nullable="false" foreignKeyName="fk_roadmap_profile_id" references="profile(id)"/>
+            </column>
+
+            <column name="custom" type="boolean">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="favorite" type="boolean">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        
+        <createTable tableName="roadmap_chapter">
+            <column name="id" type="int8">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+
+            <column name="name" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="position" type="int8">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="roadmap_id" type="int8">
+                <constraints nullable="false" foreignKeyName="fk_roadmap_chapter_id" references="roadmap(id)"/>
+            </column>
+        </createTable>
+        
+        <createTable tableName="roadmap_topic">
+            <column name="id" type="int8">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+
+            <column name="name" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="number_of_question" type="int4"/>
+
+            <column name="number_explored_question" type="int4"/>
+
+            <column name="position" type="int8">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="roadmap_chapter_id" type="int8">
+                <constraints nullable="false" foreignKeyName="fk_roadmap_topic_roadmap_chapter_id" references="roadmap_chapter(id)"/>
+            </column>
+        </createTable>
+        
+        <createTable tableName="roadmap_question">
+            <column name="id" type="int8">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+
+            <column name="question" type="text">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="answer" type="text">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="explored_status" type="varchar(25)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="position" type="int8">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="roadmap_topic_id" type="int8">
+                <constraints nullable="false" foreignKeyName="fk_roadmap_question_roadmap_topic_id" references="roadmap_topic(id)"/>
+            </column>
+        </createTable>
+    </changeSet>
+    
+</databaseChangeLog>
