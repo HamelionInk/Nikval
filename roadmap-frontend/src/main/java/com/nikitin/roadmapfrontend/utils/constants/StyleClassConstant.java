@@ -28,6 +28,8 @@ public class StyleClassConstant {
 	public static final String DIALOG_BLUE_BUTTON = "background-3530af";
 	public static final String DIALOG_RED_BUTTON = "background-af180f";
 	public static final String DIALOG_DELETE_MESSAGE = "dialog_delete_message";
+	public static final String ROADMAP_FAVORITE_COMPONENT = "roadmap-favorite-component";
+
 
 	//GENERAL
 

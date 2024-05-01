@@ -4,6 +4,7 @@ import com.nikitin.roadmapfrontend.component.CustomComponent;
 import com.nikitin.roadmapfrontend.component.tree.RoadmapTree;
 import com.nikitin.roadmapfrontend.component.tree.dialog.chapter.CreateChapterDialog;
 import com.nikitin.roadmapfrontend.component.tree.dialog.question.DeleteQuestionDialog;
+import com.nikitin.roadmapfrontend.component.tree.dialog.question.EditQuestionDialog;
 import com.nikitin.roadmapfrontend.component.tree.item.ThirdNavigationItem;
 import com.nikitin.roadmapfrontend.component.tree.utils.ContextMenuItemName;
 import com.vaadin.flow.component.Component;
@@ -29,6 +30,15 @@ public class ThirdNavigationContextMenu extends ContextMenu implements CustomCom
 			);
 
 			createChapterDialog.open();
+		});
+
+		addItem(ContextMenuItemName.EDIT, event -> {
+			var editQuestionDialog = new EditQuestionDialog(
+					roadmapTree,
+					thirdNavigationItem.getRoadmapQuestionResponseDto()
+			);
+
+			editQuestionDialog.open();
 		});
 
 		addItem(ContextMenuItemName.DELETE, event -> {
