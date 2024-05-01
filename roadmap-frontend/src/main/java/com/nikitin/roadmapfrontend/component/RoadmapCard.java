@@ -1,7 +1,7 @@
 package com.nikitin.roadmapfrontend.component;
 
 import com.nikitin.roadmapfrontend.client.RoadmapClient;
-import com.nikitin.roadmapfrontend.dialog.RoadmapCardDialog;
+import com.nikitin.roadmapfrontend.component.dialog.RoadmapCardEditDialog;
 import com.nikitin.roadmapfrontend.dto.request.RoadmapRequestDto;
 import com.nikitin.roadmapfrontend.dto.response.RoadmapResponseDto;
 import com.nikitin.roadmapfrontend.icon.RoadmapIcon;
@@ -81,15 +81,12 @@ public class RoadmapCard<T extends View> extends VerticalLayout {
 		var deleteCardButton = new Button("Удалить");
 
 		editCardButton.addClickListener(event -> {
-			var editRoadmapCardDialog = new RoadmapCardDialog<>(view);
-			editRoadmapCardDialog.setHeaderName("Редактировать");
-			editRoadmapCardDialog.setRoadmapName(roadmapResponseDto.getName());
-			editRoadmapCardDialog.setFavoriteCheckBoxValue(roadmapResponseDto.getFavorite());
-			editRoadmapCardDialog.setActionButtonName("Сохранить");
+			var editRoadmapCardDialog = new RoadmapCardEditDialog(roadmapResponseDto);
+
 			editRoadmapCardDialog.addActionButtonClickListener(action -> {
 				view.getClient(RoadmapClient.class).patch(roadmapResponseDto.getId(), RoadmapRequestDto.builder()
-						.favorite(editRoadmapCardDialog.getFavoriteCheckBoxValue())
-						.name(editRoadmapCardDialog.getRoadmapName())
+						.favorite(editRoadmapCardDialog.getRoadmapFavoriteComponentValue())
+						.name(editRoadmapCardDialog.getRoadmapNameComponentValue())
 						.build());
 
 				view.refreshView();

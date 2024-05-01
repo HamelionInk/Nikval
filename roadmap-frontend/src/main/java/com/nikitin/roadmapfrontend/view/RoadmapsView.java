@@ -3,7 +3,7 @@ package com.nikitin.roadmapfrontend.view;
 import com.nikitin.roadmapfrontend.client.RoadmapClient;
 import com.nikitin.roadmapfrontend.component.RoadmapCard;
 import com.nikitin.roadmapfrontend.component.ViewHeader;
-import com.nikitin.roadmapfrontend.dialog.RoadmapCardDialog;
+import com.nikitin.roadmapfrontend.component.dialog.RoadmapsCardCreateDialog;
 import com.nikitin.roadmapfrontend.utils.enums.RoadmapType;
 import com.nikitin.roadmapfrontend.utils.enums.VaadinSessionAttribute;
 import com.nikitin.roadmapfrontend.dto.filter.RoadmapFilter;
@@ -68,14 +68,13 @@ public class RoadmapsView extends VerticalLayout implements View {
 
 	private void settingComponents() {
 		createButton.addClickListener(event -> {
-			var roadmapCardDialog = new RoadmapCardDialog<>(this);
-			roadmapCardDialog.setHeaderName("Создать карту");
-			roadmapCardDialog.setActionButtonName("Создать");
+			var roadmapCardDialog = new RoadmapsCardCreateDialog();
+
 			roadmapCardDialog.addActionButtonClickListener(action -> {
 				getClient(RoadmapClient.class).create(RoadmapRequestDto.builder()
 						.custom(true)
-						.favorite(roadmapCardDialog.getFavoriteCheckBoxValue())
-						.name(roadmapCardDialog.getRoadmapName())
+						.favorite(roadmapCardDialog.getRoadmapFavoriteComponentValue())
+						.name(roadmapCardDialog.getRoadmapNameComponentValue())
 						.profileId((Long) SessionHelper.getSessionAttribute(VaadinSessionAttribute.PROFILE_ID))
 						.build());
 
