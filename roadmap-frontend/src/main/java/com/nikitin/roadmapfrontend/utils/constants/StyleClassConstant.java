@@ -30,6 +30,7 @@ public class StyleClassConstant {
 	public static final String DIALOG_DELETE_MESSAGE = "dialog_delete_message";
 	public static final String ROADMAP_FAVORITE_COMPONENT = "roadmap-favorite-component";
 
+
 	//GENERAL
 
 	public static final String FULL_WIDTH = "full-width";

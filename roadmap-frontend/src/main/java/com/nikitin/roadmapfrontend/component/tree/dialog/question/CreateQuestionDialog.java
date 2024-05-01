@@ -53,6 +53,7 @@ public class CreateQuestionDialog extends AbstractRoadmapTreeDialog {
 		actionButton.addClassName(StyleClassConstant.DIALOG_BLUE_BUTTON);
 
 		componentLayout.add(questionNameComponent, answerNameComponent);
+
 		add(componentLayout);
 	}
 }
