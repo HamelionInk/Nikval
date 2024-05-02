@@ -11,6 +11,8 @@ import com.vaadin.flow.component.dnd.DropTarget;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.Objects;
+
 @Getter
 @Setter
 public class ThirdNavigationItem
@@ -106,6 +108,16 @@ public class ThirdNavigationItem
 
 	@Override
 	void updateWorkspaceIfOpened() {
+		getRoadmapTree().getOpenedWorkspace(ThirdNavigationWorkspace.class)
+				.ifPresent(component -> {
+					var thirdNavigationWorkspace = (ThirdNavigationWorkspace) component;
 
+					if (Objects.equals(
+							thirdNavigationWorkspace.getWorkspaceId(),
+							roadmapQuestionResponseDto.getId()
+					)) {
+						openWorkspace();
+					}
+				});
 	}
 }

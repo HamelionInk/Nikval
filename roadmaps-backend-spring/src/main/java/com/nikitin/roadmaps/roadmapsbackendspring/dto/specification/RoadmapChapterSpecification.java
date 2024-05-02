@@ -45,9 +45,10 @@ public class RoadmapChapterSpecification {
 
 	private static Specification<RoadmapChapter> inRoadmapIds(List<Long> roadmapIds) {
 		return (root, query, criteriaBuilder) ->
-				root.get(RoadmapChapter_.ROADMAP).get(Roadmap_.ID).in(roadmapIds.stream()
+				root.get(RoadmapChapter_.roadmap).get(Roadmap_.id).in(roadmapIds.stream()
 						.filter(Objects::nonNull)
-						.collect(Collectors.toList()));
+						.collect(Collectors.toList())
+				);
 	}
 
 	private static Specification<RoadmapChapter> likeName(String startWithName) {
