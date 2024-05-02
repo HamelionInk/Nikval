@@ -17,7 +17,7 @@ public class RoadmapTopicSpecification {
         Specification<RoadmapTopic> specification = (root, query, criteriaBuilder) -> null;
 
         if (Objects.nonNull(filter.getRoadmapChapterIds())) {
-            specification = Optional.of(specification.and(inIds(filter.getRoadmapChapterIds())))
+            specification = Optional.of(specification.and(inRoadmapChapterIds(filter.getRoadmapChapterIds())))
                     .orElse(specification);
         }
 
@@ -29,15 +29,19 @@ public class RoadmapTopicSpecification {
         return specification;
     }
 
-    private static Specification<RoadmapTopic> inIds(List<Long> ids) {
+    private static Specification<RoadmapTopic> inRoadmapChapterIds(List<Long> roadmapChapterIds) {
         return (root, query, criteriaBuilder) ->
-                root.get(RoadmapTopic_.roadmapChapter).get(RoadmapChapter_.id).in(ids.stream()
+                root.get(RoadmapTopic_.roadmapChapter).get(RoadmapChapter_.id).in(roadmapChapterIds.stream()
                         .filter(Objects::nonNull)
-                        .collect(Collectors.toList()));
+                        .collect(Collectors.toList())
+                );
     }
 
     private static Specification<RoadmapTopic> likeName(String startWithName) {
         return (root, query, criteriaBuilder) ->
-                criteriaBuilder.like(criteriaBuilder.upper(root.get(RoadmapTopic_.name)), "%" + startWithName.toUpperCase() + "%");
+                criteriaBuilder.like(
+                        criteriaBuilder.upper(root.get(RoadmapTopic_.name)),
+                        "%" + startWithName.toUpperCase() + "%"
+                );
     }
 }

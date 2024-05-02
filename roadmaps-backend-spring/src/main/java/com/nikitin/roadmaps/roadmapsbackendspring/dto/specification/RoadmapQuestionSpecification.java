@@ -23,7 +23,7 @@ public class RoadmapQuestionSpecification {
                     .orElse(specification);
         }
 
-        if (!CollectionUtils.isEmpty(filter.getRoadmapTopicIds())) {
+        if (Objects.nonNull(filter.getRoadmapTopicIds())) {
             specification = Optional.of(specification.and(inRoadmapTopicIds(filter.getRoadmapTopicIds())))
                     .orElse(specification);
         }
