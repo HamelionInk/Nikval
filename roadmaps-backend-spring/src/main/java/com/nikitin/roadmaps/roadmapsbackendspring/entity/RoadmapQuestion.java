@@ -29,7 +29,7 @@ public class RoadmapQuestion extends BaseEntity {
     @Column(name = "question", nullable = false, columnDefinition = "text")
     private String question;
 
-    @Column(name = "answer", nullable = false, columnDefinition = "text")
+    @Column(name = "answer", columnDefinition = "text")
     private String answer;
 
     @Column(name = "explored_status", nullable = false, columnDefinition = "varchar(25)")
