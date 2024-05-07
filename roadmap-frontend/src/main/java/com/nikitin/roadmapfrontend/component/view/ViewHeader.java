@@ -1,4 +1,4 @@
-package com.nikitin.roadmapfrontend.component;
+package com.nikitin.roadmapfrontend.component.view;
 
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.button.Button;

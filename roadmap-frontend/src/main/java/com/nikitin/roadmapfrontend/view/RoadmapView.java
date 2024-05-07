@@ -4,7 +4,7 @@ import com.nikitin.roadmapfrontend.client.RoadmapChapterClient;
 import com.nikitin.roadmapfrontend.client.RoadmapClient;
 import com.nikitin.roadmapfrontend.client.RoadmapQuestionClient;
 import com.nikitin.roadmapfrontend.client.RoadmapTopicClient;
-import com.nikitin.roadmapfrontend.component.ViewHeader;
+import com.nikitin.roadmapfrontend.component.view.ViewHeader;
 import com.nikitin.roadmapfrontend.component.tree.RoadmapTree;
 import com.nikitin.roadmapfrontend.dto.response.RoadmapResponseDto;
 import com.nikitin.roadmapfrontend.utils.enums.VaadinSessionAttribute;

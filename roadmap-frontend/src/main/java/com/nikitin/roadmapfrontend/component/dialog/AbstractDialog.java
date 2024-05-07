@@ -22,8 +22,9 @@ public class AbstractDialog extends Dialog implements CustomComponent {
 		actionButton = new Button(DialogNameConstant.ACTION_BUTTON);
 		actionButton.addClassName(StyleClassConstant.DIALOG_CUSTOM_BUTTON);
 
-		getFooter().add(actionButton, closeButton);
 		addClassName(StyleClassConstant.DIALOG_LAYOUT);
+
+		getFooter().add(actionButton, closeButton);
 	}
 
 	public void addActionButtonClickListener(ComponentEventListener<ClickEvent<Button>> listener) {

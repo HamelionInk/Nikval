@@ -92,19 +92,6 @@ public class ThirdNavigationWorkspace extends VerticalLayout implements CustomCo
 			thirdNavigationItem.setRoadmapQuestionResponseDto(response);
 		});
 
-		classicEditor.getElement().addEventListener(
-				"focusin",
-				event -> classicEditor.setReadOnlyWithToolbarAction(false)
-		);
-
-		classicEditor.getElement().addEventListener(
-				"focusout",
-				event -> {
-					classicEditor.setReadOnlyWithToolbarAction(true);
-					classicEditor.setReadOnly(false);
-				}
-		);
-
 		buttonLayout.add(hideAnswer, changeExplored);
 		add(buttonLayout, questionName, classicEditor);
 	}
