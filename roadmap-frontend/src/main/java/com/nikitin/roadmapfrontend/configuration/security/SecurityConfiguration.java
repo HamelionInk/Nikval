@@ -25,9 +25,9 @@ public class SecurityConfiguration extends VaadinWebSecurity {
                         authorizeHttpRequests
                                 .requestMatchers(AntPathRequestMatcher.antMatcher("/images/*.png")).permitAll())
                 .oauth2Login(oauth2 ->
-                        oauth2.defaultSuccessUrl("/home")
-                                .userInfoEndpoint(userInfoEndpoint ->
-                                        userInfoEndpoint.userAuthoritiesMapper(keycloakAuthoritiesMapper))
+                        oauth2.userInfoEndpoint(userInfoEndpoint ->
+                                        userInfoEndpoint.userAuthoritiesMapper(keycloakAuthoritiesMapper)
+                                )
                                 .successHandler(successAuthHandler))
                 .logout(logout ->
                         logout.logoutSuccessUrl("/")
