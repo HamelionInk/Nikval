@@ -1,8 +1,9 @@
-package com.nikitin.roadmapfrontend.component;
+package com.nikitin.roadmapfrontend.component.card;
 
 import com.nikitin.roadmapfrontend.client.NewsCardClient;
+import com.nikitin.roadmapfrontend.component.DropDownMenu;
+import com.nikitin.roadmapfrontend.component.dialog.newscard.NewsCardEditDialog;
 import com.nikitin.roadmapfrontend.configuration.security.SecurityService;
-import com.nikitin.roadmapfrontend.dialog.NewsCardDialog;
 import com.nikitin.roadmapfrontend.dto.request.NewsCardRequestDto;
 import com.nikitin.roadmapfrontend.dto.response.NewsCardResponseDto;
 import com.nikitin.roadmapfrontend.icon.RoadmapIcon;
@@ -67,14 +68,8 @@ public class NewsCard<T extends View> extends VerticalLayout {
 			var newsCardEditButton = new Button("Редактировать");
 			newsCardEditButton.addClassName("news_card_delete");
 			newsCardEditButton.addClickListener(event -> {
-				var editNewsCardDialog = new NewsCardDialog<>(view);
+				var editNewsCardDialog = new NewsCardEditDialog(newsCardResponseDto);
 
-				editNewsCardDialog.setTitleInputValue(newsCardResponseDto.getTitle());
-				editNewsCardDialog.setDescriptionInputValue(newsCardResponseDto.getDescription());
-				editNewsCardDialog.setNewsCardImageSrc(newsCardResponseDto.getImage());
-				editNewsCardDialog.setDateTime(newsCardResponseDto.getCreatedAt());
-
-				editNewsCardDialog.setHeaderName("Редактировать новость");
 				editNewsCardDialog.setActionButtonName("Сохранить");
 				editNewsCardDialog.addActionButtonClickListener(action -> {
 					view.getClient(NewsCardClient.class).patch(newsCardResponseDto.getId(), NewsCardRequestDto.builder()

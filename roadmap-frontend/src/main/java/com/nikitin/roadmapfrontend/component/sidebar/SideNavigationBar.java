@@ -1,16 +1,12 @@
-package com.nikitin.roadmapfrontend.component;
+package com.nikitin.roadmapfrontend.component.sidebar;
 
-import com.nikitin.roadmapfrontend.client.ProfileClient;
+import com.nikitin.roadmapfrontend.component.sidebar.menu.SideNavigationMenuItem;
 import com.nikitin.roadmapfrontend.dto.response.ProfileResponseDto;
 import com.nikitin.roadmapfrontend.icon.RoadmapIcon;
 import com.vaadin.flow.component.ComponentUtil;
-import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.html.Div;
-import com.vaadin.flow.component.icon.Icon;
-import com.vaadin.flow.component.icon.SvgIcon;
-import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.shared.Tooltip;
 import com.vaadin.flow.router.AfterNavigationEvent;
 import com.vaadin.flow.router.AfterNavigationObserver;
@@ -21,7 +17,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 

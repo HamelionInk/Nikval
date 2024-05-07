@@ -24,6 +24,40 @@ public class TextEditorBuilder {
 		classicCKEditor.setLabel("Ответ");
 		classicCKEditor.getStyle().clear();
 
+		classicCKEditor.getElement().addEventListener(
+				"focusin",
+				event -> classicCKEditor.setReadOnlyWithToolbarAction(false)
+		);
+
+		classicCKEditor.getElement().addEventListener(
+				"focusout",
+				event -> {
+					classicCKEditor.setReadOnlyWithToolbarAction(true);
+					classicCKEditor.setReadOnly(false);
+				}
+		);
+
+		Optional.ofNullable(value)
+				.ifPresent(text ->
+						classicCKEditor.setValue(value)
+				);
+
+		return classicCKEditor;
+	}
+
+	public VaadinCKEditor getNewsCardCKEditor(String value) {
+		var classicCKEditor = new VaadinCKEditorBuilder()
+				.with(builder -> {
+					builder.editorType = Constants.EditorType.CLASSIC;
+					builder.theme = Constants.ThemeType.LIGHT;
+					builder.hideToolbar = true;
+					builder.readOnly = true;
+					builder.height = "100%";
+				})
+				.createVaadinCKEditor();
+
+		classicCKEditor.getStyle().clear();
+
 		Optional.ofNullable(value)
 				.ifPresent(text ->
 						classicCKEditor.setValue(value)

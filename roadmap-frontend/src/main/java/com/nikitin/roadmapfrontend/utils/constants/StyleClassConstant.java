@@ -17,8 +17,6 @@ public class StyleClassConstant {
 	public static final String ROADMAP_TREE_ACTION_BUTTON_OPEN = "roadmap-tree-action-button-open";
 	public static final String ROADMAP_TREE_ITEM_SELECTED = "roadmap-tree-item-selected";
 	public static final String ROADMAP_TREE_BUTTON_LAYOUT = "roadmap-tree-button-layout";
-	public static final String ROADMAP_TREE_BUTTON_CHANGE_EXPLORED = "roadmap-tree-button-change-explored";
-	public static final String ROADMAP_TREE_BUTTON_CHANGE_NO_EXPLORED = "roadmap-tree-button-change-no-explored";
 	public static final String ROADMAP_TREE_QUESTION_NAME = "roadmap-tree-question-name";
 
 	//Dialog
@@ -29,13 +27,12 @@ public class StyleClassConstant {
 	public static final String DIALOG_RED_BUTTON = "background-af180f";
 	public static final String DIALOG_DELETE_MESSAGE = "dialog_delete_message";
 	public static final String ROADMAP_FAVORITE_COMPONENT = "roadmap-favorite-component";
-
+	public static final String NEWS_CARD_LAYOUT = "news-card-layout";
+	public static final String NEWS_CARD_UPLOAD_LAYOUT = "news-card-upload-layout";
 
 	//GENERAL
 
 	public static final String FULL_WIDTH = "full-width";
 	public static final String POSSIBLE_DROP_ZONE = "possible-drop-zone";
-
-	public static final String MARGIN_LEFT_AUTO = "margin-left-auto";
 
 }

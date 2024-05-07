@@ -1,12 +1,9 @@
-package com.nikitin.roadmapfrontend.component;
+package com.nikitin.roadmapfrontend.component.sidebar.menu;
 
 import com.nikitin.roadmapfrontend.icon.RoadmapIcon;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.html.Paragraph;
-import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.SvgIcon;
-import com.vaadin.flow.component.icon.VaadinIcon;
-import com.vaadin.flow.component.shared.Tooltip;
 import com.vaadin.flow.router.RouterLink;
 import lombok.Getter;
 import lombok.Setter;

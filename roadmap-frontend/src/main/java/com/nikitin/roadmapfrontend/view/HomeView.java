@@ -1,10 +1,10 @@
 package com.nikitin.roadmapfrontend.view;
 
 import com.nikitin.roadmapfrontend.client.NewsCardClient;
-import com.nikitin.roadmapfrontend.component.NewsCard;
-import com.nikitin.roadmapfrontend.component.ViewHeader;
+import com.nikitin.roadmapfrontend.component.card.NewsCard;
+import com.nikitin.roadmapfrontend.component.view.ViewHeader;
 import com.nikitin.roadmapfrontend.configuration.security.SecurityService;
-import com.nikitin.roadmapfrontend.dialog.NewsCardDialog;
+import com.nikitin.roadmapfrontend.component.dialog.newscard.NewsCardCreateDialog;
 import com.nikitin.roadmapfrontend.dto.request.NewsCardRequestDto;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.Div;
@@ -36,9 +36,7 @@ public class HomeView extends VerticalLayout implements View {
         if (SecurityService.getAuthorities().contains("ROLE_ADMIN")) {
             var createNewsCardButton = new Button("Добавить новость");
             createNewsCardButton.addClickListener(event -> {
-                var createNewsCardDialog = new NewsCardDialog<>(this);
-                createNewsCardDialog.setHeaderName("Создать новость");
-                createNewsCardDialog.setActionButtonName("Создать");
+                var createNewsCardDialog = new NewsCardCreateDialog();
                 createNewsCardDialog.addActionButtonClickListener(action -> {
                     newsCardClient.create(NewsCardRequestDto.builder()
                             .title(createNewsCardDialog.getTitleInputValue())

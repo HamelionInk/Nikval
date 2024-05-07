@@ -1,7 +1,8 @@
-package com.nikitin.roadmapfrontend.component;
+package com.nikitin.roadmapfrontend.component.card;
 
 import com.nikitin.roadmapfrontend.client.RoadmapClient;
-import com.nikitin.roadmapfrontend.component.dialog.RoadmapCardEditDialog;
+import com.nikitin.roadmapfrontend.component.DropDownMenu;
+import com.nikitin.roadmapfrontend.component.dialog.roadmapcard.RoadmapCardEditDialog;
 import com.nikitin.roadmapfrontend.dto.request.RoadmapRequestDto;
 import com.nikitin.roadmapfrontend.dto.response.RoadmapResponseDto;
 import com.nikitin.roadmapfrontend.icon.RoadmapIcon;
