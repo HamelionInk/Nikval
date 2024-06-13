@@ -4,7 +4,7 @@ import com.nikitin.roadmapfrontend.client.RoadmapChapterClient;
 import com.nikitin.roadmapfrontend.client.RoadmapClient;
 import com.nikitin.roadmapfrontend.client.RoadmapQuestionClient;
 import com.nikitin.roadmapfrontend.client.RoadmapTopicClient;
-import com.nikitin.roadmapfrontend.component.ViewHeader;
+import com.nikitin.roadmapfrontend.component.view.ViewHeader;
 import com.nikitin.roadmapfrontend.component.tree.RoadmapTree;
 import com.nikitin.roadmapfrontend.dto.response.RoadmapResponseDto;
 import com.nikitin.roadmapfrontend.utils.enums.VaadinSessionAttribute;
@@ -32,7 +32,7 @@ public class RoadmapView extends VerticalLayout implements HasUrlParameter<Long>
 	private final RoadmapTopicClient roadmapTopicClient;
 	private final RoadmapQuestionClient roadmapQuestionClient;
 
-	private Button returnButton;
+	private final Button returnButton = new Button("Назад");
 
 	public RoadmapView(@Autowired RoadmapClient roadmapClient, @Autowired RoadmapChapterClient roadmapChapterClient,
 					   @Autowired RoadmapTopicClient roadmapTopicClient, @Autowired RoadmapQuestionClient roadmapQuestionClient) {
@@ -47,7 +47,6 @@ public class RoadmapView extends VerticalLayout implements HasUrlParameter<Long>
 	private ViewHeader buildViewHeader() {
 		var viewHeader = new ViewHeader(roadmapResponseDto.getName());
 
-		returnButton = new Button("Назад");
 		returnButton.addClickListener(event ->
 				UI.getCurrent().navigate((String) UI.getCurrent().getSession().getAttribute(VaadinSessionAttribute.PREVIOUS_URL.getValue()))
 		);

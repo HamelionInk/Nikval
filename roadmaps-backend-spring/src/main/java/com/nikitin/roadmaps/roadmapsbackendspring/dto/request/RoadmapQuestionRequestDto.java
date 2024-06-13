@@ -27,7 +27,6 @@ public class RoadmapQuestionRequestDto {
     private String question;
 
     @Schema(description = "Ответ на вопрос", example = "Для прогрессивной работы с коллекциями")
-    @NotNull(message = "Поле <answer> не может быть null", groups = Create.class)
     @NotBlank(message = "Поле <answer> должно иметь значение", allowNull = true, groups = { Create.class, Patch.class })
     private String answer;
 

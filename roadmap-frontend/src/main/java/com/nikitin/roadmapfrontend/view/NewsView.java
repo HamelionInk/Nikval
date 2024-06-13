@@ -1,13 +1,13 @@
 package com.nikitin.roadmapfrontend.view;
 
 import com.nikitin.roadmapfrontend.client.NewsCardClient;
-import com.nikitin.roadmapfrontend.component.ViewHeader;
-import com.nikitin.roadmapfrontend.utils.enums.VaadinSessionAttribute;
+import com.nikitin.roadmapfrontend.component.view.ViewHeader;
 import com.nikitin.roadmapfrontend.dto.response.NewsCardResponseDto;
+import com.nikitin.roadmapfrontend.utils.editor.TextEditorBuilder;
+import com.nikitin.roadmapfrontend.utils.enums.VaadinSessionAttribute;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.router.BeforeEvent;
 import com.vaadin.flow.router.HasUrlParameter;
 import com.vaadin.flow.router.PageTitle;
@@ -48,10 +48,8 @@ public class NewsView extends VerticalLayout implements HasUrlParameter<Long>, V
         var descriptionLayout = new VerticalLayout();
         descriptionLayout.addClassName("description-layout");
 
-        var descriptionNews = new TextArea();
-        descriptionNews.setReadOnly(true);
-        descriptionNews.addClassName("description-news");
-        descriptionNews.setValue(newsCardResponseDto.getDescription());
+        var descriptionNews = TextEditorBuilder.getNewsCardCKEditor(newsCardResponseDto.getDescription());
+        descriptionNews.setLabel(null);
 
         descriptionLayout.add(descriptionNews);
 

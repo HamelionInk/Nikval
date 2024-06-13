@@ -1,7 +1,7 @@
 package com.nikitin.roadmapfrontend.view;
 
 import com.nikitin.roadmapfrontend.client.ProfileClient;
-import com.nikitin.roadmapfrontend.component.ViewHeader;
+import com.nikitin.roadmapfrontend.component.view.ViewHeader;
 import com.nikitin.roadmapfrontend.dialog.ProfileAvatarDialog;
 import com.nikitin.roadmapfrontend.utils.enums.CompetenceType;
 import com.nikitin.roadmapfrontend.utils.enums.VaadinSessionAttribute;

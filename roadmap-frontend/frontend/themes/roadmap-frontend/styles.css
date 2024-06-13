@@ -7,9 +7,10 @@
 @import url('component/drop-down-menu.css');
 @import url('component/chapter-card.css');
 @import url('component/roadmap-tree.css');
+@import url('component/roadmaps-card-create-dialog.css');
 @import url('dialog/chapter-card-dialog.css');
 @import url('dialog/main-dialog.css');
-@import url('dialog/news-card-dialog.css');
+@import url('component/dialog/news-card-dialog.css');
 @import url('dialog/profile-avatar-dialog.css');
 @import url('dialog/roadmap-card-dialog.css');
 @import url('view/main-view.css');

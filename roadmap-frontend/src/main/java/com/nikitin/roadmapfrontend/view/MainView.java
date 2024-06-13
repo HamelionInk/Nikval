@@ -1,8 +1,8 @@
 package com.nikitin.roadmapfrontend.view;
 
 import com.nikitin.roadmapfrontend.client.ProfileClient;
-import com.nikitin.roadmapfrontend.component.SideNavigationBar;
-import com.nikitin.roadmapfrontend.component.SideNavigationMenuItem;
+import com.nikitin.roadmapfrontend.component.sidebar.SideNavigationBar;
+import com.nikitin.roadmapfrontend.component.sidebar.menu.SideNavigationMenuItem;
 import com.nikitin.roadmapfrontend.configuration.security.SecurityService;
 import com.nikitin.roadmapfrontend.utils.enums.VaadinSessionAttribute;
 import com.nikitin.roadmapfrontend.icon.RoadmapIcon;

@@ -12,6 +12,7 @@ public class RestTemplateConfiguration {
 
     @Value("${backend.url}")
     private String url;
+
     @Bean("KeycloakRestTemplate")
     public RestTemplate keycloakRestTemplate() {
         var restTemplate = new RestTemplate();

@@ -16,8 +16,6 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextArea;
 import com.wontlost.ckeditor.VaadinCKEditor;
-import org.jsoup.parser.Tag;
-import org.jsoup.select.Evaluator;
 
 public class ThirdNavigationWorkspace extends VerticalLayout implements CustomComponent {
 
@@ -93,19 +91,6 @@ public class ThirdNavigationWorkspace extends VerticalLayout implements CustomCo
 
 			thirdNavigationItem.setRoadmapQuestionResponseDto(response);
 		});
-
-		classicEditor.getElement().addEventListener(
-				"focusin",
-				event -> classicEditor.setReadOnlyWithToolbarAction(false)
-		);
-
-		classicEditor.getElement().addEventListener(
-				"focusout",
-				event -> {
-					classicEditor.setReadOnlyWithToolbarAction(true);
-					classicEditor.setReadOnly(false);
-				}
-		);
 
 		buttonLayout.add(hideAnswer, changeExplored);
 		add(buttonLayout, questionName, classicEditor);

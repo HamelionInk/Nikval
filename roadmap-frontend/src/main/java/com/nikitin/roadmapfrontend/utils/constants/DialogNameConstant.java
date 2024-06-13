@@ -2,11 +2,16 @@ package com.nikitin.roadmapfrontend.utils.constants;
 
 public class DialogNameConstant {
 
+	//custom dialog
+
 	public static final String CLOSE_BUTTON = "Закрыть";
 	public static final String ACTION_BUTTON = "Выполнить";
 	public static final String ACTION_BUTTON_CREATE = "Создать";
 	public static final String ACTION_BUTTON_DELETE = "Удалить";
 	public static final String ACTION_BUTTON_EDIT = "Изменить";
+
+	//roadmap tree dialog
+
 	public static final String CHAPTER_CREATE_HEADER_NAME = "Создать раздел";
 	public static final String CHAPTER_DELETE_HEADER_NAME = "Удалить раздел";
 	public static final String CHAPTER_EDIT_HEADER_NAME = "Редактировать раздел";
@@ -23,4 +28,14 @@ public class DialogNameConstant {
 	public static final String TOPIC_NAME_COMPONENT = "Название темы";
 	public static final String QUESTION_NAME_COMPONENT = "Вопрос";
 	public static final String ANSWER_NAME_COMPONENT = "Ответ";
+
+	//news card dialog
+
+	public static final String NEWS_CARD_CREATE_HEADER_TITLE = "Создать новость";
+	public static final String NEWS_CARD_EDIT_HEADER_TITLE = "Редактировать новость";
+	public static final String NEWS_CARD_CREATE_ACTION_BUTTON_NAME = "Создать";
+	public static final String NEWS_CARD_EDIT_ACTION_BUTTON_NAME = "Сохранить";
+	public static final String TIME_PICKER_NAME = "Время";
+	public static final String DATE_PICKER_NAME = "Дата";
+	public static final String TITLE_NAME = "Заголовок";
 }
