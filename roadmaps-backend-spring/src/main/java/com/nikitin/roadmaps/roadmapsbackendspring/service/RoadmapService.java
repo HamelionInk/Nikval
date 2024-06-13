@@ -13,7 +13,9 @@ import com.nikitin.roadmaps.roadmapsbackendspring.entity.Roadmap;
 import com.nikitin.roadmaps.roadmapsbackendspring.entity.RoadmapChapter;
 import com.nikitin.roadmaps.roadmapsbackendspring.entity.RoadmapQuestion;
 import com.nikitin.roadmaps.roadmapsbackendspring.entity.RoadmapTopic;
+import com.nikitin.roadmaps.roadmapsbackendspring.utils.enums.TypeFile;
 import lombok.NonNull;
+import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 

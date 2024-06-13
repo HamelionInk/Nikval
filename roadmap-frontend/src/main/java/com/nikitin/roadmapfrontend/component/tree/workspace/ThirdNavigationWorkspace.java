@@ -16,6 +16,8 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextArea;
 import com.wontlost.ckeditor.VaadinCKEditor;
+import org.jsoup.parser.Tag;
+import org.jsoup.select.Evaluator;
 
 public class ThirdNavigationWorkspace extends VerticalLayout implements CustomComponent {
 
