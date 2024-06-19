@@ -20,8 +20,8 @@ public class PageEventPDF extends PdfPageEventHelper {
 					.getHeight();
 
 			var backgroundImage = writer.getCurrentPageNumber() == 1 ?
-					Image.getInstance(ImagePDF.FIRST_PAGE_BACKGROUND_PDF) :
-					Image.getInstance(ImagePDF.MAIN_PAGE_BACKGROUND_PDF);
+					Image.getInstance(ClassLoader.getSystemResource(ImagePDF.FIRST_PAGE_BACKGROUND_PDF)) :
+					Image.getInstance(ClassLoader.getSystemResource(ImagePDF.MAIN_PAGE_BACKGROUND_PDF));
 
 			writer.getDirectContentUnder()
 					.addImage(backgroundImage, width, 0, 0, height, 0, 0);
