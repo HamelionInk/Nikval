@@ -1,0 +1,37 @@
+.news-card-dialog-body-layout {
+    width: 100%;
+}
+
+.news-card-dialog-image {
+    width: 300px;
+    height: 150px;
+    border-radius: 10px;
+}
+
+.news-card-dialog-title-input {
+    width: 100%
+}
+
+.news-card-dialog-description-input {
+    width: 100%;
+}
+
+.news-card-dialog-action-button {
+    background-color: #383838;
+    color: white;
+    width: 100%;
+}
+
+.news-card-dialog-picker-layout {
+    width: 100%;
+    display: flex;
+    justify-content: start;
+}
+
+.news-card-time-picker {
+    width: 100%;
+}
+
+.news-card-date-picker {
+    width: 100%;
+}

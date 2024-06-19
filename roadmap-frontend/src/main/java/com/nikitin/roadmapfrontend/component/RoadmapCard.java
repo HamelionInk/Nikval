@@ -1,8 +1,7 @@
-package com.nikitin.roadmapfrontend.component.card;
+package com.nikitin.roadmapfrontend.component;
 
 import com.nikitin.roadmapfrontend.client.RoadmapClient;
-import com.nikitin.roadmapfrontend.component.DropDownMenu;
-import com.nikitin.roadmapfrontend.component.dialog.roadmapcard.RoadmapCardEditDialog;
+import com.nikitin.roadmapfrontend.dialog.RoadmapCardDialog;
 import com.nikitin.roadmapfrontend.dto.request.RoadmapRequestDto;
 import com.nikitin.roadmapfrontend.dto.response.RoadmapResponseDto;
 import com.nikitin.roadmapfrontend.icon.RoadmapIcon;
@@ -44,9 +43,7 @@ public class RoadmapCard<T extends View> extends VerticalLayout {
 
 		roadmapHeaderLayout.add(buildFavoriteButton(), roadmapName, buildEditMenu());
 
-		addClickListener(event ->
-				UI.getCurrent().navigate("/roadmap/" + roadmapResponseDto.getId())
-		);
+		addClickListener(event -> UI.getCurrent().navigate("/roadmap/" + roadmapResponseDto.getId()));
 
 		add(roadmapHeaderLayout);
 	}
@@ -81,16 +78,18 @@ public class RoadmapCard<T extends View> extends VerticalLayout {
 
 	private DropDownMenu buildEditMenu() {
 		var editCardButton = new Button("Редактировать");
-		var uploadCardButton = new Button("Скачать PDF");
 		var deleteCardButton = new Button("Удалить");
 
 		editCardButton.addClickListener(event -> {
-			var editRoadmapCardDialog = new RoadmapCardEditDialog(roadmapResponseDto);
-
+			var editRoadmapCardDialog = new RoadmapCardDialog<>(view);
+			editRoadmapCardDialog.setHeaderName("Редактировать");
+			editRoadmapCardDialog.setRoadmapName(roadmapResponseDto.getName());
+			editRoadmapCardDialog.setFavoriteCheckBoxValue(roadmapResponseDto.getFavorite());
+			editRoadmapCardDialog.setActionButtonName("Сохранить");
 			editRoadmapCardDialog.addActionButtonClickListener(action -> {
 				view.getClient(RoadmapClient.class).patch(roadmapResponseDto.getId(), RoadmapRequestDto.builder()
-						.favorite(editRoadmapCardDialog.getRoadmapFavoriteComponentValue())
-						.name(editRoadmapCardDialog.getRoadmapNameComponentValue())
+						.favorite(editRoadmapCardDialog.getFavoriteCheckBoxValue())
+						.name(editRoadmapCardDialog.getRoadmapName())
 						.build());
 
 				view.refreshView();
@@ -100,22 +99,12 @@ public class RoadmapCard<T extends View> extends VerticalLayout {
 			editRoadmapCardDialog.open();
 		});
 
-		uploadCardButton.addClickListener(event ->
-				view.getClient(RoadmapClient.class)
-						.export(roadmapResponseDto.getId())
-		);
-
 		deleteCardButton.addClickListener(event -> {
-			view.getClient(RoadmapClient.class)
-					.deleteById(roadmapResponseDto.getId());
+			view.getClient(RoadmapClient.class).deleteById(roadmapResponseDto.getId());
 			view.refreshView();
 		});
 
-		var dropDownCardMenu = new DropDownMenu(
-				RoadmapIcon.DROP_DOWN_VERTICAL,
-				editCardButton, uploadCardButton, deleteCardButton
-		);
-
+		var dropDownCardMenu = new DropDownMenu(RoadmapIcon.DROP_DOWN_VERTICAL, editCardButton, deleteCardButton);
 		dropDownCardMenu.getMenuBarIcon().addClassName("roadmap-dropdown-card-menu-icon");
 		dropDownCardMenu.addClassName("roadmap-dropdown-card-menu");
 

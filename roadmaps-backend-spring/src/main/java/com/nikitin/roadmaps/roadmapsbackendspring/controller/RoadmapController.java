@@ -3,7 +3,9 @@ package com.nikitin.roadmaps.roadmapsbackendspring.controller;
 import com.nikitin.roadmaps.roadmapsbackendspring.dto.filter.RoadmapFilter;
 import com.nikitin.roadmaps.roadmapsbackendspring.dto.request.RoadmapRequestDto;
 import com.nikitin.roadmaps.roadmapsbackendspring.dto.response.RoadmapResponseDto;
+import com.nikitin.roadmaps.roadmapsbackendspring.service.RoadmapExportService;
 import com.nikitin.roadmaps.roadmapsbackendspring.service.RoadmapService;
+import com.nikitin.roadmaps.roadmapsbackendspring.utils.HttpHeaderHelper;
 import com.nikitin.roadmaps.roadmapsbackendspring.validation.Create;
 import com.nikitin.roadmaps.roadmapsbackendspring.validation.Patch;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -11,11 +13,14 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springdoc.core.converters.models.PageableAsQueryParam;
+import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -36,6 +41,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class RoadmapController {
 
     private final RoadmapService roadmapService;
+    private final RoadmapExportService roadmapExportService;
 
     @PostMapping
     public ResponseEntity<RoadmapResponseDto> create(@RequestBody @Validated(value = Create.class) RoadmapRequestDto roadmapRequestDto) {
@@ -77,6 +83,18 @@ public class RoadmapController {
         var responseBody = roadmapService.getAllByProfileId(id, pageable);
 
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(responseBody);
+    }
+
+    @GetMapping(value = "/export/{id}", produces = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<Resource> export(@PathVariable(name = "id") Long id) {
+        var file = roadmapExportService.exportPDF(id);
+
+        return ResponseEntity
+                .ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION,
+                        HttpHeaderHelper.generateFormDataHeaderValue(file.getFilename())
+                )
+                .body(file);
     }
 
     @DeleteMapping("/{id}")
