@@ -1,5 +1,6 @@
 package com.nikitin.roadmapfrontend.utils.editor;
 
+import com.wontlost.ckeditor.Config;
 import com.wontlost.ckeditor.Constants;
 import com.wontlost.ckeditor.VaadinCKEditor;
 import com.wontlost.ckeditor.VaadinCKEditorBuilder;

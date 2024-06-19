@@ -8,15 +8,17 @@ import com.itextpdf.text.pdf.PdfPageEventHelper;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.itextpdf.tool.xml.ElementList;
 import com.itextpdf.tool.xml.parser.XMLParser;
-import com.nikitin.roadmaps.roadmapsbackendspring.service.pdf.RoadmapSettingPDF;
+import com.nikitin.roadmaps.roadmapsbackendspring.utils.StringUtils;
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
+import org.jsoup.Jsoup;
 
 import java.io.*;
 import java.util.List;
 import java.util.function.BiFunction;
-import java.util.function.Consumer;
 import java.util.function.Function;
 
+@Slf4j
 @Getter
 public abstract class CreatorPDF implements BaseCreatorPDF {
 
@@ -24,7 +26,6 @@ public abstract class CreatorPDF implements BaseCreatorPDF {
 	protected Document document;
 	protected PdfWriter pdfWriter;
 	protected XMLParser xmlParser;
-	protected RoadmapSettingPDF roadmapSettingPDF;
 
 	private ElementList elements;
 
@@ -35,8 +36,9 @@ public abstract class CreatorPDF implements BaseCreatorPDF {
 		this.file = file;
 		this.pdfWriter = PdfWriter.getInstance(document, new FileOutputStream(file));
 
-		this.document.setMargins(20, 20, 20, 135);
 		this.document.open();
+
+		log.info("The document has started to be created");
 
 		return this;
 	}
@@ -44,21 +46,31 @@ public abstract class CreatorPDF implements BaseCreatorPDF {
 	@Override
 	public List<Element> parse(String value) throws IOException {
 		elements.clear();
-		xmlParser.parse(new ByteArrayInputStream(value.getBytes()));
+
+		xmlParser.parse(new ByteArrayInputStream(
+				value.getBytes())
+		);
 
 		return elements;
 	}
 
 	@Override
-	public BaseCreatorPDF configureXmlParser(Function<ElementList, XMLParser> function) {
-		xmlParser = function.apply(elements);
+	public List<Element> parseWithFixClosingTag(String value, String... tags) throws IOException {
+		return parse(fixClosingTag(value, tags));
+	}
+
+	@Override
+	public BaseCreatorPDF configureXmlParser(BiFunction<ElementList, CreatorPDF, XMLParser> function) {
+		xmlParser = function.apply(elements, this);
 
 		return this;
 	}
 
 	@Override
-	public BaseCreatorPDF setting() {
-		return null;
+	public BaseCreatorPDF configure(Function<CreatorPDF, Document> function) {
+		document = function.apply(this);
+
+		return this;
 	}
 
 	@Override
@@ -83,5 +95,33 @@ public abstract class CreatorPDF implements BaseCreatorPDF {
 	public void closeDocument() {
 		this.document.close();
 		this.pdfWriter.close();
+
+		log.info("Document Created");
+	}
+
+	private String fixClosingTag(String value, String... tags) {
+		var finalValue = new StringBuilder(value);
+
+		for (var tag : tags) {
+			var jsoupElements = Jsoup.parse(finalValue.toString())
+					.getElementsByTag(tag);
+
+			for (var jsoupElement : jsoupElements) {
+				var oldTag = jsoupElement.outerHtml();
+				var fixedTag = jsoupElement.outerHtml().replace(">", "/>");
+
+				var tempValue = finalValue.toString().replace(oldTag, fixedTag);
+
+				finalValue = new StringBuilder(
+						StringUtils.replaceAll(
+								tempValue,
+								oldTag,
+								fixedTag
+						)
+				);
+			}
+		}
+
+		return finalValue.toString();
 	}
 }

@@ -4,6 +4,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.lang.NonNull;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
@@ -25,7 +26,10 @@ import java.util.stream.Collectors;
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @Override
-    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException exception, HttpHeaders headers, HttpStatusCode statusCode, WebRequest request) {
+    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException exception,
+                                                                  @NonNull HttpHeaders headers,
+                                                                  HttpStatusCode statusCode,
+                                                                  WebRequest request) {
         var body = ExceptionResponseDto.builder()
                 .status(String.valueOf(statusCode.value()))
                 .message(exception.getBindingResult().getAllErrors()
@@ -39,7 +43,11 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @Override
-    protected ResponseEntity<Object> handleExceptionInternal(Exception exception, Object body, HttpHeaders headers, HttpStatusCode statusCode, WebRequest request) {
+    protected ResponseEntity<Object> handleExceptionInternal(@NonNull Exception exception,
+                                                             Object body,
+                                                             @NonNull HttpHeaders headers,
+                                                             @NonNull HttpStatusCode statusCode,
+                                                             @NonNull WebRequest request) {
         if (Objects.isNull(body)) {
             return ResponseEntity.status(statusCode.value())
                     .body(ExceptionResponseDto.builder()
@@ -58,6 +66,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
             InvalidCsrfTokenException.class, SessionAuthenticationException.class, OAuth2AuthenticationException.class})
     public ResponseEntity<ExceptionResponseDto> handleAuthenticationException(Exception exception, WebRequest request) {
         var httpStatus = HttpStatus.UNAUTHORIZED;
+
         return ResponseEntity.status(httpStatus.value())
                 .body(ExceptionResponseDto.builder()
                         .status(String.valueOf(httpStatus.value()))
@@ -69,6 +78,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(value = {AccessDeniedException.class, OAuth2AuthorizationException.class})
     public ResponseEntity<ExceptionResponseDto> handleForbiddenException(Exception exception, WebRequest request) {
         var httpStatus = HttpStatus.FORBIDDEN;
+
         return ResponseEntity.status(httpStatus.value())
                 .body(ExceptionResponseDto.builder()
                         .status(String.valueOf(httpStatus.value()))
@@ -80,6 +90,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(value = BadRequestException.class)
     public ResponseEntity<ExceptionResponseDto> handleBadRequestException(Exception exception, WebRequest request) {
         var httpStatus = HttpStatus.BAD_REQUEST;
+
         return ResponseEntity.status(httpStatus.value())
                 .body(ExceptionResponseDto.builder()
                         .status(String.valueOf(httpStatus.value()))
@@ -92,6 +103,20 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(value = NotFoundException.class)
     public ResponseEntity<ExceptionResponseDto> handleNotFoundException(Exception exception, WebRequest request) {
         var httpStatus = HttpStatus.NOT_FOUND;
+
+        return ResponseEntity.status(httpStatus.value())
+                .body(ExceptionResponseDto.builder()
+                        .status(String.valueOf(httpStatus.value()))
+                        .message(exception.getMessage())
+                        .path(request.getContextPath())
+                        .build()
+                );
+    }
+
+    @ExceptionHandler(value = InternalServerException.class)
+    public ResponseEntity<ExceptionResponseDto> handleDocumentException(Exception exception, WebRequest request) {
+        var httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
+
         return ResponseEntity.status(httpStatus.value())
                 .body(ExceptionResponseDto.builder()
                         .status(String.valueOf(httpStatus.value()))

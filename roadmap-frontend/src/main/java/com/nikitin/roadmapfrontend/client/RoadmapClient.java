@@ -1,10 +1,13 @@
 package com.nikitin.roadmapfrontend.client;
 
+import com.nikitin.roadmapfrontend.configuration.rest.RestTemplateConfiguration;
 import com.nikitin.roadmapfrontend.configuration.rest.RestTemplateService;
 import com.nikitin.roadmapfrontend.dto.filter.RoadmapFilter;
 import com.nikitin.roadmapfrontend.dto.request.RoadmapRequestDto;
 import com.nikitin.roadmapfrontend.dto.response.RoadmapResponseDto;
 import com.nikitin.roadmapfrontend.dto.response.pageable.PageableRoadmapResponseDto;
+import com.nikitin.roadmapfrontend.view.RoadmapsView;
+import com.vaadin.flow.component.UI;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpMethod;
@@ -18,6 +21,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class RoadmapClient {
 
+    private final RestTemplateConfiguration restTemplateConfiguration;
     private final RestTemplateService restTemplateService;
 
     public RoadmapResponseDto create(RoadmapRequestDto roadmapRequestDto) {
@@ -65,6 +69,14 @@ public class RoadmapClient {
                 uriParams,
                 PageableRoadmapResponseDto.class
         );
+    }
+
+    public void export(Long id) {
+        var urlForDownload = restTemplateConfiguration.getUrl() + "/roadmaps/export/" + id;
+
+        UI.getCurrent()
+                .getPage()
+                .open(urlForDownload);
     }
 
     public String deleteById(Long id) {

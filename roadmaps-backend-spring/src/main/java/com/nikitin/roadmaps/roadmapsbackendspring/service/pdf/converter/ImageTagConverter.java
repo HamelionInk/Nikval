@@ -10,33 +10,35 @@ import com.itextpdf.tool.xml.WorkerContext;
 import com.itextpdf.tool.xml.exceptions.RuntimeWorkerException;
 import com.itextpdf.tool.xml.html.HTML;
 import com.itextpdf.tool.xml.pipeline.html.HtmlPipelineContext;
+import com.nikitin.roadmaps.roadmapsbackendspring.exception.InternalServerException;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 public class ImageTagConverter extends com.itextpdf.tool.xml.html.Image {
 
 	@Override
 	public List<Element> end(final WorkerContext ctx, final Tag tag, final List<Element> currentContent) {
-		final Map<String, String> attributes = tag.getAttributes();
-		String src = attributes.get(HTML.Attribute.SRC);
+		final var attributes = tag.getAttributes();
+		var src = attributes.get(HTML.Attribute.SRC);
 		List<Element> elements = new ArrayList<>(1);
+
 		if (null != src && !src.isEmpty()) {
-			Image img = null;
+			Image image = null;
+
 			if (src.startsWith("data:image/")) {
-				final String base64Data = src.substring(src.indexOf(",") + 1);
+				final var base64Data = src.substring(src.indexOf(",") + 1);
+
 				try {
-					img = Image.getInstance(Base64.decode(base64Data));
-				} catch (Exception e) {
-//					if (logger.isLogging(Level.ERROR)) {
-//						logger.error(String.format(LocaleMessages.getInstance().getMessage(LocaleMessages.HTML_IMG_RETRIEVE_FAIL), src), e);
-//					}
+					image = Image.getInstance(Base64.decode(base64Data));
+				} catch (Exception exception) {
+					throw new InternalServerException(exception.getMessage());
 				}
-				if (img != null) {
+
+				if (image != null) {
 					try {
 						final HtmlPipelineContext htmlPipelineContext = getHtmlPipelineContext(ctx);
-						elements.add(getCssAppliers().apply(new Chunk((com.itextpdf.text.Image) getCssAppliers().apply(img, tag, htmlPipelineContext), 0, 0, true), tag,
+						elements.add(getCssAppliers().apply(new Chunk((com.itextpdf.text.Image) getCssAppliers().apply(image, tag, htmlPipelineContext), 0, 0, true), tag,
 								htmlPipelineContext));
 					} catch (NoCustomContextException e) {
 						throw new RuntimeWorkerException(e);
@@ -44,10 +46,11 @@ public class ImageTagConverter extends com.itextpdf.tool.xml.html.Image {
 				}
 			}
 
-			if (img == null) {
+			if (image == null) {
 				elements = super.end(ctx, tag, currentContent);
 			}
 		}
+
 		return elements;
 	}
 }

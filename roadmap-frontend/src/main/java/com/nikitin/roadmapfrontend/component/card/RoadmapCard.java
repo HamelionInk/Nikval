@@ -44,7 +44,9 @@ public class RoadmapCard<T extends View> extends VerticalLayout {
 
 		roadmapHeaderLayout.add(buildFavoriteButton(), roadmapName, buildEditMenu());
 
-		addClickListener(event -> UI.getCurrent().navigate("/roadmap/" + roadmapResponseDto.getId()));
+		addClickListener(event ->
+				UI.getCurrent().navigate("/roadmap/" + roadmapResponseDto.getId())
+		);
 
 		add(roadmapHeaderLayout);
 	}
@@ -79,6 +81,7 @@ public class RoadmapCard<T extends View> extends VerticalLayout {
 
 	private DropDownMenu buildEditMenu() {
 		var editCardButton = new Button("Редактировать");
+		var uploadCardButton = new Button("Скачать PDF");
 		var deleteCardButton = new Button("Удалить");
 
 		editCardButton.addClickListener(event -> {
@@ -97,12 +100,22 @@ public class RoadmapCard<T extends View> extends VerticalLayout {
 			editRoadmapCardDialog.open();
 		});
 
+		uploadCardButton.addClickListener(event ->
+				view.getClient(RoadmapClient.class)
+						.export(roadmapResponseDto.getId())
+		);
+
 		deleteCardButton.addClickListener(event -> {
-			view.getClient(RoadmapClient.class).deleteById(roadmapResponseDto.getId());
+			view.getClient(RoadmapClient.class)
+					.deleteById(roadmapResponseDto.getId());
 			view.refreshView();
 		});
 
-		var dropDownCardMenu = new DropDownMenu(RoadmapIcon.DROP_DOWN_VERTICAL, editCardButton, deleteCardButton);
+		var dropDownCardMenu = new DropDownMenu(
+				RoadmapIcon.DROP_DOWN_VERTICAL,
+				editCardButton, uploadCardButton, deleteCardButton
+		);
+
 		dropDownCardMenu.getMenuBarIcon().addClassName("roadmap-dropdown-card-menu-icon");
 		dropDownCardMenu.addClassName("roadmap-dropdown-card-menu");
 
