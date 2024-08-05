@@ -19,3 +19,13 @@ services:
       - "traefik.http.routers.postgres.tls.certresolver=letsEncrypt"
       - "traefik.http.routers.postgres.service=postgres@docker"
       - "traefik.http.services.postgres.loadbalancer.server.port=5432"
+  sender:
+    image: postgres
+    container_name: sender
+    restart: unless-stopped
+    ports:
+      - "5433:5433"
+    environment:
+      POSTGRES_PASSWORD: "sender"
+      POSTGRES_USER: "sender"
+      POSTGRES_DB: "sender"

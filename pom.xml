@@ -26,6 +26,7 @@
     <modules>
         <module>roadmaps-backend-spring</module>
         <module>roadmap-frontend</module>
+        <module>roadmap-sender</module>
     </modules>
 
     <build>
