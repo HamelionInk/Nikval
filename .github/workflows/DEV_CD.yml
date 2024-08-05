@@ -29,6 +29,7 @@ jobs:
       keycloak-dir: ./docker/docker-keycloak
       dev-apps-dir: ./docker/docker-apps-dev
       postgres-dir: ./docker/docker-postgres
+      minio-dir: ./docker/docker-minio
     needs: test
     steps:
       - uses: actions/checkout@v3
@@ -43,6 +44,10 @@ jobs:
       - name: update postgres
         working-directory: ${{env.postgres-dir}}
         run: sudo docker-compose stop && sudo docker-compose up -d
+
+      - name: update minio
+        working-directory: ${{env.minio-dir}}
+        run:  sudo docker-compose stop && sudo docker-compose up -d
 
       - name: update Maven
         uses: stCarolas/setup-maven@v4.5
