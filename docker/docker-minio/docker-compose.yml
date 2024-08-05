@@ -6,7 +6,10 @@ services:
     container_name: minio
     restart: unless-stopped
     ports:
+      - "9001:9001"
       - "9000:9000"
+    command:
+      - --console-address ":9001"
     environment:
       MINIO_ROOT_USER: develop
       MINIO_ROOT_PASSWORD: develop
