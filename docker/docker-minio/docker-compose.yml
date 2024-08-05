@@ -25,4 +25,4 @@ services:
       - minio:/data
 
 volumes:
-  data:
+  minio:
