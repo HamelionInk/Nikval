@@ -16,7 +16,7 @@ services:
       MINIO_DISTRIBUTED_NODES: minio.develop
       MINIO_SERVER_URL: https://minio.develop
       MINIO_BROWSER_REDIRECT_URL: https://minio.develop/minio/ui
-      MINIO_DISTRIBUTED_MODE_ENABLED: yes
+      MINIO_DISTRIBUTED_MODE_ENABLED: true
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.minio.entrypoints=websecure"
