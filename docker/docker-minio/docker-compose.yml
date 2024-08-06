@@ -9,8 +9,8 @@ services:
       - "9001:9001"
       - "9000:9000"
     environment:
-      MINIO_ROOT_USER: develop
-      MINIO_ROOT_PASSWORD: develop
+      MINIO_ROOT_USER: miniodevelop
+      MINIO_ROOT_PASSWORD: miniodevelop
       MINIO_CONSOLE_PORT_NUMBER: 9001
       MINIO_SCHEME: https
       MINIO_DISTRIBUTED_NODES: minio.develop
