@@ -13,10 +13,8 @@ services:
       MINIO_ROOT_PASSWORD: miniodevelop
       MINIO_CONSOLE_PORT_NUMBER: 9001
       MINIO_SCHEME: https
-      MINIO_DISTRIBUTED_NODES: minio.develop
-      MINIO_SERVER_URL: https://minio.develop
-      MINIO_BROWSER_REDIRECT_URL: https://minio.develop/minio/ui
-      MINIO_DISTRIBUTED_MODE_ENABLED: 'true'
+      MINIO_SERVER_URL: https://minio.roadmaps-nikval.ru
+      MINIO_BROWSER_REDIRECT_URL: https://minio.roadmaps-nikval.ru/minio/ui
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.minio.entrypoints=websecure"
