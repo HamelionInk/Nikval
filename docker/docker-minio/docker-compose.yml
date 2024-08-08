@@ -22,7 +22,7 @@ services:
       - "traefik.http.routers.minio.tls=true"
       - "traefik.http.routers.minio.tls.certresolver=letsEncrypt"
       - "traefik.http.routers.minio.service=minio@docker"
-      - "traefik.http.services.minio.loadbalancer.server.port=8080"
+      - "traefik.http.services.minio.loadbalancer.server.port=9000"
     volumes:
       - minio:/data
 
