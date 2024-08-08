@@ -13,7 +13,7 @@ services:
       MINIO_ROOT_PASSWORD: miniodevelop
       MINIO_CONSOLE_PORT_NUMBER: 9001
       MINIO_SERVER_URL: https://minio.roadmaps-nikval.ru
-      MINIO_BROWSER_REDIRECT_URL: https://minio.roadmaps-nikval.ru/minio/ui
+      MINIO_BROWSER_REDIRECT_URL: https://minio-client.roadmaps-nikval.ru/minio/ui
       MINIO_DEFAULT_BUCKETS: senderbucket, roadmapbucket
     labels:
       - "traefik.enable=true"
@@ -29,7 +29,6 @@ services:
       - "traefik.http.routers.minio_client.tls=true"
       - "traefik.http.routers.minio_client.tls.certresolver=letsEncrypt"
       - "traefik.http.routers.minio_client.service=minio@docker"
-      - "traefik.http.services.minio_client.loadbalancer.server.port=9001"
       - "traefik.http.services.minio_client.loadbalancer.server.port=9001"
     volumes:
       - minio:/data
