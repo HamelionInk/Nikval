@@ -27,7 +27,7 @@ services:
       - "traefik.http.routers.minio_client.rule=Host(`minio-client.roadmaps-nikval.ru`)"
       - "traefik.http.routers.minio_client.tls=true"
       - "traefik.http.routers.minio_client.tls.certresolver=letsEncrypt"
-      - "traefik.http.routers.minio_client.service=minio@docker"
+      - "traefik.http.routers.minio_client.service=minio_client@docker"
       - "traefik.http.services.minio_client.loadbalancer.server.port=9001"
     volumes:
       - minio:/data
