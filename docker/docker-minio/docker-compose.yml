@@ -12,6 +12,7 @@ services:
       MINIO_ROOT_USER: miniodevelop
       MINIO_ROOT_PASSWORD: miniodevelop
       MINIO_CONSOLE_PORT_NUMBER: 9001
+      MINIO_BROWSER_REDIRECT_URL: https://minio-client.roadmaps-nikval.ru
       MINIO_DEFAULT_BUCKETS: senderbucket, roadmapbucket
     labels:
       - "traefik.enable=true"
