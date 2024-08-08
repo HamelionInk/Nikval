@@ -24,7 +24,7 @@ services:
       - "traefik.http.services.minio.loadbalancer.server.port=9000"
 
       - "traefik.http.routers.minio_client.entrypoints=websecure"
-      - "traefik.http.routers.minio_client.rule=Host(`minio.roadmaps-nikval.ru`)"
+      - "traefik.http.routers.minio_client.rule=Host(`minio-client.roadmaps-nikval.ru`)"
       - "traefik.http.routers.minio_client.tls=true"
       - "traefik.http.routers.minio_client.tls.certresolver=letsEncrypt"
       - "traefik.http.routers.minio_client.service=minio@docker"
