@@ -15,6 +15,7 @@ services:
       KC_HTTP_ENABLE: "true"
       KC_PROXY: "edge"
       KC_HOSTNAME: "sso.roadmaps-nikval.ru"
+      KC_FEATURES: 'declarative-user-profile'
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.keycloak.entrypoints=websecure"
