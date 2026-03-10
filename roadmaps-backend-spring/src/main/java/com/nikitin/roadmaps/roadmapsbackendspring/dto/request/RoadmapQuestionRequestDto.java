@@ -5,7 +5,6 @@ import com.nikitin.roadmaps.roadmapsbackendspring.validation.Create;
 import com.nikitin.roadmaps.roadmapsbackendspring.validation.Patch;
 import com.nikitin.roadmaps.roadmapsbackendspring.validation.annotation.NotBlank;
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
@@ -13,8 +12,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.time.Instant;
 
 @Getter
 @Setter
@@ -39,10 +36,6 @@ public class RoadmapQuestionRequestDto {
 
     @Schema(description = "Позиция вопроса", example = "4")
     private Long position;
-
-    @Schema(description = "Время запланированного изучения", example = "2023-08-28T09:18:55.766Z")
-    @FutureOrPresent(message = "Поле <plannedDate> не может быть прошлым", groups = { Create.class, Patch.class })
-    private Instant plannedDate;
 
     @Schema(description = "Идентификатор темы", example = "43")
     @NotNull(message = "Поле <roadmapTopicId> не может быть null", groups = Create.class)

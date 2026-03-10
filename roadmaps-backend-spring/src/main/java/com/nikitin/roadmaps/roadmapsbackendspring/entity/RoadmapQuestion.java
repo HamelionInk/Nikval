@@ -19,8 +19,6 @@ import lombok.Setter;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
-import java.time.Instant;
-
 @Getter
 @Setter
 @AllArgsConstructor
@@ -40,9 +38,6 @@ public class RoadmapQuestion extends BaseEntity {
 
     @Column(name = "position", nullable = false, columnDefinition = "int8")
     private Long position;
-
-    @Column(name = "planned_date", columnDefinition = "timestamptz")
-    private Instant plannedDate;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @OnDelete(action = OnDeleteAction.CASCADE)

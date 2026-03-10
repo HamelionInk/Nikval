@@ -7,7 +7,6 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="roadmap-sender" />
         <module name="roadmap-frontend" />
       </profile>
       <profile name="Annotation profile for roadmaps-pom" enabled="true">
@@ -48,7 +47,6 @@
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="roadmap-frontend" options="-parameters" />
-      <module name="roadmap-sender" options="-parameters" />
       <module name="roadmaps-backend-spring" options="-parameters" />
       <module name="roadmaps-frontend-vaadin" options="-parameters" />
     </option>

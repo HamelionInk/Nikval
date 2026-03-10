@@ -1,6 +1,5 @@
 package com.nikitin.roadmaps.roadmapsbackendspring.service.implement;
 
-import com.nikitin.roadmaps.roadmapsbackendspring.client.RoadmapSenderClient;
 import com.nikitin.roadmaps.roadmapsbackendspring.dto.filter.RoadmapQuestionFilter;
 import com.nikitin.roadmaps.roadmapsbackendspring.dto.request.RoadmapQuestionRequestDto;
 import com.nikitin.roadmaps.roadmapsbackendspring.dto.request.RoadmapTopicRequestDto;
@@ -38,7 +37,6 @@ public class RoadmapQuestionServiceImplement implements RoadmapQuestionService, 
 	private final RoadmapQuestionMapper roadmapQuestionMapper;
 	private final RoadmapQuestionRepository roadmapQuestionRepository;
 	private final RoadmapTopicService roadmapTopicService;
-	private final RoadmapSenderClient roadmapSenderClient;
 
 	@Transactional
 	@Override
@@ -49,12 +47,7 @@ public class RoadmapQuestionServiceImplement implements RoadmapQuestionService, 
 		var roadmapQuestion = roadmapQuestionMapper.toEntity(roadmapQuestionRequestDto);
 
 		positionDefinition(roadmapQuestion);
-
 		var roadmapQuestionAfterSave = roadmapQuestionRepository.save(roadmapQuestion);
-
-		if (roadmapQuestionRequestDto.getPlannedDate() != null) {
-			scheduleQuestionNotification(roadmapQuestionAfterSave);
-		}
 
 		var roadmapTopicId = roadmapQuestionAfterSave.getRoadmapTopic().getId();
 		updateNumberQuestionsForTopic(
@@ -80,10 +73,6 @@ public class RoadmapQuestionServiceImplement implements RoadmapQuestionService, 
 		);
 
 		recalculatePositions(roadmapQuestion);
-
-		if (roadmapQuestionRequestDto.getPlannedDate() == null) {
-			scheduleQuestionNotification(roadmapQuestion);
-		}
 
 		var roadmapTopicId = roadmapQuestion.getRoadmapTopic().getId();
 		updateNumberQuestionsForTopic(
@@ -170,10 +159,6 @@ public class RoadmapQuestionServiceImplement implements RoadmapQuestionService, 
 		}
 
 		roadmapQuestionRepository.saveAll(roadmapQuestions);
-	}
-
-	private void scheduleQuestionNotification(RoadmapQuestion roadmapQuestion) {
-		log.info(roadmapSenderClient.scheduleNotification().toString());
 	}
 
 	private void checkRoadmapTopicForAvailability(Long roadmapTopicId) {

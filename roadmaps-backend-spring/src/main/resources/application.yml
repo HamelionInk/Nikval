@@ -3,10 +3,6 @@ server:
     context-path: /api/v1/roadmaps
   port: ${BACKEND_PORT:8083}
 
-client:
-  sender:
-    url: ${SENDER_URL:http://localhost:8084/api/v1/sender}
-
 spring:
   http:
     multipart:

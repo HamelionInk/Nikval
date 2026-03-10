@@ -8,10 +8,4 @@
         <dropNotNullConstraint tableName="roadmap_question" columnName="answer"/>
     </changeSet>
 
-    <changeSet id="add planned date column" author="msnikitin">
-        <addColumn tableName="roadmap_question">
-            <column name="planned_date" type="timestamptz"/>
-        </addColumn>
-    </changeSet>
-
 </databaseChangeLog>
