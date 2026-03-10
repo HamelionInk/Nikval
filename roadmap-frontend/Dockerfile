@@ -1,10 +1,10 @@
-FROM openjdk:17-alpine as build
+FROM eclipse-temurin:17-jdk-alpine as build
 LABEL maintrainer="Michael Nikitin <term11term@gmail.com>"
 ARG JAR_FILE
 COPY ${JAR_FILE} app.jar
 RUN mkdir -p target/dependency && (cd target/dependency; jar -xf /app.jar)
 
-FROM openjdk:17-alpine
+FROM eclipse-temurin:17-jdk-alpine
 VOLUME /tmp
 ARG DEPENDENCY=/target/dependency
 COPY --from=build ${DEPENDENCY}/BOOT-INF/lib /app/lib
