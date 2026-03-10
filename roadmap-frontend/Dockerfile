@@ -4,7 +4,7 @@ ARG JAR_FILE
 COPY ${JAR_FILE} app.jar
 RUN mkdir -p target/dependency && (cd target/dependency; jar -xf /app.jar)
 
-FROM eclipse-temurin:17-jdk-alpine
+FROM openjdk:17-alpine
 VOLUME /tmp
 ARG DEPENDENCY=/target/dependency
 COPY --from=build ${DEPENDENCY}/BOOT-INF/lib /app/lib
