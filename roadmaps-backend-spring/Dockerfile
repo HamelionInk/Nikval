@@ -1,4 +1,4 @@
-FROM eclipse-temurin:17-jdk-alpine as build
+FROM openjdk:17-alpine as build
 LABEL maintrainer="Michael Nikitin <term11term@gmail.com>"
 ARG JAR_FILE
 COPY ${JAR_FILE} app.jar
