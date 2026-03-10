@@ -7,6 +7,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.Instant;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -28,6 +30,9 @@ public class RoadmapQuestionResponseDto {
 
     @Schema(description = "Позиция вопроса", example = "4")
     private Long position;
+
+    @Schema(description = "Время запланированного изучения", example = "2023-08-28T09:18:55.766Z")
+    private Instant plannedDate;
 
     @Schema(description = "Идентификатор отношения к теме", example = "29")
     private Long roadmapTopicId;
